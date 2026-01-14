@@ -1,0 +1,31 @@
+.public-navbar {
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.hero-section {
+    padding: 100px 0;
+    background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.15), transparent),
+                radial-gradient(circle at bottom left, rgba(251, 191, 36, 0.05), transparent);
+}
+
+.question-card {
+    transition: all 0.3s;
+}
+
+.question-card:hover {
+    border-color: var(--accent-gold);
+}
+
+.filter-sidebar {
+    position: sticky;
+    top: 90px;
+}
+
+.footer {
+    padding: 60px 0;
+    margin-top: 100px;
+    background: var(--primary-navy);
+    border-top: 1px solid var(--border-color);
+}
