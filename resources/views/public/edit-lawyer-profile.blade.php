@@ -1,40 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Lawyer Profile - LegalQ&A</title>
-    @include('partials.head')
+@extends('layouts.app')
 
+@section('title', 'Edit Lawyer Profile - LegalQ&A')
+
+@section('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/site.css') }}">
-</head>
-<body class="bg-dark text-white">
+@endsection
 
-    @include('partials.public-navbar')
-
-    <!-- MAIN CONTENT -->
-    <div class="container py-5 mt-5">
+@section('content')
+    <div class="container py-5" style="margin-top: 60px;">
         <div class="d-flex justify-content-between align-items-center mb-4">
              <h2 class="mb-0 fw-bold">Edit Profile & Content</h2>
-             <a href="lawyer-profile?id=1" class="btn btn-outline-light"><i class="fas fa-arrow-left me-2"></i>Back to Profile</a>
+             <a href="{{ route('lawyer-profile') }}" class="btn btn-outline-primary"><i class="fas fa-arrow-left me-2"></i>Back to Profile</a>
         </div>
 
         <div class="row g-4">
             <!-- SECTION 1: EDIT PROFILE -->
             <div class="col-12">
-                <div class="card bg-dark border-secondary shadow-lg">
-                    <div class="card-header border-secondary p-4">
+                <div class="card border-secondary shadow-sm">
+                    <div class="card-header border-secondary p-4 bg-transparent">
                         <h4 class="mb-0 fw-bold"><i class="fas fa-user-edit me-2 text-primary"></i>Profile Details</h4>
                     </div>
                     <div class="card-body p-4 p-md-5">
                         <form id="editProfileForm" onsubmit="event.preventDefault(); saveProfile();">
                             <div class="row">
                                 <div class="col-md-6 mb-4">
-                                    <label class="form-label fw-bold small text-uppercase text-secondary">Full Name</label>
+                                    <label class="form-label fw-bold">Full Name</label>
                                     <input type="text" class="form-control" value="Atty. Marcus Aurelius" required>
                                 </div>
                                 <div class="col-md-6 mb-4">
-                                    <label class="form-label fw-bold small text-uppercase text-secondary">Specialization</label>
+                                    <label class="form-label fw-bold">Specialization</label>
                                     <select class="form-select" required>
                                         <option value="Criminal Law" selected>Criminal Law</option>
                                         <option value="Corporate Law">Corporate Law</option>
@@ -45,26 +39,26 @@
                             </div>
 
                             <div class="mb-4">
-                                <label class="form-label fw-bold small text-uppercase text-secondary">Professional Bio</label>
+                                <label class="form-label fw-bold">Professional Bio</label>
                                 <textarea class="form-control" rows="4" required>Marcus Aurelius is a distinguished legal professional with over 15 years of experience in criminal defense and human rights litigation.</textarea>
                             </div>
 
                             <h6 class="text-white border-bottom border-secondary pb-2 mb-3 mt-2">Contact Information</h6>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold small text-uppercase text-secondary">Email</label>
+                                    <label class="form-label fw-bold">Email</label>
                                     <input type="email" class="form-control" value="marcus@law.com">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold small text-uppercase text-secondary">Phone</label>
+                                    <label class="form-label fw-bold">Phone</label>
                                     <input type="text" class="form-control" value="+966 55 123 4567">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold small text-uppercase text-secondary">WhatsApp</label>
+                                    <label class="form-label fw-bold">WhatsApp</label>
                                     <input type="text" class="form-control" placeholder="+966...">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold small text-uppercase text-secondary">LinkedIn</label>
+                                    <label class="form-label fw-bold">LinkedIn</label>
                                     <input type="url" class="form-control" value="https://linkedin.com/in/marcus">
                                 </div>
                             </div>
@@ -79,8 +73,8 @@
 
             <!-- SECTION 2: MY ANSWERS -->
             <div class="col-12">
-                <div class="card bg-dark border-secondary shadow-lg">
-                    <div class="card-header border-secondary p-4">
+                <div class="card border-secondary shadow-sm">
+                    <div class="card-header border-secondary p-4 bg-transparent">
                         <h4 class="mb-0 fw-bold"><i class="fas fa-comments me-2 text-success"></i>My Answers</h4>
                     </div>
                     <div class="card-body p-0">
@@ -88,52 +82,52 @@
                             <!-- Answer 1 -->
                             <div class="list-group-item bg-transparent border-secondary p-4">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
-                                     <a href="question-details?id=101" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">What are the penalties for cybercrime defamation?</a>
+                                     <a href="{{ route('question-details') }}?id=101" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">What are the penalties for cybercrime defamation?</a>
                                      <span class="badge bg-secondary text-info">Criminal Law</span>
                                 </div>
                                 <small class="text-muted d-block mb-2">Answered on 2026-01-12</small>
                                 <p class="text-secondary small mb-3">Under the Anti-Cyber Crime Law, defamation via electronic means involves penalties including imprisonment for up to one year...</p>
                                 <div class="d-flex gap-2">
-                                    <button class="btn btn-sm btn-outline-light" onclick="editAnswer('ANS-001')"><i class="fas fa-edit me-1"></i>Edit</button>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="editAnswer('ANS-001')"><i class="fas fa-edit me-1"></i>Edit</button>
                                     <button class="btn btn-sm btn-outline-danger" onclick="deleteItem('Answer', 'ANS-001')"><i class="fas fa-trash me-1"></i>Delete</button>
                                 </div>
                             </div>
                             <!-- Answer 2 -->
                             <div class="list-group-item bg-transparent border-secondary p-4">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
-                                     <a href="question-details?id=102" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">Custody rights for expatriate mothers?</a>
+                                     <a href="{{ route('question-details') }}?id=102" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">Custody rights for expatriate mothers?</a>
                                      <span class="badge bg-secondary text-warning">Family Law</span>
                                 </div>
                                 <small class="text-muted d-block mb-2">Answered on 2026-01-10</small>
                                 <p class="text-secondary small mb-3">The Personal Status Law 2022 prioritizes the child's best interest. Generally, custody remains with the mother...</p>
                                 <div class="d-flex gap-2">
-                                    <button class="btn btn-sm btn-outline-light" onclick="editAnswer('ANS-002')"><i class="fas fa-edit me-1"></i>Edit</button>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="editAnswer('ANS-002')"><i class="fas fa-edit me-1"></i>Edit</button>
                                     <button class="btn btn-sm btn-outline-danger" onclick="deleteItem('Answer', 'ANS-002')"><i class="fas fa-trash me-1"></i>Delete</button>
                                 </div>
                             </div>
                              <!-- Answer 3 -->
                              <div class="list-group-item bg-transparent border-secondary p-4">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
-                                     <a href="question-details?id=103" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">Starting a business without a local sponsor?</a>
+                                     <a href="{{ route('question-details') }}?id=103" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">Starting a business without a local sponsor?</a>
                                      <span class="badge bg-secondary text-primary">Corporate Law</span>
                                 </div>
                                 <small class="text-muted d-block mb-2">Answered on 2026-01-08</small>
                                 <p class="text-secondary small mb-3">New regulations allow 100% foreign ownership in many sectors. You likely do not need a sponsor for...</p>
                                 <div class="d-flex gap-2">
-                                    <button class="btn btn-sm btn-outline-light" onclick="editAnswer('ANS-003')"><i class="fas fa-edit me-1"></i>Edit</button>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="editAnswer('ANS-003')"><i class="fas fa-edit me-1"></i>Edit</button>
                                     <button class="btn btn-sm btn-outline-danger" onclick="deleteItem('Answer', 'ANS-003')"><i class="fas fa-trash me-1"></i>Delete</button>
                                 </div>
                             </div>
                             <!-- Answer 4 -->
                             <div class="list-group-item bg-transparent border-secondary p-4">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
-                                     <a href="question-details?id=104" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">Termination notice period requirements?</a>
+                                     <a href="{{ route('question-details') }}?id=104" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">Termination notice period requirements?</a>
                                      <span class="badge bg-secondary text-danger">Labor Law</span>
                                 </div>
                                 <small class="text-muted d-block mb-2">Answered on 2026-01-05</small>
                                 <p class="text-secondary small mb-3">Assuming an indefinite contract, the notice period must be at least 60 days. For fixed contracts...</p>
                                 <div class="d-flex gap-2">
-                                    <button class="btn btn-sm btn-outline-light" onclick="editAnswer('ANS-004')"><i class="fas fa-edit me-1"></i>Edit</button>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="editAnswer('ANS-004')"><i class="fas fa-edit me-1"></i>Edit</button>
                                     <button class="btn btn-sm btn-outline-danger" onclick="deleteItem('Answer', 'ANS-004')"><i class="fas fa-trash me-1"></i>Delete</button>
                                 </div>
                             </div>
@@ -144,8 +138,8 @@
 
             <!-- SECTION 3: MY ARTICLES -->
             <div class="col-12">
-                <div class="card bg-dark border-secondary shadow-lg">
-                    <div class="card-header border-secondary p-4">
+                <div class="card border-secondary shadow-sm">
+                    <div class="card-header border-secondary p-4 bg-transparent">
                         <h4 class="mb-0 fw-bold"><i class="fas fa-newspaper me-2 text-info"></i>My Articles</h4>
                     </div>
                      <div class="card-body p-0">
@@ -153,39 +147,39 @@
                             <!-- Article 1 -->
                             <div class="list-group-item bg-transparent border-secondary p-4">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
-                                     <a href="article-details?id=201" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">Understanding the New Commercial Courts Law</a>
+                                     <a href="{{ route('article-details') }}?id=201" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">Understanding the New Commercial Courts Law</a>
                                      <span class="badge bg-primary">Corporate</span>
                                 </div>
                                 <small class="text-muted d-block mb-2">Published on 2026-01-12</small>
                                 <p class="text-secondary small mb-3">A deep dive into how the new regulations streamline commercial litigation...</p>
                                 <div class="d-flex gap-2">
-                                    <a href="edit-article?id=201" class="btn btn-sm btn-outline-light"><i class="fas fa-edit me-1"></i>Edit Article</a>
+                                    <a href="{{ route('edit-article') }}?id=201" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit me-1"></i>Edit Article</a>
                                     <button class="btn btn-sm btn-outline-danger" onclick="deleteItem('Article', 'ART-201')"><i class="fas fa-trash me-1"></i>Delete</button>
                                 </div>
                             </div>
                              <!-- Article 2 -->
                              <div class="list-group-item bg-transparent border-secondary p-4">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
-                                     <a href="article-details?id=202" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">Property Ownership Rules for Non-Saudis</a>
+                                     <a href="{{ route('article-details') }}?id=202" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">Property Ownership Rules for Non-Saudis</a>
                                      <span class="badge bg-success">Real Estate</span>
                                 </div>
                                 <small class="text-muted d-block mb-2">Published on 2026-01-08</small>
                                 <p class="text-secondary small mb-3">An updated guide on REGA regulations concerning foreign ownership...</p>
                                 <div class="d-flex gap-2">
-                                    <a href="edit-article?id=202" class="btn btn-sm btn-outline-light"><i class="fas fa-edit me-1"></i>Edit Article</a>
+                                    <a href="{{ route('edit-article') }}?id=202" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit me-1"></i>Edit Article</a>
                                     <button class="btn btn-sm btn-outline-danger" onclick="deleteItem('Article', 'ART-202')"><i class="fas fa-trash me-1"></i>Delete</button>
                                 </div>
                             </div>
                             <!-- Article 3 -->
                             <div class="list-group-item bg-transparent border-secondary p-4">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
-                                     <a href="article-details?id=203" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">IP Rights for Tech Startups</a>
+                                     <a href="{{ route('article-details') }}?id=203" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">IP Rights for Tech Startups</a>
                                      <span class="badge bg-secondary text-info">IP Law</span>
                                 </div>
                                 <small class="text-muted d-block mb-2">Published on 2025-12-28</small>
                                 <p class="text-secondary small mb-3">Why early trademark registration is crucial for your startup's valuation...</p>
                                 <div class="d-flex gap-2">
-                                    <a href="edit-article?id=203" class="btn btn-sm btn-outline-light"><i class="fas fa-edit me-1"></i>Edit Article</a>
+                                    <a href="{{ route('edit-article') }}?id=203" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit me-1"></i>Edit Article</a>
                                     <button class="btn btn-sm btn-outline-danger" onclick="deleteItem('Article', 'ART-203')"><i class="fas fa-trash me-1"></i>Delete</button>
                                 </div>
                             </div>
@@ -249,8 +243,9 @@
         </div>
       </div>
     </div>
+@endsection
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+@section('scripts')
     <script src="{{ asset('assets/js/ui.js') }}"></script>
     <script>
         const answerModal = new bootstrap.Modal(document.getElementById('editAnswerModal'));
@@ -290,6 +285,4 @@
             showToastMessage(`${itemTypeToDelete} deleted successfully.`);
         }
     </script>
-</body>
-</html>
-
+@endsection
