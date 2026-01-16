@@ -1,6 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.lawyer')
 
 @section('title', 'Edit Lawyer Profile - LegalQ&A')
+@section('page-title', 'Edit Profile')
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/site.css') }}">
@@ -200,7 +201,7 @@
                                 <small class="text-muted d-block mb-2">Published on 2026-01-12</small>
                                 <p class="text-secondary small mb-3">A deep dive into how the new regulations streamline commercial litigation...</p>
                                 <div class="d-flex gap-2">
-                                    <a href="{{ route('edit-article') }}?id=201" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit me-1"></i>Edit Article</a>
+                                    <a href="{{ route('lawyer.articles.edit') }}?id=201" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit me-1"></i>Edit Article</a>
                                     <button class="btn btn-sm btn-outline-danger" onclick="deleteItem('Article', 'ART-201')"><i class="fas fa-trash me-1"></i>Delete</button>
                                 </div>
                             </div>
@@ -213,7 +214,7 @@
                                 <small class="text-muted d-block mb-2">Published on 2026-01-08</small>
                                 <p class="text-secondary small mb-3">An updated guide on REGA regulations concerning foreign ownership...</p>
                                 <div class="d-flex gap-2">
-                                    <a href="{{ route('edit-article') }}?id=202" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit me-1"></i>Edit Article</a>
+                                    <a href="{{ route('lawyer.articles.edit') }}?id=202" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit me-1"></i>Edit Article</a>
                                     <button class="btn btn-sm btn-outline-danger" onclick="deleteItem('Article', 'ART-202')"><i class="fas fa-trash me-1"></i>Delete</button>
                                 </div>
                             </div>
@@ -226,7 +227,7 @@
                                 <small class="text-muted d-block mb-2">Published on 2025-12-28</small>
                                 <p class="text-secondary small mb-3">Why early trademark registration is crucial for your startup's valuation...</p>
                                 <div class="d-flex gap-2">
-                                    <a href="{{ route('edit-article') }}?id=203" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit me-1"></i>Edit Article</a>
+                                    <a href="{{ route('lawyer.articles.edit') }}?id=203" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit me-1"></i>Edit Article</a>
                                     <button class="btn btn-sm btn-outline-danger" onclick="deleteItem('Article', 'ART-203')"><i class="fas fa-trash me-1"></i>Delete</button>
                                 </div>
                             </div>
@@ -293,7 +294,6 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('assets/js/ui.js') }}"></script>
     <script>
         const answerModal = new bootstrap.Modal(document.getElementById('editAnswerModal'));
         const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));

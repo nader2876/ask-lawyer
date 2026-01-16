@@ -4,15 +4,15 @@
 
 @section('content')
     <!-- Main Content -->
-    <div class="container py-5 mt-5">
+    <div class="container page-wrapper">
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-7">
                 <div class="card border-secondary shadow-lg">
-                    <div class="card-header border-secondary bg-transparent text-center py-4">
-                        <div class="d-inline-flex align-items-center justify-content-center bg-primary rounded-circle mb-3" style="width: 60px; height: 60px;">
-                            <i class="fas fa-question fa-2x text-white"></i>
+                    <div class="card-header border-bottom border-secondary bg-transparent text-center py-4">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-circle mb-3 shadow" style="width: 64px; height: 64px;">
+                            <i class="fas fa-question fa-2x"></i>
                         </div>
-                        <h2 class="fw-bold mb-0">Ask a Question</h2>
+                        <h2 class="fw-bold mb-1">Ask a Question</h2>
                         <p class="text-muted mb-0">Get verified answers from legal professionals</p>
                     </div>
                     <div class="card-body p-4 p-md-5">
@@ -42,21 +42,21 @@
 
                             <div class="form-check mb-4">
                                 <input class="form-check-input" type="checkbox" id="anonCheck">
-                                <label class="form-check-label text-muted small" for="anonCheck">
+                                <label class="form-check-label text-muted" for="anonCheck">
                                     Post anonymously
                                 </label>
                             </div>
 
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold">
+                            <div class="d-grid gap-3">
+                                <button type="submit" class="btn btn-primary btn-lg">
                                     Submit Question
                                 </button>
+                                <a href="{{ url('/') }}" class="btn btn-link text-muted text-decoration-none">
+                                    <i class="fas fa-arrow-left me-1"></i> Cancel & Return Home
+                                </a>
                             </div>
                         </form>
                     </div>
-                </div>
-                <div class="text-center mt-4">
-                    <a href="{{ url('/') }}" class="text-muted text-decoration-none small"><i class="fas fa-arrow-left me-1"></i> Back to Home</a>
                 </div>
             </div>
         </div>

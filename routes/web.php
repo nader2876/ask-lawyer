@@ -7,107 +7,65 @@ use Illuminate\Support\Facades\Route;
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| Copy the contents of this file into your Laravel project's 'routes/web.php'.
-| These routes map the URLs used in your static files to the new Blade views.
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
 |
 */
 
-// --- Public Pages ---
+// ============================================================================
+// 1) PUBLIC ROUTES
+// ============================================================================
 
-Route::get('/', function () {
-    return view('public.index');
-})->name('home');
+Route::view('/', 'public.index')->name('home');
+Route::view('/index', 'public.index')->name('index'); // Alias
 
-Route::get('/index', function () {
-    return view('public.index');
-})->name('index');
+Route::view('/question-details', 'public.question-details')->name('question-details'); // Using generic for demo, usually /{id}
+Route::view('/ask', 'public.ask-question')->name('ask-question');
+Route::view('/lawyers', 'public.lawyers')->name('lawyers');
+Route::view('/lawyer-profile', 'public.lawyer-profile')->name('lawyer-profile'); // Generic for demo
+Route::view('/edit-lawyer-profile', 'public.edit-lawyer-profile')->name('edit-lawyer-profile'); // Generic for demo
 
-Route::get('/lawyers', function () {
-    return view('public.lawyers');
-})->name('lawyers');
+Route::view('/blog', 'public.blog')->name('blog');
+Route::view('/article/details', 'public.article-details')->name('article-details'); // Generic for demo
 
-Route::get('/blog', function () {
-    return view('public.blog');
-})->name('blog');
+Route::view('/login', 'public.login')->name('login');
+Route::view('/register', 'public.register')->name('register');
+Route::view('/lawyer/request', 'public.lawyer-request')->name('lawyer-request');
 
-Route::get('/ask-question', function () {
-    return view('public.ask-question');
-})->name('ask-question');
+// ============================================================================
+// 2) ADMIN ROUTES
+// Prefix: /admin
+// ============================================================================
 
-Route::get('/question-details', function () {
-    return view('public.question-details');
-})->name('question-details');
-
-// Auth / Onboarding
-Route::get('/login', function () {
-    return view('public.login');
-})->name('login');
-
-Route::get('/register', function () {
-    return view('public.register');
-})->name('register');
-
-Route::get('/lawyer-request', function () {
-    return view('public.lawyer-request');
-})->name('lawyer-request');
-
-// Lawyer Specific (Protected in real app)
-Route::get('/lawyer-profile', function () {
-    return view('public.lawyer-profile');
-})->name('lawyer-profile');
-
-Route::get('/edit-lawyer-profile', function () {
-    return view('public.edit-lawyer-profile');
-})->name('edit-lawyer-profile');
-
-Route::get('/new-article', function () {
-    return view('public.new-article');
-})->name('new-article');
-
-Route::get('/edit-article', function () {
-    return view('public.edit-article');
-})->name('edit-article');
-
-Route::get('/my-articles', function () {
-    return view('public.my-articles');
-})->name('my-articles');
-
-Route::get('/article-details', function () {
-    return view('public.article-details');
-})->name('article-details');
-
-
-// --- Admin Pages ---
-// Prefix with /admin to keep it organized
-
-Route::group(['prefix' => 'admin'], function () {
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::view('/', 'admin.dashboard')->name('dashboard');
+    Route::view('/dashboard', 'admin.dashboard'); // Alias
     
-    Route::get('/', function () {
-        return redirect('/admin/dashboard');
-    })->name('admin.index');
+    Route::view('/users', 'admin.users.index')->name('users.index');
+    Route::view('/lawyer-requests', 'admin.lawyer-requests.index')->name('lawyer-requests.index');
+    Route::view('/questions', 'admin.questions.index')->name('questions.index');
+    Route::view('/articles', 'admin.articles.index')->name('articles.index');
+    Route::view('/categories', 'admin.categories.index')->name('categories.index');
+});
 
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+// ============================================================================
+// 3) LAWYER ROUTES
+// Prefix: /lawyer
+// ============================================================================
 
-    Route::get('/users', function () {
-        return view('admin.users');
-    })->name('admin.users');
-
-    Route::get('/lawyer-requests', function () {
-        return view('admin.lawyer-requests');
-    })->name('admin.lawyer-requests');
-
-    Route::get('/questions', function () {
-        return view('admin.questions');
-    })->name('admin.questions');
-
-    Route::get('/articles', function () {
-        return view('admin.articles');
-    })->name('admin.articles');
-
-    Route::get('/categories', function () {
-        return view('admin.categories');
-    })->name('admin.categories');
-
+Route::prefix('lawyer')->name('lawyer.')->group(function () {
+    Route::view('/', 'lawyer.dashboard')->name('dashboard');
+    Route::view('/dashboard', 'lawyer.dashboard'); // Alias
+    
+    Route::view('/questions', 'lawyer.questions.index')->name('questions.index');
+    
+    Route::view('/answers', 'lawyer.answers.index')->name('answers.index');
+    Route::view('/answers/edit', 'lawyer.answers.edit')->name('answers.edit');
+    
+    Route::view('/articles', 'lawyer.articles.index')->name('articles.index');
+    Route::view('/articles/create', 'lawyer.articles.create')->name('articles.create');
+    Route::view('/articles/edit', 'lawyer.articles.edit')->name('articles.edit');
+    
+    Route::view('/profile/edit', 'lawyer.profile.edit')->name('profile.edit');
 });

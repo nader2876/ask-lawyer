@@ -1,23 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Lawyer Profile - LegalQ&A</title>
-    @include('partials.head')
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ asset('assets/css/site.css') }}">
+@extends('layouts.app')
 
+@section('title', 'Lawyer Profile - LegalQ&A')
+
+@section('styles')
     <style>
         .profile-header { background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%); }
         .nav-tabs .nav-link { color: var(--text-muted); border: none; border-bottom: 2px solid transparent; }
         .nav-tabs .nav-link:hover { color: var(--text-primary); }
         .nav-tabs .nav-link.active { background: transparent; color: var(--primary); border-bottom: 2px solid var(--primary); font-weight: bold; }
     </style>
-</head>
-<body class="bg-dark text-white">
+@endsection
 
-    @include('partials.public-navbar')
-
+@section('content')
     <!-- PROFILE HEADER -->
     <div class="container mt-5 pt-5">
         <div class="card bg-dark border-secondary shadow-lg mt-4 text-white">
@@ -30,7 +24,7 @@
                         </div>
                          <!-- Edit Button (Lawyer Only) -->
                          <div class="mt-3 lawyer-only d-none">
-                            <a href="edit-lawyer-profile?id=1" class="btn btn-sm btn-outline-light rounded-pill px-3">
+                            <a href="{{ route('lawyer.profile.edit') }}" class="btn btn-sm btn-outline-light rounded-pill px-3">
                                 <i class="fas fa-edit me-1"></i> Edit Profile
                             </a>
                         </div>
@@ -153,7 +147,7 @@
                                 <span class="badge bg-secondary text-info">Criminal Law</span>
                                 <small class="text-muted">2 days ago</small>
                             </div>
-                            <h5 class="card-title"><a href="question-details" class="text-white text-decoration-none hover-primary">What are the penalties for cybercrime defamation in KSA?</a></h5>
+                            <h5 class="card-title"><a href="{{ route('question-details') }}" class="text-white text-decoration-none hover-primary">What are the penalties for cybercrime defamation in KSA?</a></h5>
                             <p class="card-text text-muted mb-0">Under the Anti-Cyber Crime Law, defamation via electronic means involves penalties including imprisonment for up to one year and a fine not exceeding 500,000 riyals...</p>
                         </div>
                     </div>
@@ -164,7 +158,7 @@
                                 <span class="badge bg-secondary text-warning">Family Law</span>
                                 <small class="text-muted">5 days ago</small>
                             </div>
-                            <h5 class="card-title"><a href="question-details" class="text-white text-decoration-none hover-primary">Custody rights for expatriate mothers after divorce?</a></h5>
+                            <h5 class="card-title"><a href="{{ route('question-details') }}" class="text-white text-decoration-none hover-primary">Custody rights for expatriate mothers after divorce?</a></h5>
                             <p class="card-text text-muted mb-0">The Personal Status Law 2022 prioritizes the child's best interest. Generally, custody remains with the mother unless proven unfit, regardless of nationality...</p>
                         </div>
                     </div>
@@ -182,7 +176,7 @@
                                     <span class="badge bg-primary">Corporate</span>
                                     <small class="text-muted">1 week ago</small>
                                 </div>
-                                <h5 class="card-title"><a href="article-details" class="text-white text-decoration-none hover-primary">Understanding the New Commercial Courts Law</a></h5>
+                                <h5 class="card-title"><a href="{{ route('article-details') }}" class="text-white text-decoration-none hover-primary">Understanding the New Commercial Courts Law</a></h5>
                                 <p class="card-text text-muted small">A deep dive into how the new regulations streamline commercial litigation and what it means for foreign investors.</p>
                             </div>
                         </div>
@@ -195,7 +189,7 @@
                                     <span class="badge bg-success">Real Estate</span>
                                     <small class="text-muted">2 weeks ago</small>
                                 </div>
-                                <h5 class="card-title"><a href="article-details" class="text-white text-decoration-none hover-primary">Property Ownership Rules for Non-Saudis</a></h5>
+                                <h5 class="card-title"><a href="{{ route('article-details') }}" class="text-white text-decoration-none hover-primary">Property Ownership Rules for Non-Saudis</a></h5>
                                 <p class="card-text text-muted small">An updated guide on REGA regulations concerning foreign ownership of residential and commercial real estate.</p>
                             </div>
                         </div>
@@ -205,112 +199,4 @@
 
         </div>
     </div>
-
-    <!-- Edit Profile Modal -->
-    <div class="modal fade" id="editProfileModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content bg-dark border-secondary">
-                <div class="modal-header border-secondary">
-                    <h5 class="modal-title fw-bold">Edit Profile</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <form id="editProfileForm">
-                        <div class="mb-3">
-                            <label class="form-label small fw-bold">Full Name</label>
-                            <input type="text" id="editName" class="form-control" value="Atty. Marcus Aurelius">
-                        </div>
-                         <div class="mb-3">
-                            <label class="form-label small fw-bold">Specialization</label>
-                            <select id="editSpec" class="form-select">
-                                <option>Criminal Law & Human Rights</option>
-                                <option>Corporate Law</option>
-                                <option>Family Law</option>
-                                <option>Intellectual Property</option>
-                                <option>Real Estate Law</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label small fw-bold">Bio</label>
-                            <textarea id="editBio" class="form-control" rows="4">Marcus Aurelius is a distinguished legal professional with over 15 years of experience in criminal defense and human rights litigation.</textarea>
-                        </div>
-                        <div class="row">
-                             <div class="col-md-6 mb-3">
-                                <label class="form-label small fw-bold">Email</label>
-                                <input type="email" id="editEmail" class="form-control" value="marcus@law.com">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label small fw-bold">Phone</label>
-                                <input type="text" id="editPhone" class="form-control" value="+966 55 123 4567">
-                             </div>
-                             <div class="col-md-12 mb-3">
-                                <label class="form-label small fw-bold">LinkedIn URL</label>
-                                <input type="text" id="editLinkedin" class="form-control" value="linkedin.com/in/marcus">
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer border-secondary">
-                    <button type="button" class="btn btn-outline-light rounded-pill" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary rounded-pill px-4" onclick="saveProfile()">Save Changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Success Toast -->
-    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-      <div id="saveToast" class="toast bg-success text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="d-flex">
-          <div class="toast-body">
-            <i class="fas fa-check-circle me-2"></i> Demo: Profile updated locally!
-          </div>
-          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-      </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('assets/js/ui.js') }}"></script>
-    <script>
-        // Profile Editing Logic
-        const profileModal = new bootstrap.Modal(document.getElementById('editProfileModal'));
-        const toastEl = document.getElementById('saveToast');
-        const toast = new bootstrap.Toast(toastEl);
-
-        function openEditProfile() {
-            // Populate form with current DOM values
-            document.getElementById('editName').value = document.getElementById('profileName').innerText;
-            document.getElementById('editSpec').value = document.getElementById('profileSpecialization').innerText;
-            document.getElementById('editBio').value = document.getElementById('profileBio').innerText;
-            // Contact info is tricky to parse back from icons, so we use static defaults or simple parsing if strictly needed for demo
-
-            profileModal.show();
-        }
-
-        function saveProfile() {
-            // Update DOM
-            document.getElementById('profileName').innerText = document.getElementById('editName').value;
-            document.getElementById('profileSpecialization').innerText = document.getElementById('editSpec').value;
-            document.getElementById('profileBio').innerText = document.getElementById('editBio').value;
-
-            const email = document.getElementById('editEmail').value;
-            const linkedin = document.getElementById('editLinkedin').value;
-            const phone = document.getElementById('editPhone').value;
-
-            // Rebuild contact display
-            const contactHtml = `
-                <span><i class="fab fa-linkedin me-1"></i> ${linkedin}</span>
-                <span><i class="fas fa-envelope me-1"></i> ${email}</span>
-                <span><i class="fas fa-phone me-1"></i> ${phone}</span>
-            `;
-            document.getElementById('contactDisplay').innerHTML = contactHtml;
-
-            // Close and notify
-            profileModal.hide();
-            toast.show();
-        }
-    </script>
-</body>
-</html>
-
+@endsection
