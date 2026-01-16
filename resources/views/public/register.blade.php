@@ -2,6 +2,43 @@
 
 @section('title', 'LegalQ&A - Register')
 
+@section('styles')
+<style>
+    .nav-tabs {
+        border-bottom-color: var(--border-color);
+    }
+    .nav-tabs .nav-link {
+        color: var(--text-secondary);
+        border: none;
+        border-bottom: 2px solid transparent;
+    }
+    .nav-tabs .nav-link:hover {
+        color: var(--text-primary);
+        border-color: transparent;
+    }
+    .nav-tabs .nav-link.active {
+        background-color: transparent !important;
+        color: var(--warning) !important;
+        border-bottom: 2px solid var(--warning);
+    }
+    /* File Input Styling */
+    input[type="file"]::file-selector-button {
+        background-color: var(--bg-tertiary) !important;
+        color: var(--text-primary) !important;
+        border: 1px solid var(--border-color) !important;
+        border-right: 1px solid var(--border-color) !important;
+        padding: 0.375rem 0.75rem;
+        border-radius: 50rem;
+        margin-right: 1rem;
+        transition: all 0.2s;
+    }
+    input[type="file"]::file-selector-button:hover {
+        background-color: var(--bg-secondary) !important;
+        color: var(--primary) !important;
+    }
+</style>
+@endsection
+
 @section('content')
     <div class="container py-5 mt-5">
         <div class="row justify-content-center">
@@ -17,8 +54,8 @@
                     <div class="card-header border-bottom border-secondary bg-transparent p-0">
                         <!-- Dual Flow Tabs -->
                         <div class="nav nav-tabs nav-justified" id="regTab" role="tablist">
-                            <button class="nav-link active py-3 fw-bold rounded-0" id="user-tab" data-bs-toggle="tab" data-bs-target="#user-pane" type="button" role="tab" style="color: var(--text-primary);">Individual User</button>
-                            <button class="nav-link py-3 fw-bold rounded-0" id="lawyer-tab" data-bs-toggle="tab" data-bs-target="#lawyer-pane" type="button" role="tab" style="color: var(--text-primary);">Legal Professional</button>
+                            <button class="nav-link active py-3 fw-bold rounded-0" id="user-tab" data-bs-toggle="tab" data-bs-target="#user-pane" type="button" role="tab">Individual User</button>
+                            <button class="nav-link py-3 fw-bold rounded-0" id="lawyer-tab" data-bs-toggle="tab" data-bs-target="#lawyer-pane" type="button" role="tab">Legal Professional</button>
                         </div>
                     </div>
 
@@ -97,7 +134,7 @@
                                     </div>
 
                                     <div class="d-grid mb-4">
-                                        <button type="submit" class="btn btn-outline-warning rounded-pill py-2 fw-bold">Submit for Approval</button>
+                                        <button type="submit" class="btn btn-gold rounded-pill py-2 fw-bold">Submit for Approval</button>
                                     </div>
                                 </form>
                             </div>
