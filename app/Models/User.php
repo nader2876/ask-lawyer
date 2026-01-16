@@ -45,4 +45,30 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function lawyerProfile()
+{
+    return $this->hasOne(LawyerProfile::class);
+}
+
+public function questions()
+{
+    return $this->hasMany(Question::class, 'user_id');
+}
+
+public function replies()
+{
+    return $this->hasMany(QuestionReply::class, 'lawyer_id');
+}
+
+public function articles()
+{
+    return $this->hasMany(Article::class, 'author_id');
+}
+
+public function specializations()
+{
+    return $this->belongsToMany(Category::class, 'category_lawyer', 'lawyer_id', 'category_id')
+        ->withTimestamps();
+}
+
 }
