@@ -42,11 +42,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::view('/', 'admin.dashboard')->name('dashboard');
     Route::view('/dashboard', 'admin.dashboard'); // Alias
     
-    Route::view('/users', 'admin.users.index')->name('users.index');
-    Route::view('/lawyer-requests', 'admin.lawyer-requests.index')->name('lawyer-requests.index');
-    Route::view('/questions', 'admin.questions.index')->name('questions.index');
-    Route::view('/articles', 'admin.articles.index')->name('articles.index');
-    Route::view('/categories', 'admin.categories.index')->name('categories.index');
+    Route::resource('users',  \App\Http\Controllers\Admin\UserController::class);
+    Route::view('/lawyer-requests', 'admin.lawyer-requests.index')->name('lawyer-requests');
+    Route::view('/questions', 'admin.questions.index')->name('questions');
+    Route::view('/articles', 'admin.articles.index')->name('articles');
+    Route::view('/categories', 'admin.categories.index')->name('categories');
 });
 
 // ============================================================================

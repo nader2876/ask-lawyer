@@ -23,6 +23,7 @@ return new class extends Migration
         ->cascadeOnDelete();
 
     $table->timestamps();
+    $table->softDeletes();
 
     $table->unique(['lawyer_id', 'category_id']);
 });

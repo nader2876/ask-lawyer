@@ -11,7 +11,7 @@
         </a>
         
         <div class="nav-section-title">Management</div>
-        <a href="{{ route('admin.users') }}" class="nav-item {{ Request::is('admin/users') ? 'active' : '' }}">
+        <a href="{{ route('admin.users.index') }}" class="nav-item {{ Request::is('admin/users') ? 'active' : '' }}">
             <i class="fas fa-users"></i>
             <span>Users</span>
         </a>

@@ -12,6 +12,7 @@
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    @livewireStyles
 </head>
 <body>
     <div class="admin-layout">
@@ -33,5 +34,6 @@
     <script src="{{ asset('assets/js/shared.js') }}"></script>
     <script src="{{ asset('assets/js/admin-ui.js') }}"></script>
     @yield('scripts')
+    @livewireScripts
 </body>
 </html>
