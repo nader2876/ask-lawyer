@@ -6,16 +6,57 @@ use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\LawyerProfile;
-
+use App\Models\Category;
 class LawyersRequests extends Component
 {
 
+    
+   public $search = '';
+   public $roleFilter = '';
+   public $statusFilter = '';
+   public $categoryFilter = '';
+  
+
+public $sort = 'created-desc';  
     public function render()
     {
-        $lawyers = LawyerProfile::with('user.specializations')->get();
+    $lawyers = LawyerProfile::query()
+    ->with(['user.specializations']) // or ['user.specializations'] if that's your real structure
+    ->when($this->search, function ($q) {
+        $q->whereHas('user', function ($uq) {
+            $uq->where('name', 'like', "%{$this->search}%")
+               ->orWhere('email', 'like', "%{$this->search}%");
+        });
+    })
+    ->when($this->roleFilter, function ($q) {
+        $q->whereHas('user', fn ($uq) => $uq->where('role', $this->roleFilter));
+    })
+    ->when($this->statusFilter, fn ($q) => $q->where('status', $this->statusFilter))
+    ->when($this->categoryFilter, fn ($q) => $q->whereHas('user.specializations', fn ($sq) => $sq->where('categories.name', $this->categoryFilter)))
+    ->when($this->sort, function ($q) {
+        match ($this->sort) {
+            'created-desc' => $q->orderBy('created_at', 'desc')->orderBy('id', 'desc'),
+            'created-asc'  => $q->orderBy('created_at', 'asc')->orderBy('id', 'asc'),
+
+            // Sort by related user's name using a subquery (no joins)
+            'name-asc'     => $q->orderBy(
+                User::select('name')->whereColumn('users.id', 'lawyer_profiles.user_id'),
+                'asc'
+            ),
+            'name-desc'    => $q->orderBy(
+                User::select('name')->whereColumn('users.id', 'lawyer_profiles.user_id'),
+                'desc'
+            ),
+
+            default        => $q->orderBy('created_at', 'desc'),
+        };
+    })
+    ->get();
+    $categories = Category::all();
 
         return view('livewire.admin.lawyers-requests', [
-            'lawyers' => $lawyers
+            'lawyers' => $lawyers,
+            'categories' => $categories
         ]);
     }
 

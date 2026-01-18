@@ -63,7 +63,7 @@
     .table-container {
         width: 100%;
         max-width: 100%;
-        overflow-x: auto;
+        overflow-x: hidden; /* Force hide scrollbar */
     }
 
     /* Table Optimization to prevent scrolling */
@@ -123,12 +123,12 @@
                 <div class="filters-bar">
                     <div class="filters-grid">
                         <div class="filter-group">
-                            <label class="form-label">Search</label>
+                            <label class="form-label" >Search</label>
                             <input 
                                 type="text" 
                                 class="form-control" 
                                 placeholder="Search by name or email"
-                                oninput="requestFilter.search(this.value)"
+                                wire:model.live="search"
                             >
                         </div>
                         
@@ -136,11 +136,11 @@
                             <label class="form-label">Filter by Status</label>
                             <select 
                                 class="form-select"
-                                onchange="requestFilter.filterByAttribute('status', this.value)"
+                                wire:model.live="statusFilter"
                             >
                                 <option value="">All Status</option>
                                 <option value="Pending">Pending</option>
-                                <option value="Approved">Approved</option>
+                                <option value="Accepted">Accepted</option>
                                 <option value="Rejected">Rejected</option>
                             </select>
                         </div>
@@ -149,14 +149,12 @@
                             <label class="form-label">Filter by Category</label>
                             <select 
                                 class="form-select"
-                                onchange="requestFilter.filterByAttribute('category', this.value)"
+                                wire:model.live="categoryFilter"
                             >
                                 <option value="">All Categories</option>
-                                <option value="Corporate Law">Corporate Law</option>
-                                <option value="Family Law">Family Law</option>
-                                <option value="Criminal Law">Criminal Law</option>
-                                <option value="IP Law">IP Law</option>
-                                <option value="Real Estate">Real Estate</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->name }}">{{ $category->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         
@@ -164,10 +162,12 @@
                             <label class="form-label">Sort</label>
                             <select 
                                 class="form-select"
-                                onchange="handleSort(this.value)"
+                                wire:model.live="sort"
                             >
                                 <option value="created-desc">Newest First</option>
                                 <option value="created-asc">Oldest First</option>
+                                <option value="name-asc">Name (A-Z)</option>
+                                <option value="name-desc">Name (Z-A)</option>
                             </select>
                         </div>
                     </div>
