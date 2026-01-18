@@ -60,6 +60,8 @@
                     icon: event.type,
                     title: event.title,
                     text: event.text,
+                    background: '#1e293b',
+                    color: '#e5e7eb',
                     timer: 2000,
                     showConfirmButton: false
                 });
@@ -72,9 +74,11 @@
                     title: event.title,
                     text: event.text,
                     icon: event.type,
+                    background: '#1e293b',
+                    color: '#e5e7eb',
                     showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
+                    confirmButtonColor: '#2563eb',
+                    cancelButtonColor: '#ef4444',
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                     if (result.isConfirmed) {

@@ -3,11 +3,6 @@
 <head>
     <title>Article - LLC vs C-Corp - LegalQ&A</title>
     @include('partials.head')
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Article - LLC vs C-Corp - LegalQ&A</title>
-    @include('partials.head')
     <link rel="stylesheet" href="{{ asset('assets/css/site.css') }}">
 
 </head>
@@ -65,7 +60,7 @@
                     <div>
                         <h5 class="fw-bold mb-2">About Marcus Vane</h5>
                         <p class="small text-muted mb-3">Marcus is a startup attorney based in New York. He has helped over 200 founders choose their initial legal structures and negotiate seed round financing.</p>
-                        <a href="lawyer-profile" class="btn btn-sm btn-gold rounded-pill px-4 fw-bold">View Profile</a>
+                        <a href="{{ route('lawyer-profile') }}" class="btn btn-sm btn-gold rounded-pill px-4 fw-bold">View Profile</a>
                     </div>
                 </div>
             </div>

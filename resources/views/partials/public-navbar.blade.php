@@ -38,25 +38,41 @@
                     </select>
                 </div>
                 
-                <div class="auth-buttons guest-only d-flex gap-2">
+                @guest
+                <div class="auth-buttons d-flex gap-2">
                     <a href="{{ route('login') }}" class="btn btn-outline-primary btn-sm">Sign In</a>
                     <a href="{{ route('register') }}" class="btn btn-primary btn-sm">Sign Up</a>
                 </div>
+                @endguest
 
-                <div class="user-menu logged-in-only d-none">
+                @auth
+                <div class="user-menu">
                      <div class="dropdown">
                         <button class="btn btn-link text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
                             <i class="fas fa-user-circle fa-lg"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark shadow">
-                             <li><h6 class="dropdown-header" id="userMenuName">User Name</h6></li>
-                             <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">Admin Dashboard</a></li>
-                             <li><a class="dropdown-item" href="{{ route('lawyer.dashboard') }}">Lawyer Dashboard</a></li>
+                             <li><h6 class="dropdown-header">{{ Auth::user()->name }}</h6></li>
+                             
+                             @if(Auth::user()->role === 'admin')
+                                <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">Admin Dashboard</a></li>
+                             @elseif(Auth::user()->role === 'lawyer')
+                                <li><a class="dropdown-item" href="{{ route('lawyer.dashboard') }}">Lawyer Dashboard</a></li>
+                             @else
+                                <li><a class="dropdown-item" href="{{ route('profile.edit') }}">My Profile</a></li>
+                             @endif
+
                              <li><hr class="dropdown-divider"></li>
-                             <li><a class="dropdown-item" href="#" onclick="handleLogout()">Logout</a></li>
+                             <li>
+                                <form method="POST" action="{{ route('logout') }}" id="logout-form">
+                                    @csrf
+                                </form>
+                                <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                             </li>
                         </ul>
                      </div>
                 </div>
+                @endauth
             </div>
         </div>
     </div>

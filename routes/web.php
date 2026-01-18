@@ -1,6 +1,26 @@
 <?php
+require __DIR__.'/auth.php';
 
+
+
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,20 +48,22 @@ Route::view('/edit-lawyer-profile', 'public.edit-lawyer-profile')->name('edit-la
 
 Route::view('/blog', 'public.blog')->name('blog');
 Route::view('/article/details', 'public.article-details')->name('article-details'); // Generic for demo
+Route::view('/my-articles', 'public.my-articles')->name('my-articles');
+Route::view('/article/new', 'public.new-article')->name('new-article');
+Route::view('/article/edit', 'public.edit-article')->name('edit-article');
 
-Route::view('/login', 'public.login')->name('login');
-Route::view('/register', 'public.register')->name('register');
+// Route::view('/login', 'public.login')->name('login'); // Handled by Breeze in auth.php
+// Route::view('/register', 'public.register')->name('register'); // Handled by Breeze in auth.php
 Route::view('/lawyer/request', 'public.lawyer-request')->name('lawyer-request');
 
 // ============================================================================
 // 2) ADMIN ROUTES
 // Prefix: /admin
 // ============================================================================
-
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
     Route::view('/', 'admin.dashboard')->name('dashboard');
     Route::view('/dashboard', 'admin.dashboard'); // Alias
-    
+
     Route::resource('users',  \App\Http\Controllers\Admin\UserController::class);
     Route::view('/lawyer-requests', 'admin.lawyer-requests.index')->name('lawyer-requests');
     Route::view('/questions', 'admin.questions.index')->name('questions');
@@ -54,18 +76,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
 // Prefix: /lawyer
 // ============================================================================
 
-Route::prefix('lawyer')->name('lawyer.')->group(function () {
+Route::prefix('lawyer')->name('lawyer.')->middleware(['auth', 'role:lawyer'])->group(function () {
     Route::view('/', 'lawyer.dashboard')->name('dashboard');
     Route::view('/dashboard', 'lawyer.dashboard'); // Alias
-    
+
     Route::view('/questions', 'lawyer.questions.index')->name('questions.index');
-    
+
     Route::view('/answers', 'lawyer.answers.index')->name('answers.index');
     Route::view('/answers/edit', 'lawyer.answers.edit')->name('answers.edit');
-    
+
     Route::view('/articles', 'lawyer.articles.index')->name('articles.index');
     Route::view('/articles/create', 'lawyer.articles.create')->name('articles.create');
     Route::view('/articles/edit', 'lawyer.articles.edit')->name('articles.edit');
-    
+
     Route::view('/profile/edit', 'lawyer.profile.edit')->name('profile.edit');
 });

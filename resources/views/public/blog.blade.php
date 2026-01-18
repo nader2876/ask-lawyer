@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.public')
 
 @section('title', 'LegalQ&A - Insights Blog')
 
@@ -35,7 +35,7 @@
                     <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&auto=format&fit=crop&q=60" class="card-img-top" alt="Law">
                     <div class="card-body p-4">
                         <div class="mb-3"><span class="badge bg-soft-primary text-primary-soft badge-outline rounded-pill">Consumer Rights</span></div>
-                        <h5 class="fw-bold mb-3"><a href="{{ url('/article-details') }}" class="text-white text-decoration-none">How to handle faulty products: A legal guide</a></h5>
+                        <h5 class="fw-bold mb-3"><a href="{{ route('article-details') }}" class="text-white text-decoration-none">How to handle faulty products: A legal guide</a></h5>
                         <p class="text-muted small">Understanding the consumer protection act and your rights to refund or replacement...</p>
                         <div class="d-flex align-items-center mt-4 pt-3 border-top border-secondary">
                             <span class="small text-muted">Atty. David Hale</span>
@@ -51,7 +51,7 @@
                     <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&auto=format&fit=crop&q=60" class="card-img-top" alt="Startup">
                     <div class="card-body p-4">
                         <div class="mb-3"><span class="badge bg-soft-primary text-primary-soft badge-outline rounded-pill">Startups</span></div>
-                        <h5 class="fw-bold mb-3"><a href="{{ url('/article-details') }}" class="text-white text-decoration-none">LLC vs C-Corp: Which is right for your startup?</a></h5>
+                        <h5 class="fw-bold mb-3"><a href="{{ route('article-details') }}" class="text-white text-decoration-none">LLC vs C-Corp: Which is right for your startup?</a></h5>
                         <p class="text-muted small">A deep dive into tax implications and legal protections for new business owners...</p>
                         <div class="d-flex align-items-center mt-4 pt-3 border-top border-secondary">
                             <span class="small text-muted">Atty. Marcus Vane</span>

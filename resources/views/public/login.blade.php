@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.public')
 
 @section('title', 'LegalQ&A - Login')
 
@@ -13,14 +13,21 @@
                 </div>
                 <div class="card shadow-lg border-secondary p-4 p-md-5 bg-dark">
                     <h3 class="fw-bold mb-4 text-white">Welcome Back</h3>
-                    <form onsubmit="event.preventDefault(); window.location.href='{{ url('/') }}'">
+                    <form method="POST" action="{{ route('login') }}">
+                        @csrf
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-white">Email Address</label>
-                            <input type="email" class="form-control rounded-pill px-4 py-2" placeholder="name@example.com" required>
+                            <input type="email" name="email" class="form-control rounded-pill px-4 py-2" placeholder="name@example.com" value="{{ old('email') }}" required autofocus>
+                            @error('email')
+                                <span class="text-danger small ms-3">{{ $message }}</span>
+                            @enderror
                         </div>
                         <div class="mb-4">
                             <label class="form-label small fw-bold text-white">Password</label>
-                            <input type="password" class="form-control rounded-pill px-4 py-2" placeholder="Enter password" required>
+                            <input type="password" name="password" class="form-control rounded-pill px-4 py-2" placeholder="Enter password" required>
+                            @error('password')
+                                <span class="text-danger small ms-3">{{ $message }}</span>
+                            @enderror
                         </div>
                         <div class="d-grid mb-4">
                             <button type="submit" class="btn btn-gold rounded-pill py-2 fw-bold">Sign In</button>

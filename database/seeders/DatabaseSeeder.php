@@ -14,6 +14,25 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // 0) Admin User
+        User::factory()->create([
+            'name' => 'Admin User',
+            'email' => 'admin@example.com',
+            'role' => 'admin',
+        ]);
+
+        // 0.1) Demo Lawyer
+        $demoLawyer = User::factory()->create([
+            'name' => 'Demo Lawyer',
+            'email' => 'lawyer@example.com',
+            'role' => 'lawyer',
+        ]);
+
+        LawyerProfile::factory()->create([
+            'user_id' => $demoLawyer->id,
+            'status' => 'accepted',
+        ]);
+
         // 1) Categories
         $categories = Category::factory()->count(10)->create();
 
