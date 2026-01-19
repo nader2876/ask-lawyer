@@ -8,6 +8,8 @@ use Livewire\Component;
 
 class UsersManagement extends Component
 {
+    use \Livewire\WithPagination;
+
     public $isviewopen = false;
     public $iseditopen = false;
     public $isaddopen = false;
@@ -53,7 +55,7 @@ class UsersManagement extends Component
             default        => $q->orderBy('created_at', 'desc'),
         };
     })
-    ->get();
+    ->paginate(10);
 
         return view('livewire.admin.users-management', compact('users'));
     }

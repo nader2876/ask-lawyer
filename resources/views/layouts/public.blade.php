@@ -22,7 +22,10 @@
         // Pass Laravel Auth state to JS for the "Demo" logic
         let dbRole = @json(auth()->user()?->role ?? 'guest');
         // Map database roles to frontend demo roles
-        if (dbRole === 'lawyer') dbRole = 'lawyer-approved'; 
+        if (dbRole === 'lawyer') {
+            const isPending = @json(auth()->user()?->lawyerProfile?->status === 'pending');
+            dbRole = isPending ? 'lawyer-pending' : 'lawyer-approved'; 
+        } 
         window.currentDemoRole = dbRole;
         window.authUser = @json(auth()->user());
     </script>

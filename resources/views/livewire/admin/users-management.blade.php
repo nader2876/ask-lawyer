@@ -109,6 +109,37 @@
             </tbody>
         </table>
     </div>
+    
+    <div class="px-4 py-3 border-top border-white/10 d-flex align-items-center justify-content-between" style="border-top: 1px solid rgba(255,255,255,0.1);">
+        <div class="text-muted small">
+            Showing {{ $users->firstItem() ?? 0 }} to {{ $users->lastItem() ?? 0 }} of {{ $users->total() }} results
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            @if ($users->onFirstPage())
+                <button class="btn btn-sm btn-secondary disabled" style="opacity: 0.5; cursor: not-allowed; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8;">
+                    <i class="fas fa-chevron-left"></i> Previous
+                </button>
+            @else
+                <button wire:click="previousPage" class="btn btn-sm btn-outline-light" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #e2e8f0;">
+                    <i class="fas fa-chevron-left"></i> Previous
+                </button>
+            @endif
+
+            <span class="text-muted small mx-2">
+                Page {{ $users->currentPage() }} of {{ $users->lastPage() }}
+            </span>
+
+            @if ($users->hasMorePages())
+                <button wire:click="nextPage" class="btn btn-sm btn-outline-light" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #e2e8f0;">
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+            @else
+                <button class="btn btn-sm btn-secondary disabled" style="opacity: 0.5; cursor: not-allowed; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8;">
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+            @endif
+        </div>
+    </div>
 
     @if ($isviewopen)
         <div class="modal show" id="viewUserModal" style="display: flex !important; align-items: center; justify-content: center; background-color: rgba(0,0,0,0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1050;">

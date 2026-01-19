@@ -189,7 +189,11 @@
 }
 
 .stat-card {
-    background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(30, 41, 59, 0.8) 100%);
+    background: linear-gradient(
+        135deg,
+        var(--bg-secondary) 0%,
+        rgba(30, 41, 59, 0.8) 100%
+    );
     border: 1px solid var(--border-color);
     border-radius: 0.5rem;
     padding: 1.5rem;
@@ -228,11 +232,26 @@
     font-size: 1.5rem;
 }
 
-.stat-icon.primary { background-color: rgba(37, 99, 235, 0.2); color: var(--primary); }
-.stat-icon.success { background-color: rgba(16, 185, 129, 0.2); color: var(--success); }
-.stat-icon.warning { background-color: rgba(245, 158, 11, 0.2); color: var(--warning); }
-.stat-icon.danger { background-color: rgba(239, 68, 68, 0.2); color: var(--danger); }
-.stat-icon.info { background-color: rgba(6, 182, 212, 0.2); color: var(--info); }
+.stat-icon.primary {
+    background-color: rgba(37, 99, 235, 0.2);
+    color: var(--primary);
+}
+.stat-icon.success {
+    background-color: rgba(16, 185, 129, 0.2);
+    color: var(--success);
+}
+.stat-icon.warning {
+    background-color: rgba(245, 158, 11, 0.2);
+    color: var(--warning);
+}
+.stat-icon.danger {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: var(--danger);
+}
+.stat-icon.info {
+    background-color: rgba(6, 182, 212, 0.2);
+    color: var(--info);
+}
 
 /* ============================================
    FILTERS BAR
@@ -407,27 +426,27 @@
         transform: translateX(-100%);
         transition: transform 0.3s ease-in-out;
     }
-    
+
     .admin-sidebar.mobile-open {
         transform: translateX(0);
     }
-    
+
     .admin-content {
         margin-left: 0;
     }
-    
+
     .stats-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .filters-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .content-wrapper {
         padding: 1rem;
     }
-    
+
     .admin-topbar {
         padding: 1rem;
     }
@@ -456,4 +475,33 @@
 
 .empty-state p {
     font-size: 0.875rem;
+}
+
+/* ============================================
+   SCROLLBARS
+   ============================================ */
+
+/* Global Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) var(--bg-primary);
 }

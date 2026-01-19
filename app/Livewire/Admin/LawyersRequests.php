@@ -77,4 +77,5 @@ public $sort = 'created-desc';
 
         $this->dispatch('success', 'Request rejected successfully!');
     }
+    
 }

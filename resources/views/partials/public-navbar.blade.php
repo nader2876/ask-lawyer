@@ -77,7 +77,11 @@
         </div>
     </div>
 </nav>
-<div id="pendingLawyerBanner" class="bg-warning text-dark text-center py-2 fw-bold d-none" style="margin-top: 75px;">
+@php
+    $isPendingLawyer = Auth::check() && Auth::user()->role === 'lawyer' && Auth::user()->lawyerProfile?->status === 'pending';
+@endphp
+
+<div id="pendingLawyerBanner" class="bg-warning text-dark text-center py-2 fw-bold {{ $isPendingLawyer ? '' : 'd-none' }}" style="margin-top: 75px;">
     <div class="container">
         <i class="fas fa-exclamation-triangle me-2"></i> Pending admin approval. You cannot answer or post articles yet.
     </div>

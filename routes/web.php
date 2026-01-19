@@ -5,6 +5,7 @@ require __DIR__.'/auth.php';
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\publicIndexController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -37,7 +38,7 @@ Route::middleware('auth')->group(function () {
 // 1) PUBLIC ROUTES
 // ============================================================================
 
-Route::view('/', 'public.index')->name('home');
+Route::get('/', [publicIndexController::class, 'index'])->name('home');
 Route::view('/index', 'public.index')->name('index'); // Alias
 
 Route::view('/question-details', 'public.question-details')->name('question-details'); // Using generic for demo, usually /{id}
