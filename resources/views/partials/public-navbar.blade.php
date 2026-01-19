@@ -67,7 +67,7 @@
                                 <form method="POST" action="{{ route('logout') }}" id="logout-form">
                                     @csrf
                                 </form>
-                                <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                                <a class="dropdown-item" href="#" onclick="confirmUserLogout(event)">Logout</a>
                              </li>
                         </ul>
                      </div>
@@ -77,6 +77,27 @@
         </div>
     </div>
 </nav>
+
+<script>
+    function confirmUserLogout(e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will be logged out of your account.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#eab308', // Using gold/warning color for public site
+            cancelButtonColor: '#d33',
+            background: '#1e293b',
+            color: '#fff',
+            confirmButtonText: 'Yes, Logout'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('logout-form').submit();
+            }
+        })
+    }
+</script>
 @php
     $isPendingLawyer = Auth::check() && Auth::user()->role === 'lawyer' && Auth::user()->lawyerProfile?->status === 'pending';
 @endphp

@@ -42,7 +42,7 @@
                         </select>
                     </div>
                     <div class="mt-4">
-                        <a href="{{ url('/ask-question') }}" class="btn btn-gold w-100 rounded-pill py-3 fw-bold shadow">
+                        <a href="{{ url('ask-question') }}" class="btn btn-gold w-100 rounded-pill py-3 fw-bold shadow">
                             <i class="fas fa-plus me-2"></i> Ask a Question
                         </a>
                     </div>
@@ -63,11 +63,11 @@
                             <p class="text-muted small mb-4">{{$question->description}}</p>
                             <div class="d-flex align-items-center pt-3 border-top border-secondary">
                                 <div class="small"><i class="fas fa-comments text-warning me-2"></i> <span class="text-white">{{ $question->replies->count() }} Answers</span></div>
-                                <a href="{{ url('/question-details') }}" class="btn btn-outline-warning btn-sm rounded-pill px-4 ms-auto">Read Details</a>
+                                <a href="{{ url('/question-details/'.$question->id) }}" class="btn btn-outline-warning btn-sm rounded-pill px-4 ms-auto">Read Details</a>
                             </div>
                         </div>
                     </div>
-@endforeach
+                                          @endforeach
                 
                 </div>
             </div>

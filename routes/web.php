@@ -6,6 +6,7 @@ require __DIR__.'/auth.php';
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\publicIndexController;
+use App\Http\Controllers\questionDetailsController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -39,10 +40,13 @@ Route::middleware('auth')->group(function () {
 // ============================================================================
 
 Route::get('/', [publicIndexController::class, 'index'])->name('home');
-Route::view('/index', 'public.index')->name('index'); // Alias
+Route::get('/index', [publicIndexController::class, 'index'])->name('index'); // Alias
 
-Route::view('/question-details', 'public.question-details')->name('question-details'); // Using generic for demo, usually /{id}
-Route::view('/ask', 'public.ask-question')->name('ask-question');
+Route::get('/question-details/{id}', [questionDetailsController::class, 'index'])->name('question-details'); // Using generic for demo, usually /{id}
+Route::middleware('auth','role:user')->group(function () {
+Route::get('/ask-question',[publicIndexController::class,'addQuestion'])->name('ask-question');
+Route::post('/store-question',[publicIndexController::class,'storeQuestion'])->name('store-question');
+});
 Route::view('/lawyers', 'public.lawyers')->name('lawyers');
 Route::view('/lawyer-profile', 'public.lawyer-profile')->name('lawyer-profile'); // Generic for demo
 Route::view('/edit-lawyer-profile', 'public.edit-lawyer-profile')->name('edit-lawyer-profile'); // Generic for demo

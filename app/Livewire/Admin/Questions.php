@@ -100,7 +100,6 @@ class Questions extends Component
         $reply = \App\Models\QuestionReply::findOrFail($replyId);
         $reply->delete();
         
-        // Refresh the selected question's replies
         $this->selectedQuestion->refresh();
         $this->replies = $this->selectedQuestion->replies;
 

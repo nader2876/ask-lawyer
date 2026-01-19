@@ -25,4 +25,5 @@ class QuestionReply extends Model
     {
         return $this->belongsTo(User::class, 'lawyer_id');
     }
+    
 }

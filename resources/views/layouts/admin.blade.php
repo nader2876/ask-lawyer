@@ -35,5 +35,7 @@
     <script src="{{ asset('assets/js/admin-ui.js') }}"></script>
     @yield('scripts')
     @livewireScripts
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>

@@ -15,20 +15,17 @@
                 <div class="card mb-4">
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="badge badge-secondary">IP Law</span>
-                            <span class="text-muted small">Asked on Jan 13, 2026</span>
+                            <span class="badge badge-secondary">{{$question->category->name}}</span>
+                            <span class="text-muted small">Asked on {{$question->created_at->diffForHumans()}}</span>
                         </div>
-                        <h2 class="mb-3">How to register a trademark in UAE?</h2>
+                        <h2 class="mb-3">{{$question->title}}</h2>
                         <p class="text-secondary mb-4">
-                            I'm planning to launch a new tech startup in Dubai and want to protect my brand name and logo. 
-                            What is the process for trademark registration in the UAE? How long does it take, and what are the costs involved?
-                            Also, does UAE trademark protection extend to other GCC countries automatically?
+                            {{$question->description}}
                         </p>
                         <div class="d-flex align-items-center pt-3 border-top" style="border-color: var(--border-color) !important;">
-                            <img src="https://ui-avatars.com/api/?name=Ahmed+Hassan&background=2563eb&color=fff" class="rounded-circle me-3" width="40">
+                            <img src="https://ui-avatars.com/api/?name={{$question->owner->name}}&background=2563eb&color=fff" class="rounded-circle me-3" width="40">
                             <div>
-                                <p class="mb-0 fw-semibold">Ahmed Hassan</p>
-                                <small class="text-muted">Tech Entrepreneur</small>
+                                <p class="mb-0 fw-semibold">{{$question->owner->name}}</p>
                             </div>
                         </div>
                     </div>
@@ -39,55 +36,32 @@
 
                 <!-- Answer 1 -->
                 <!-- BACKEND: GET /api/questions/{id}/answers -->
+                @foreach ($question->replies as $reply)
                 <div class="card mb-3">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-center mb-3">
-                            <img src="https://ui-avatars.com/api/?name=Dr+Khalid+Rahman&background=10b981&color=fff" class="rounded-circle me-3" width="40">
+                            <img src="https://ui-avatars.com/api/?name={{$reply->lawyer->name}}&background=10b981&color=fff" class="rounded-circle me-3" width="40">
                             <div class="flex-grow-1">
-                                <p class="mb-0 fw-semibold">Dr. Khalid Rahman</p>
-                                <small class="text-muted">IP & Corporate Law Specialist</small>
+                                <p class="mb-0 fw-semibold">{{$reply->lawyer->name}}</p>
+                                <small class="text-muted">@foreach($reply->lawyer->specializations as $category){{$category->name}} @endforeach</small>
                             </div>
                             <span class="badge badge-success">Verified Lawyer</span>
                         </div>
                         <p class="text-secondary mb-3">
-                            Trademark registration in UAE is handled by the Ministry of Economy. The process typically takes 6-12 months. 
-                            You'll need to file an application with your brand details, pay the filing fee (around AED 1,000-3,000 depending on classes), 
-                            and wait for examination. UAE trademark protection is territorial and does NOT automatically extend to other GCC countries - 
-                            you need separate applications for each country or use the Madrid Protocol for international registration.
+                            {{$reply->body}}
                         </p>
                         <div class="d-flex gap-2">
                             <button class="btn btn-sm btn-outline-primary" onclick="likeAnswer('ANS-001')">
                                 <i class="far fa-thumbs-up me-1"></i>Helpful (15)
                             </button>
-                            <small class="text-muted align-self-center">Answered on Jan 13, 2026</small>
+                            <small class="text-muted align-self-center">Answered on {{$reply->created_at->diffForHumans()}}</small>
                         </div>
                     </div>
                 </div>
+                @endforeach
 
-                <!-- Answer 2 -->
-                <div class="card mb-4">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center mb-3">
-                            <img src="https://ui-avatars.com/api/?name=Noor+Hassan&background=10b981&color=fff" class="rounded-circle me-3" width="40">
-                            <div class="flex-grow-1">
-                                <p class="mb-0 fw-semibold">Noor Hassan</p>
-                                <small class="text-muted">IP Law Expert</small>
-                            </div>
-                            <span class="badge badge-success">Verified Lawyer</span>
-                        </div>
-                        <p class="text-secondary mb-3">
-                            To add to Dr. Khalid's answer: Before filing, conduct a comprehensive trademark search to ensure your mark isn't already registered. 
-                            The UAE follows the Nice Classification system (45 classes). Consider hiring a local IP agent to handle the application - 
-                            they can navigate the Arabic documentation requirements and follow up with the Ministry more efficiently.
-                        </p>
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-outline-primary" onclick="likeAnswer('ANS-002')">
-                                <i class="far fa-thumbs-up me-1"></i>Helpful (8)
-                            </button>
-                            <small class="text-muted align-self-center">Answered on Jan 13, 2026</small>
-                        </div>
-                    </div>
-                </div>
+            
+           
 
                 <!-- Answer Form (Approved Lawyers Only) -->
                 <!-- BACKEND: POST /api/questions/{id}/answers -->
@@ -124,43 +98,43 @@
             <!-- Sidebar -->
             <div class="col-lg-4">
                 <!-- Top Answerer -->
+               
                 <div class="card mb-3">
                     <div class="card-body p-4">
                         <h6 class="fw-semibold mb-3">Top Answerer</h6>
                         <div class="text-center mb-3">
-                            <img src="https://ui-avatars.com/api/?name=Dr+Khalid+Rahman&background=10b981&color=fff" class="rounded-circle mb-2" width="60">
-                            <h6 class="mb-1">Dr. Khalid Rahman</h6>
-                            <p class="small text-muted mb-0">IP & Corporate Law</p>
+                            <img src="https://ui-avatars.com/api/?name={{$topAnswerer->name}}&background=10b981&color=fff" class="rounded-circle mb-2" width="60">
+                            <h6 class="mb-1">{{$topAnswerer->name}}</h6>
+                            <p class="small text-muted mb-0">
+                                @foreach($topAnswerer->specializations->take(2) as $spec)
+                                    {{ $spec->name }}@if(!$loop->last) & @endif
+                                @endforeach
+                            </p>
+                             <div class="mt-2">
+                                <span class="badge bg-light text-dark border"><i class="fas fa-comment-dots me-1 text-primary"></i> {{ $topAnswerer->replies_count }} Answers</span>
+                            </div>
                         </div>
                         <a href="{{ route('lawyer-profile') }}" class="btn btn-outline-primary btn-sm w-100">
                             <i class="fas fa-user me-1"></i>View Profile
                         </a>
                     </div>
                 </div>
+          
 
                 <!-- Related Questions -->
                 <div class="card">
                     <div class="card-body p-4">
                         <h6 class="fw-semibold mb-3">Related Questions</h6>
                         <ul class="list-unstyled mb-0">
+                             @foreach ($relatedQuestions as $relatedQuestion)
                             <li class="mb-3">
-                                <a href="{{ route('question-details') }}" class="text-decoration-none" style="color: var(--text-primary);">
-                                    <small class="d-block mb-1">Patent application process in UAE</small>
+                                <a href="{{ route('question-details', ['id' => $relatedQuestion->id]) }}" class="text-decoration-none" style="color: var(--text-primary);">
+                                    <small class="d-block mb-1">{{$relatedQuestion->title}}</small>
                                 </a>
-                                <small class="text-muted">3 Answers</small>
+                                <small class="text-muted">{{$relatedQuestion->replies->count()}} Answers</small>
                             </li>
-                            <li class="mb-3">
-                                <a href="{{ route('question-details') }}" class="text-decoration-none" style="color: var(--text-primary);">
-                                    <small class="d-block mb-1">Copyright protection for software</small>
-                                </a>
-                                <small class="text-muted">5 Answers</small>
-                            </li>
-                            <li>
-                                <a href="{{ route('question-details') }}" class="text-decoration-none" style="color: var(--text-primary);">
-                                    <small class="d-block mb-1">GCC trademark registration</small>
-                                </a>
-                                <small class="text-muted">2 Answers</small>
-                            </li>
+                            @endforeach
+                           
                         </ul>
                     </div>
                 </div>
