@@ -27,12 +27,10 @@
                         <h6 class="fw-bold mb-3"><i class="fas fa-filter text-warning me-2"></i> Categories</h6>
                         <select class="form-select mb-3" data-filter-category data-filter-target="questions-container">
                             <option value="">All Categories</option>
-                            <option value="Corporate Law">Corporate Law</option>
-                            <option value="Family Law">Family Law</option>
-                            <option value="IP Law">IP Law</option>
-                            <option value="Real Estate">Real Estate</option>
-                            <option value="Criminal Law">Criminal Law</option>
-                            <option value="Consumer Rights">Consumer Rights</option>
+                            @foreach($categories as $category)
+
+                            <option value="{{$category->name}}">{{$category->name}}</option>
+                          @endforeach
                         </select>
                     </div>
                     <div class="card p-3 shadow-sm border-secondary">
@@ -54,88 +52,23 @@
             <div class="col-lg-9">
                 <div id="questions-container" class="row">
                     <!-- Sample Item 1 -->
-                    <div class="col-12 mb-4" data-search-item data-category-item data-category="Corporate Law" data-date="2026-01-13" data-answers="5" data-sort-item>
+                    @foreach($questions as $question)
+                    <div class="col-12 mb-4" >
                         <div class="card question-card h-100 p-4 card-hover overflow-hidden">
                             <div class="d-flex justify-content-between mb-3">
-                                <span class="badge bg-soft-primary text-primary-soft badge-outline px-3 py-2 rounded-pill">Corporate Law</span>
-                                <span class="text-muted small"><i class="fas fa-clock me-1"></i> Today</span>
+                                <span class="badge bg-soft-primary text-primary-soft badge-outline px-3 py-2 rounded-pill">{{$question->category->name}}</span>
+                                <span class="text-muted small"><i class="fas fa-clock me-1"></i> {{$question->created_at}}</span>
                             </div>
-                            <h5 class="fw-bold mb-3"><a href="{{ url('/question-details') }}" class="text-white text-decoration-none">Intellectual property rights for software algorithms?</a></h5>
-                            <p class="text-muted small mb-4">I developed a unique sorting algorithm and want to know if I can patent it or if it falls under copyright only...</p>
+                            <h5 class="fw-bold mb-3"><a href="{{ url('/question-details') }}" class="text-white text-decoration-none">{{$question->title}}</a></h5>
+                            <p class="text-muted small mb-4">{{$question->description}}</p>
                             <div class="d-flex align-items-center pt-3 border-top border-secondary">
-                                <div class="small"><i class="fas fa-comments text-warning me-2"></i> <span class="text-white">5 Answers</span></div>
-                                <div class="ms-4 small"><i class="fas fa-eye text-warning me-2"></i> <span class="text-white">342 Views</span></div>
+                                <div class="small"><i class="fas fa-comments text-warning me-2"></i> <span class="text-white">{{ $question->replies->count() }} Answers</span></div>
                                 <a href="{{ url('/question-details') }}" class="btn btn-outline-warning btn-sm rounded-pill px-4 ms-auto">Read Details</a>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Sample Item 2 -->
-                    <div class="col-12 mb-4" data-search-item data-category-item data-category="Family Law" data-date="2026-01-12" data-answers="3" data-sort-item>
-                        <div class="card question-card h-100 p-4 card-hover overflow-hidden">
-                            <div class="d-flex justify-content-between mb-3">
-                                <span class="badge bg-soft-primary text-primary-soft badge-outline px-3 py-2 rounded-pill">Family Law</span>
-                                <span class="text-muted small"><i class="fas fa-clock me-1"></i> Yesterday</span>
-                            </div>
-                            <h5 class="fw-bold mb-3"><a href="{{ url('/question-details') }}" class="text-white text-decoration-none">Divorce processing time in New York State?</a></h5>
-                            <p class="text-muted small mb-4">Starting the process of mutual consent divorce. How long does the paperwork usually take to clear through the courts?</p>
-                            <div class="d-flex align-items-center pt-3 border-top border-secondary">
-                                <div class="small"><i class="fas fa-comments text-warning me-2"></i> <span class="text-white">3 Answers</span></div>
-                                <div class="ms-4 small"><i class="fas fa-eye text-warning me-2"></i> <span class="text-white">128 Views</span></div>
-                                <a href="{{ url('/question-details') }}" class="btn btn-outline-warning btn-sm rounded-pill px-4 ms-auto">Read Details</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Sample Item 3 -->
-                    <div class="col-12 mb-4" data-search-item data-category-item data-category="Real Estate" data-date="2026-01-10" data-answers="0" data-sort-item>
-                        <div class="card question-card h-100 p-4 card-hover overflow-hidden">
-                            <div class="d-flex justify-content-between mb-3">
-                                <span class="badge bg-soft-primary text-primary-soft badge-outline px-3 py-2 rounded-pill">Real Estate</span>
-                                <span class="text-muted small"><i class="fas fa-clock me-1"></i> 3 days ago</span>
-                            </div>
-                            <h5 class="fw-bold mb-3"><a href="{{ url('/question-details') }}" class="text-white text-decoration-none">Security deposit dispute with former landlord?</a></h5>
-                            <p class="text-muted small mb-4">My landlord is withholding $800 from my deposit for carpet cleaning that I believe is normal wear and tear...</p>
-                            <div class="d-flex align-items-center pt-3 border-top border-secondary">
-                                <div class="small"><i class="fas fa-comments text-warning me-2"></i> <span class="text-white">0 Answers</span></div>
-                                <div class="ms-4 small"><i class="fas fa-eye text-warning me-2"></i> <span class="text-white">56 Views</span></div>
-                                <a href="{{ url('/question-details') }}" class="btn btn-outline-warning btn-sm rounded-pill px-4 ms-auto">Read Details</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Sample Item 4 -->
-                    <div class="col-12 mb-4" data-search-item data-category-item data-category="Criminal Law" data-date="2026-01-08" data-answers="10" data-sort-item>
-                        <div class="card question-card h-100 p-4 card-hover overflow-hidden">
-                            <div class="d-flex justify-content-between mb-3">
-                                <span class="badge bg-soft-primary text-primary-soft badge-outline px-3 py-2 rounded-pill">Criminal Law</span>
-                                <span class="text-muted small"><i class="fas fa-clock me-1"></i> 5 days ago</span>
-                            </div>
-                            <h5 class="fw-bold mb-3"><a href="{{ url('/question-details') }}" class="text-white text-decoration-none">DUI first offense consequences?</a></h5>
-                            <p class="text-muted small mb-4">Facing a first-time DUI charge. What are the typical license suspension periods and mandatory fines?</p>
-                            <div class="d-flex align-items-center pt-3 border-top border-secondary">
-                                <div class="small"><i class="fas fa-comments text-warning me-2"></i> <span class="text-white">10 Answers</span></div>
-                                <div class="ms-4 small"><i class="fas fa-eye text-warning me-2"></i> <span class="text-white">942 Views</span></div>
-                                <a href="{{ url('/question-details') }}" class="btn btn-outline-warning btn-sm rounded-pill px-4 ms-auto">Read Details</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Sample Item 5 -->
-                    <div class="col-12 mb-4" data-search-item data-category-item data-category="IP Law" data-date="2026-01-05" data-answers="2" data-sort-item>
-                        <div class="card question-card h-100 p-4 card-hover overflow-hidden">
-                            <div class="d-flex justify-content-between mb-3">
-                                <span class="badge bg-soft-primary text-primary-soft badge-outline px-3 py-2 rounded-pill">IP Law</span>
-                                <span class="text-muted small"><i class="fas fa-clock me-1"></i> 1 week ago</span>
-                            </div>
-                            <h5 class="fw-bold mb-3"><a href="{{ url('/question-details') }}" class="text-white text-decoration-none">Trademarking a catchy slogan for small business?</a></h5>
-                            <p class="text-muted small mb-4">I have a slogan for my boutique and want to protect it nationally. What is the USPTO filing process like?</p>
-                            <div class="d-flex align-items-center pt-3 border-top border-secondary">
-                                <div class="small"><i class="fas fa-comments text-warning me-2"></i> <span class="text-white">2 Answers</span></div>
-                                <a href="{{ url('/question-details') }}" class="btn btn-outline-warning btn-sm rounded-pill px-4 ms-auto">Read Details</a>
-                            </div>
-                        </div>
-                    </div>
+@endforeach
+                
                 </div>
             </div>
         </div>
