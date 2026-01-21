@@ -82,13 +82,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
 // ============================================================================
 
 Route::prefix('lawyer')->name('lawyer.')->middleware(['auth', 'role:lawyer'])->group(function () {
-    Route::view('/', 'lawyer.dashboard')->name('dashboard');
-    Route::view('/dashboard', 'lawyer.dashboard'); // Alias
+    Route::redirect('/', '/lawyer/dashboard');
+    Route::view('/dashboard', 'lawyer.dashboard')->name('dashboard');
 
     Route::view('/questions', 'lawyer.questions.index')->name('questions.index');
 
     Route::view('/answers', 'lawyer.answers.index')->name('answers.index');
-    Route::view('/answers/edit', 'lawyer.answers.edit')->name('answers.edit');
+    Route::view('/answers/{id}/edit', 'lawyer.answers.edit')->name('answers.edit');
+    Route::view('/questions/{id}/answer', 'lawyer.answers.create')->name('questions.answer');
 
     Route::view('/articles', 'lawyer.articles.index')->name('articles.index');
     Route::view('/articles/create', 'lawyer.articles.create')->name('articles.create');

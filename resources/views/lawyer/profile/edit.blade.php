@@ -11,7 +11,7 @@
     <div class="container py-5" style="margin-top: 60px;">
         <div class="d-flex justify-content-between align-items-center mb-4">
              <h2 class="mb-0 fw-bold">Edit Profile & Content</h2>
-             <a href="{{ route('lawyer-profile') }}" class="btn btn-outline-primary"><i class="fas fa-arrow-left me-2"></i>Back to Profile</a>
+             <a href="{{ route('lawyer.dashboard') }}" class="btn btn-outline-primary"><i class="fas fa-arrow-left me-2"></i>Back to Dashboard</a>
         </div>
 
         <div class="row g-4">
@@ -23,7 +23,7 @@
                     </div>
                     <div class="card-body p-4 p-md-5">
                         <!-- BACKEND: POST /api/lawyer/profile/update -->
-                        <form id="editProfileForm" method="POST" action="{{ route('lawyer-profile') }}" enctype="multipart/form-data" onsubmit="return handleProfileSubmit(event);">
+                        <form id="editProfileForm" method="POST" action="#" enctype="multipart/form-data" onsubmit="return handleProfileSubmit(event);">
                             @csrf
                             @method('PUT')
                             
@@ -109,7 +109,7 @@
                             </div>
 
                             <div class="d-flex justify-content-end gap-2 pt-3">
-                                <a href="{{ route('lawyer-profile') }}" class="btn btn-outline-secondary px-4">Cancel</a>
+                                <a href="{{ route('lawyer.dashboard') }}" class="btn btn-outline-secondary px-4">Cancel</a>
                                 <button type="submit" class="btn btn-primary px-4 fw-bold">
                                     <i class="fas fa-save me-2"></i>Save Changes
                                 </button>
@@ -130,7 +130,7 @@
                             <!-- Answer 1 -->
                             <div class="list-group-item bg-transparent border-secondary p-4">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
-                                     <a href="{{ route('question-details') }}?id=101" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">What are the penalties for cybercrime defamation?</a>
+                                     <a href="{{ route('question-details', 101) }}" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">What are the penalties for cybercrime defamation?</a>
                                      <span class="badge bg-secondary text-info">Criminal Law</span>
                                 </div>
                                 <small class="text-muted d-block mb-2">Answered on 2026-01-12</small>
@@ -143,7 +143,7 @@
                             <!-- Answer 2 -->
                             <div class="list-group-item bg-transparent border-secondary p-4">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
-                                     <a href="{{ route('question-details') }}?id=102" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">Custody rights for expatriate mothers?</a>
+                                     <a href="{{ route('question-details', 102) }}" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">Custody rights for expatriate mothers?</a>
                                      <span class="badge bg-secondary text-warning">Family Law</span>
                                 </div>
                                 <small class="text-muted d-block mb-2">Answered on 2026-01-10</small>
@@ -156,7 +156,7 @@
                              <!-- Answer 3 -->
                              <div class="list-group-item bg-transparent border-secondary p-4">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
-                                     <a href="{{ route('question-details') }}?id=103" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">Starting a business without a local sponsor?</a>
+                                     <a href="{{ route('question-details', 103) }}" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">Starting a business without a local sponsor?</a>
                                      <span class="badge bg-secondary text-primary">Corporate Law</span>
                                 </div>
                                 <small class="text-muted d-block mb-2">Answered on 2026-01-08</small>
@@ -169,7 +169,7 @@
                             <!-- Answer 4 -->
                             <div class="list-group-item bg-transparent border-secondary p-4">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
-                                     <a href="{{ route('question-details') }}?id=104" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">Termination notice period requirements?</a>
+                                     <a href="{{ route('question-details', 104) }}" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">Termination notice period requirements?</a>
                                      <span class="badge bg-secondary text-danger">Labor Law</span>
                                 </div>
                                 <small class="text-muted d-block mb-2">Answered on 2026-01-05</small>
@@ -195,7 +195,7 @@
                             <!-- Article 1 -->
                             <div class="list-group-item bg-transparent border-secondary p-4">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
-                                     <a href="{{ route('article-details') }}?id=201" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">Understanding the New Commercial Courts Law</a>
+                                     <a href="{{ route('article.details', 201) }}" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">Understanding the New Commercial Courts Law</a>
                                      <span class="badge bg-primary">Corporate</span>
                                 </div>
                                 <small class="text-muted d-block mb-2">Published on 2026-01-12</small>
@@ -208,7 +208,7 @@
                              <!-- Article 2 -->
                              <div class="list-group-item bg-transparent border-secondary p-4">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
-                                     <a href="{{ route('article-details') }}?id=202" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">Property Ownership Rules for Non-Saudis</a>
+                                     <a href="{{ route('article.details', 202) }}" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">Property Ownership Rules for Non-Saudis</a>
                                      <span class="badge bg-success">Real Estate</span>
                                 </div>
                                 <small class="text-muted d-block mb-2">Published on 2026-01-08</small>
@@ -221,7 +221,7 @@
                             <!-- Article 3 -->
                             <div class="list-group-item bg-transparent border-secondary p-4">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
-                                     <a href="{{ route('article-details') }}?id=203" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">IP Rights for Tech Startups</a>
+                                     <a href="{{ route('article.details', 203) }}" class="fw-bold text-white text-decoration-none hover-primary h5 mb-0">IP Rights for Tech Startups</a>
                                      <span class="badge bg-secondary text-info">IP Law</span>
                                 </div>
                                 <small class="text-muted d-block mb-2">Published on 2025-12-28</small>
@@ -388,7 +388,7 @@
                 if (data.success) {
                     showToastMessage("Profile updated successfully!");
                     // Optionally redirect
-                    // window.location.href = "{{ route('lawyer-profile') }}";
+                    // window.location.href = "{{ route('lawyer.dashboard') }}";
                 } else {
                     showToastMessage("Error: " + (data.message || "Failed to update profile"));
                 }

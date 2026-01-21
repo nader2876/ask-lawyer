@@ -30,9 +30,9 @@
 
             <div class="content-wrapper p-4">
                 @if(session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <div class="alert bg-dark border border-warning text-warning alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
                 
