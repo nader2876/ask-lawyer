@@ -26,8 +26,8 @@ class LawyerProfile extends Model
         return $this->belongsTo(User::class);
     }
     public function categories()
-{
-    return $this->belongsToMany(Category::class, 'category_lawyer', 'lawyer_id', 'category_id');
-}
+    {
+        return $this->belongsToMany(Category::class, 'category_lawyer', 'lawyer_id', 'category_id', 'user_id');
+    }
 
 }

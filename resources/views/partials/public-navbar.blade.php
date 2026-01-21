@@ -8,7 +8,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Questions</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('index') ? 'active' : '' }}" href="{{ route('index') }}">Questions</a></li>
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('lawyers') ? 'active' : '' }}" href="{{ route('lawyers') }}">Lawyers</a></li>
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('blog') ? 'active' : '' }}" href="{{ route('blog') }}">Blog</a></li>
                 @if(request()->routeIs('ask-question'))

@@ -14,7 +14,7 @@
 }
 
 .navbar-brand {
-    font-family: 'Outfit', sans-serif;
+    font-family: "Outfit", sans-serif;
     font-weight: 700;
     letter-spacing: -0.5px;
     color: var(--warning) !important;
@@ -30,7 +30,7 @@
     margin: 0 0.125rem;
 }
 
-.navbar-nav .nav-link:hover, 
+.navbar-nav .nav-link:hover,
 .navbar-nav .nav-link.active {
     color: var(--text-primary);
     background-color: rgba(255, 255, 255, 0.05); /* Subtle hover bg */
@@ -90,14 +90,16 @@
 }
 
 /* Warning/Gold Buttons */
-.btn-warning, .btn-gold {
+.btn-warning,
+.btn-gold {
     background-color: var(--warning);
     border-color: var(--warning);
     color: var(--bg-primary);
     box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.2);
 }
 
-.btn-warning:hover, .btn-gold:hover {
+.btn-warning:hover,
+.btn-gold:hover {
     background-color: var(--warning-hover);
     border-color: var(--warning-hover);
     color: var(--bg-primary);
@@ -118,11 +120,13 @@
     border-bottom-color: var(--border-color);
 }
 
-.question-card, .article-card {
+.question-card,
+.article-card {
     transition: all 0.25s ease;
 }
 
-.question-card:hover, .article-card:hover {
+.question-card:hover,
+.article-card:hover {
     transform: translateY(-3px);
     border-color: var(--warning); /* Hover highlight using theme color */
     box-shadow: var(--shadow-lg);
@@ -131,8 +135,17 @@
 /* Hero Section Alignment */
 .hero-section {
     padding: 120px 0 80px;
-    background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.1), transparent 40%),
-                radial-gradient(circle at bottom left, rgba(245, 158, 11, 0.05), transparent 40%);
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(37, 99, 235, 0.1),
+            transparent 40%
+        ),
+        radial-gradient(
+            circle at bottom left,
+            rgba(245, 158, 11, 0.05),
+            transparent 40%
+        );
 }
 
 /* Footer Consistency */
@@ -144,8 +157,8 @@
 }
 
 /* Layout Utilities */
-.bg-primary-navy { 
-    background-color: var(--bg-secondary) !important; 
+.bg-primary-navy {
+    background-color: var(--bg-secondary) !important;
 }
 
 .filter-sidebar {
@@ -159,7 +172,6 @@
     font-size: 1.1rem;
 }
 
-
 /* Page Layout Utility */
 .page-wrapper {
     padding-top: 120px;
@@ -167,10 +179,97 @@
     min-height: 80vh;
 }
 
-
 /* FORCE GLOBAL DARK BACKGROUND */
-html, body {
+html,
+body {
     background-color: var(--bg-primary) !important;
     color: var(--text-primary) !important;
     min-height: 100vh;
+}
+
+/* ============================================
+   LANDING PAGE UTILITIES
+   ============================================ */
+
+/* Animation Utilities */
+.animate-fade-up {
+    animation: fadeUp 0.8s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+.animate-fade-down {
+    animation: fadeDown 0.8s ease-out forwards;
+    opacity: 0;
+    transform: translateY(-20px);
+}
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+@keyframes fadeDown {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Soft Backgrounds */
+.bg-soft-primary {
+    background-color: rgba(37, 99, 235, 0.1) !important;
+    color: var(--primary) !important;
+}
+.bg-soft-warning {
+    background-color: rgba(245, 158, 11, 0.1) !important;
+    color: var(--warning) !important;
+}
+.bg-soft-success {
+    background-color: rgba(16, 185, 129, 0.1) !important;
+    color: var(--success) !important;
+}
+
+/* Colors */
+.bg-gold {
+    background-color: var(--warning) !important;
+}
+.bg-tertiary {
+    background-color: var(--bg-tertiary) !important;
+}
+.text-gold {
+    color: var(--warning) !important;
+}
+.text-primary-soft {
+    color: #60a5fa !important;
+}
+
+/* Effects */
+.hover-white:hover {
+    color: #fff !important;
+    border-color: #fff !important;
+}
+.hover-scale {
+    transition: transform 0.3s ease;
+}
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+/* Spacing */
+.letter-spacing-1 {
+    letter-spacing: 1px;
+}
+.letter-spacing-2 {
+    letter-spacing: 2px;
+}
+
+/* Card Image Overlay helper */
+.stretched-link::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    content: "";
 }

@@ -114,7 +114,7 @@
                                 <span class="badge bg-light text-dark border"><i class="fas fa-comment-dots me-1 text-primary"></i> {{ $topAnswerer->replies_count }} Answers</span>
                             </div>
                         </div>
-                        <a href="{{ route('lawyer-profile') }}" class="btn btn-outline-primary btn-sm w-100">
+                        <a href="{{ route('lawyer-profile', $topAnswerer->id) }}" class="btn btn-outline-primary btn-sm w-100">
                             <i class="fas fa-user me-1"></i>View Profile
                         </a>
                     </div>

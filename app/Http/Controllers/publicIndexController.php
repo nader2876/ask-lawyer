@@ -5,20 +5,50 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use  App\Models\question;
 use  App\Models\Category;
+use App\Models\Article;
+use App\Models\LawyerProfile;
+
 class publicIndexController extends Controller
 {
-    //
+    public function landing()
+    {
+        $latestQuestions = Question::with(['category'])->withCount('replies')
+            ->orderBy('created_at', 'desc')
+            ->take(3)
+            ->get();
+            
+        return view('public.landing', compact('latestQuestions'));
+    }
+
     public function index()
     {
-        $questions= Question::all();
-        $categories= Category::all(); 
-return view('public.index', compact('questions', 'categories'));
+        
+        return view('public.index');
     }
+
+    public function blog()
+    {
+        return view('public.blog');
+    }
+
+    public function articleDetails($id)
+    {
+        $article = Article::with('author', 'category')->findOrFail($id);
+        return view('public.article-details', compact('article'));
+    }
+
+    public function lawyerProfile($id)
+    {
+        $lawyer = LawyerProfile::where('user_id', $id)->firstOrFail();
+        return view('public.lawyer-profile', compact('lawyer'));
+    }
+
     public function addQuestion()
     {
        $categories= Category::all(); 
-return view('public.ask-question', compact('categories'));
+       return view('public.ask-question', compact('categories'));
     }
+
     public function storeQuestion(Request $request)
     {
         $request->validate([

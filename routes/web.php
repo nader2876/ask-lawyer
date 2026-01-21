@@ -39,8 +39,8 @@ Route::middleware('auth')->group(function () {
 // 1) PUBLIC ROUTES
 // ============================================================================
 
-Route::get('/', [publicIndexController::class, 'index'])->name('home');
-Route::get('/index', [publicIndexController::class, 'index'])->name('index'); // Alias
+Route::get('/', [publicIndexController::class, 'landing'])->name('home');
+Route::get('/questions', [publicIndexController::class, 'index'])->name('index'); // Questions Feed (was index)
 
 Route::get('/question-details/{id}', [questionDetailsController::class, 'index'])->name('question-details'); // Using generic for demo, usually /{id}
 Route::middleware('auth','role:user')->group(function () {
@@ -48,11 +48,11 @@ Route::get('/ask-question',[publicIndexController::class,'addQuestion'])->name('
 Route::post('/store-question',[publicIndexController::class,'storeQuestion'])->name('store-question');
 });
 Route::view('/lawyers', 'public.lawyers')->name('lawyers');
-Route::view('/lawyer-profile', 'public.lawyer-profile')->name('lawyer-profile'); // Generic for demo
-Route::view('/edit-lawyer-profile', 'public.edit-lawyer-profile')->name('edit-lawyer-profile'); // Generic for demo
+Route::get('/lawyer-profile/{id}', [publicIndexController::class, 'lawyerProfile'])->name('lawyer-profile'); 
+Route::view('/edit-lawyer-profile', 'public.edit-lawyer-profile')->name('edit-lawyer-profile'); 
 
-Route::view('/blog', 'public.blog')->name('blog');
-Route::view('/article/details', 'public.article-details')->name('article-details'); // Generic for demo
+Route::get('/blog', [publicIndexController::class, 'blog'])->name('blog');
+Route::get('/article/details/{id}', [publicIndexController::class, 'articleDetails'])->name('article.details');
 Route::view('/my-articles', 'public.my-articles')->name('my-articles');
 Route::view('/article/new', 'public.new-article')->name('new-article');
 Route::view('/article/edit', 'public.edit-article')->name('edit-article');
