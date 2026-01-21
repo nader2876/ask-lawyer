@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // 0) Admin User
-        // 0) Admin User
         User::factory()->create([
             'name' => 'System Admin',
             'email' => 'admin@example.com',
@@ -24,7 +23,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // 0.1) Test User (Regular Client)
-        User::factory()->create([
+        $testUser = User::factory()->create([
             'name' => 'Test User',
             'email' => 'user@example.com',
             'role' => 'user',
@@ -49,13 +48,17 @@ class DatabaseSeeder extends Seeder
         // 1) Specialized Categories (Real Legal Areas)
         $categoriesNames = [
             'Corporate Law', 'Family Law', 'Criminal Defense', 'Real Estate', 
-            'Intellectual Property', 'Immigration', 'Labor & Employment', 'Personal Injury'
+            'Intellectual Property', 'Immigration', 'Labor & Employment', 'Personal Injury',
+            'Tax Law', 'Environmental Law', 'Bankruptcy', 'Civil Rights'
         ];
         
         $categories = collect();
         foreach ($categoriesNames as $name) {
             $categories->push(Category::create(['name' => $name, 'slug' => \Illuminate\Support\Str::slug($name)]));
         }
+
+        // Attach categories to test lawyer
+        $testLawyer->specializations()->attach($categories->random(2)->pluck('id'));
 
         // 2) Realistic Lawyers Data
         $lawyerData = [
@@ -67,6 +70,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         $lawyerUsers = collect();
+        $lawyerUsers->push($testLawyer); // Add test lawyer to the pool
 
         foreach ($lawyerData as $data) {
             $user = User::create([
@@ -85,7 +89,7 @@ class DatabaseSeeder extends Seeder
                 'license_number' => 'BAR-' . rand(10000, 99999),
             ]);
 
-            // Attach specific category to User (as requested)
+            // Attach specific category to User
             $cat = $categories->where('name', $data['specialization'])->first();
             $user->specializations()->attach($cat->id);
             // Add a random second category
@@ -111,7 +115,14 @@ class DatabaseSeeder extends Seeder
             );
         }
 
-        // 3) Realistic Questions & Answers
+        // 3) Create Users (Clients)
+        $clientUsers = collect();
+        $clientUsers->push($testUser);
+        
+        $randomClients = User::factory()->count(30)->create(['role' => 'user']);
+        $clientUsers = $clientUsers->merge($randomClients);
+
+        // 4) Realistic Questions & Answers
         $questionsData = [
             ['title' => 'Can I get my deposit back if I break my lease early?', 'cat' => 'Real Estate', 'desc' => 'I signed a 12-month lease but need to move for work after 6 months. My landlord says he keeps the deposit. Is this legal in most states?'],
             ['title' => 'How do I trademark my new software logo?', 'cat' => 'Intellectual Property', 'desc' => 'I just launched a SaaS startup and want to protect my branding. What is the process for registering a trademark globally?'],
@@ -119,9 +130,6 @@ class DatabaseSeeder extends Seeder
             ['title' => 'Slip and fall at a grocery store, who is liable?', 'cat' => 'Personal Injury', 'desc' => 'I slipped on a wet floor that had no warning sign. I broke my wrist. Can I sue for medical bills and lost wages?'],
             ['title' => 'Starting a LLC vs S-Corp for freelance work?', 'cat' => 'Corporate Law', 'desc' => 'I am a freelance graphic designer making about $80k/year. Should I form an LLC or is an S-Corp better for tax purposes?'],
         ];
-
-        // Create generic users to ask these
-        $clientUsers = User::factory()->count(10)->create(['role' => 'user']);
 
         foreach ($questionsData as $qData) {
             $cat = $categories->where('name', $qData['cat'])->first() ?? $categories->first();
@@ -135,8 +143,10 @@ class DatabaseSeeder extends Seeder
                 'created_at' => now()->subDays(rand(1, 10)),
             ]);
 
-            // Add a reply from a relevant lawyer
-            $relevantLawyer = $lawyerUsers->random(); 
+            // Add a reply from a relevant lawyer (or random if none found in loop)
+            $lawyerPool = $testLawyer->specializations->contains($cat->id) ? collect([$testLawyer]) : $lawyerUsers;
+            $relevantLawyer = $lawyerPool->random();
+
             QuestionReply::create([
                 'question_id' => $question->id,
                 'lawyer_id' => $relevantLawyer->id,
@@ -145,11 +155,35 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // 4) Realistic Articles
+        // 4.1) Generate 50 Additional Random Questions
+        for ($i = 0; $i < 50; $i++) {
+            $qCat = $categories->random();
+            $qUser = $clientUsers->random();
+            
+            $question = Question::factory()->create([
+                'user_id' => $qUser->id,
+                'category_id' => $qCat->id,
+                'created_at' => now()->subDays(rand(1, 60)),
+            ]);
+
+            // 70% chance of having replies
+            if (rand(1, 100) <= 70) {
+                $numReplies = rand(1, 3);
+                for ($j = 0; $j < $numReplies; $j++) {
+                    QuestionReply::factory()->create([
+                        'question_id' => $question->id,
+                        'lawyer_id' => $lawyerUsers->random()->id,
+                        'created_at' => $question->created_at->addHours(rand(1, 48)),
+                    ]);
+                }
+            }
+        }
+
+        // 5) Realistic Articles (Blog)
         $articlesData = [
             ['title' => '5 Common Mistakes in Startup Incorporations', 'cat' => 'Corporate Law'],
             ['title' => 'Understanding Alimony: What You Need to Know', 'cat' => 'Family Law'],
-            ['title' => 'Your Rights strict When Stopped by Police', 'cat' => 'Criminal Defense'],
+            ['title' => 'Your Rights When Stopped by Police', 'cat' => 'Criminal Defense'],
             ['title' => 'A Guide to Commercial Lease Agreements', 'cat' => 'Real Estate'],
             ['title' => 'Copyright vs Trademark: What is the Difference?', 'cat' => 'Intellectual Property'],
         ];
@@ -165,6 +199,16 @@ class DatabaseSeeder extends Seeder
                  'status' => 'published',
                  'created_at' => now()->subDays(rand(2, 20)),
              ]);
+        }
+
+        // 5.1) Generate 25 Additional Random Articles
+        for ($i = 0; $i < 25; $i++) {
+            Article::factory()->create([
+                'author_id' => $lawyerUsers->random()->id,
+                'category_id' => $categories->random()->id,
+                'created_at' => now()->subDays(rand(1, 90)),
+                'status' => 'published',
+            ]);
         }
     }
 }
