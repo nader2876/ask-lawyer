@@ -4,27 +4,33 @@ namespace App\Livewire\Lawyer;
 
 use App\Models\Question;
 use Livewire\Component;
+use App\Models\QuestionReply;
 
 class EditAnswer extends Component
 {
-      public $replyId;
-       public $answer;
-
+    public $questionId;
+    public $answer;
     public function mount($id)
     {
-        $this->replyId = $id;
-        $this->answer = "This is a placeholder answer content for editing. Backend logic is disabled."; 
+        $this->questionId = $id;
+
+      
+        $reply = QuestionReply::where('question_id', $this->questionId)
+            ->where('lawyer_id', auth()->id())
+            ->first();
+
+        
+        if ($reply) {
+            $this->answer = $reply->body;
+        }
     }
+
     public function render()
     {
-        // Dummy data for frontend demo
-        $question = new \App\Models\Question();
-        $question->title = "Demo Question Title";
-        $question->description = "This is a demo description for the question you are answering.";
-        $question->setRelation('category', new \App\Models\Category(['name' => 'Demo Category']));
-        $question->setRelation('owner', new \App\Models\User(['name' => 'Demo User']));
-        $question->created_at = now();
-
+        $question = Question::find($this->questionId);
+        
+      
+   
         return view('livewire.lawyer.edit-answer', compact('question'));
     }
     public function update()
@@ -32,8 +38,18 @@ class EditAnswer extends Component
         $this->validate([
             'answer' => 'required|string|min:3',
         ]);
+        $reply = QuestionReply::where('question_id', $this->questionId)
+        ->where('lawyer_id', auth()->id())
+        ->first();
+        
+        if ($reply) {
+            $reply->update([
+                'body' => $this->answer,
+            ]);
+        }
         
         $this->dispatch('refreshAnswers');
        return redirect()->route('lawyer.answers.index')->with('success', 'Your answer has been updated successfully!');
     }
+  
 }

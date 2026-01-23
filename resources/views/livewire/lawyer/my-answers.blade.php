@@ -1,5 +1,11 @@
 <div>
- <div class="card shadow-sm">
+@if (session()->has('success'))
+    <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+    <div class="card shadow-sm">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
             <h5 class="mb-0">My Answers ({{ $questions->count() }})</h5>
             <div class="col-md-3 d-flex gap-2">
@@ -32,39 +38,41 @@
                         <i class="fas fa-thumbs-up me-1 text-primary"></i> 15 Helpful • Answered 2 days ago
                     </div>
                     <div>
-                        <a href="{{ route('lawyer.answers.edit', 101) }}" class="btn btn-sm btn-outline-primary">
+                        <a href="{{ route('lawyer.answers.edit', $question->id) }}" class="btn btn-sm btn-outline-primary">
                             <i class="fas fa-edit me-1"></i>Edit
                         </a>
-                        <button class="btn btn-sm btn-outline-danger">
+                        <button class="btn btn-sm btn-outline-danger" wire:click="confirmDelete({{ $question->id }})">
                             <i class="fas fa-trash me-1"></i>Delete
                         </button>
                     </div>
                 </div>
             </div>
             @endforeach            
-            <div class="list-group-item p-3">
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                    <h6 class="mb-1">
-                        <a href="#" class="text-decoration-none text-white fw-bold">Custody rights for expatriate mothers?</a>
-                    </h6>
-                    <span class="badge bg-warning text-dark">Family Law</span>
-                </div>
-                 <div class="p-3 bg-transparent border border-secondary rounded text-muted mb-3 small fst-italic">
-                    "The Personal Status Law 2022 prioritizes the child's best interest. Generally, the mother is the custodian until the child reaches..."
-                </div>
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="text-muted small">
-                        <i class="fas fa-thumbs-up me-1 text-primary"></i> 8 Helpful • Answered 5 days ago
-                    </div>
-                    <div>
-                        <a href="{{ route('lawyer.answers.edit', 102) }}" class="btn btn-sm btn-outline-primary">
-                            <i class="fas fa-edit me-1"></i>Edit
-                        </a>
-                        <button class="btn btn-sm btn-outline-danger">
-                            <i class="fas fa-trash me-1"></i>Delete
-                        </button>
-                    </div>
-                </div>
-            </div>
+            
         </div>
-    </div></div>
+    </div>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('livewire:initialized', () => {
+            @this.on('open-delete-modal', () => {
+                Swal.fire({
+                    title: 'Delete Answer?',
+                    text: "Are you sure you want to permanently remove this answer?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, Delete It',
+                    background: '#1a202c',
+                    color: '#fff'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        @this.call('deleteAnswer');
+                    }
+                });
+            });
+        });
+    </script>
+</div>
+</div>
