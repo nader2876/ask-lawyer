@@ -85,6 +85,16 @@
                 <i class="fas fa-file-alt"></i>
             </div>
         </div>
+
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3>{{ $totalCategories }}</h3>
+                <p>Total Categories</p>
+            </div>
+            <div class="stat-icon warning">
+                <i class="fas fa-tags"></i>
+            </div>
+        </div>
     </div>
 
     <!-- Recent Activity -->
@@ -134,10 +144,14 @@
                     <tbody>
                         @foreach ($recentQuestions as $question)
                         <tr wire:key="question-{{ $question->id }}">
-                            <td>{{ $question->title }}</td>
+                            <td class="fw-semibold">{{ $question->title }}</td>
                             <td>{{ $question->owner->name }}</td>
-                            <td>{{ $question->category->name }}</td>
-                            <td>{{ $question->created_at->format('Y-m-d') }}</td>
+                            <td>
+                                <span class="badge-outline-pill bg-soft-primary">
+                                    {{ $question->category->name }}
+                                </span>
+                            </td>
+                            <td class="text-muted small">{{ $question->created_at->format('Y-m-d') }}</td>
                             <td>
                                 <span class="badge {{ $question->status === 'open' ? 'badge-success' : ($question->status === 'closed' ? 'badge-danger' : 'badge-warning') }}">
                                     {{ ucfirst($question->status) }}
@@ -174,22 +188,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($recentLawyerRequests as $request)
+                        @forelse ($recentLawyerRequests as $request)
                         <tr wire:key="request-{{ $request->id }}">
                             <td>{{ $request->user->name }}</td>
                             <td>{{ $request->user->email }}</td>
                             <td>{{ $request->license_number }}</td>
                             <td>{{ $request->created_at->format('Y-m-d') }}</td>
-                            <td>
-                                @if($request->cv)
-                                    <a href="{{ asset('storage/' . $request->cv) }}" target="_blank" class="btn btn-sm btn-outline-info">
-                                        <i class="fas fa-file-pdf"></i> View CV
-                                    </a>
-                                @else
-                                    <span class="text-muted small">No CV</span>
-                                @endif
-                            </td>
-                            <td><span class="badge badge-warning">{{ $request->status }}</span></td>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-1">
+                                            @foreach ($request->user->specializations as $spec)
+                                                <span class="badge-outline-pill bg-soft-warning" style="font-size: 0.65rem; padding: 0.25rem 0.6rem;">
+                                                    {{ $spec->name }}
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    </td>
+                                    <td><span class="badge badge-warning">{{ $request->status }}</span></td>
                            <td>
                                @if ($request->status == 'pending')
                                         <div class="action-buttons">
@@ -208,7 +222,13 @@
                                    
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="7" class="text-center py-4 text-muted">
+                                <i class="fas fa-check-circle me-1 opacity-50"></i> No recent lawyer requests found.
+                            </td>
+                        </tr>
+                        @endforelse
                        
                     </tbody>
                 </table>
@@ -235,7 +255,8 @@
                         <strong>Title:</strong> {{ $selectedQuestion->title }}
                     </div>
                     <div class="mb-3">
-                        <strong>Category:</strong> <span class="badge-gradient">{{ $selectedQuestion->category->name }}</span>
+                        <strong>Category:</strong> 
+                        <span class="badge-outline-pill bg-soft-primary ms-2">{{ $selectedQuestion->category->name }}</span>
                     </div>
                     <div class="mb-3">
                         <strong>Author:</strong> {{ $selectedQuestion->owner->name }}

@@ -26,159 +26,163 @@
         </div>
     @endif
 
-    <!-- Unified Categories Info Card -->
-    <div class="card mb-3" style="border-left: 4px solid var(--info); background: rgba(37, 130, 246, 0.05);">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center gap-2">
-                            <i class="fas fa-info-circle" style="color: var(--info); font-size: 1.25rem;"></i>
-                            <div>
-                                <strong>Unified Categories System</strong>
-                                <p class="mb-0 text-secondary" style="font-size: 0.875rem;">
-                                    These categories are used across Questions, Lawyers, and Articles. 
-                                    Categories in use should be deactivated instead of deleted to maintain data integrity.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <!-- Info Card -->
+    <div class="card mb-4" style="border-left: 4px solid var(--info); background: rgba(37, 130, 246, 0.05);">
+        <div class="card-body py-3">
+            <div class="d-flex align-items-center gap-3">
+                <i class="fas fa-info-circle text-info"></i>
+                <p class="mb-0 text-secondary small">
+                    Categories are shared across the platform. Deactivate categories to hide them while preserving historical data.
+                </p>
+            </div>
+        </div>
+    </div>
 
-                <!-- Categories Table -->
-                <!-- BACKEND: GET /admin/categories -->
-                <div class="table-wrapper">
-                    <div class="table-header">
-                        <h3 class="table-title">All Categories</h3>
-                        <button class="btn btn-primary" wire:click="openAddModal">
-                            <i class="fas fa-plus"></i>
-                            Add Category
-                        </button>
-                    </div>
-                    
-                    <div class="table-container">
-                        <table class="table" id="categoriesTable">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Category Name</th>
-                                    <th>Status</th>
-                                    <th>Questions Count</th>
-                                    <th>Lawyers Count</th>
-                                    <th>Articles Count</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($categories as $category)
-                                <tr >
-                                    <td>{{ $category->id }}</td>
-                                    <td class="fw-semibold">{{ $category->name }}</td>
-                                    <td><span class="badge badge-success">{{ $category->status }}</span></td>
-                                    <td>{{ $category->questions->count() }} questions</td>
-                                    <td>{{ $category->lawyers->count() }} lawyers</td>
-                                    <td>{{ $category->articles->count() }} articles</td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-warning btn-icon btn-sm" wire:click="editCategory({{ $category->id }})" title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            @if($category->status == 'active')
-                                            <button class="btn btn-outline-danger btn-sm" onclick="confirmCategoryAction('Are you sure you want to deactivate this category?', () => @this.toggleCategory({{ $category->id }}, 'inactive'))" title="Deactivate">
-                                                <i class="fas fa-ban"></i> Deactivate
-                                            </button>
-                                            @else
-                                            <button class="btn btn-outline-success btn-sm" onclick="confirmCategoryAction('Are you sure you want to activate this category?', () => @this.toggleCategory({{ $category->id }}, 'active'))" title="Activate">
-                                                <i class="fas fa-check"></i> Activate
-                                            </button>
-                                            @endif
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforeach
-                              
-                           
-                            </tbody>
-                        </table>
-                    </div>
+    <!-- Categories Table -->
+    <div class="table-wrapper shadow-lg">
+        <div class="table-header d-flex justify-content-between align-items-center bg-secondary py-3 px-4 border-bottom border-secondary">
+            <h3 class="table-title mb-0">Platform Categories</h3>
+            <button class="btn btn-primary px-4 fw-bold shadow-sm" wire:click="openAddModal">
+                <i class="fas fa-plus me-2"></i> Add Category
+            </button>
+        </div>
+        <div class="table-container">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">Category Name</th>
+                        <th>Status</th>
+                        <th class="text-center">Questions</th>
+                        <th class="text-center">Lawyers</th>
+                        <th class="text-center">Articles</th>
+                        <th class="pe-4 text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($categories as $category)
+                    <tr wire:key="category-{{ $category->id }}">
+                        <td class="ps-4 py-3">
+                            <span class="fw-bold text-white">{{ $category->name }}</span>
+                        </td>
+                        <td>
+                            <span class="badge {{ $category->status === 'active' ? 'badge-success' : 'badge-secondary' }}">
+                                {{ ucfirst($category->status) }}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge bg-soft-primary px-3">{{ $category->questions_count }}</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge bg-soft-warning px-3">{{ $category->lawyers_count }}</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge bg-soft-success px-3">{{ $category->articles_count }}</span>
+                        </td>
+                        <td class="pe-4 py-3 text-end">
+                            <div class="d-flex justify-content-end gap-2">
+                                <button class="btn btn-sm btn-icon border border-secondary" wire:click="editCategory({{ $category->id }})" title="Edit">
+                                    <i class="fas fa-edit text-warning"></i>
+                                </button>
+                                
+                                <button class="btn btn-sm btn-icon border border-secondary" 
+                                        onclick="confirmCategoryAction('Are you sure you want to {{ $category->status === 'active' ? 'deactivate' : 'activate' }} this category?', () => @this.toggleCategory({{ $category->id }}, '{{ $category->status === 'active' ? 'inactive' : 'active' }}'))" 
+                                        title="{{ $category->status === 'active' ? 'Deactivate' : 'Activate' }}">
+                                    <i class="fas {{ $category->status === 'active' ? 'fa-ban text-danger' : 'fa-check text-success' }}"></i>
+                                </button>
+
+                                <button class="btn btn-sm btn-icon border border-secondary" 
+                                        onclick="confirmCategoryAction('Delete this category? This cannot be undone.', () => @this.deleteCategory({{ $category->id }}))" 
+                                        title="Delete">
+                                    <i class="fas fa-trash text-muted hover-red"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="text-center py-5">
+                            <div class="opacity-50">
+                                <i class="fas fa-tags fa-3x mb-3"></i>
+                                <p class="mb-0">No categories found.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add Modal -->
+    @if($showAddModal)
+    <div class="modal show" style="display: flex !important; background: rgba(0,0,0,0.8); z-index: 1060;">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 500px;">
+            <div class="modal-content border-secondary shadow-lg" style="background: #1e293b; border-radius: 12px;">
+                <div class="modal-header border-bottom border-white/10 px-4 py-3">
+                    <h5 class="modal-title fw-bold text-white"><i class="fas fa-plus-circle text-primary me-2"></i> Add New Category</h5>
+                    <button type="button" class="btn-close btn-close-white" wire:click="closeAddModal"></button>
                 </div>
-            </div>
-        </main>
-    
-    
-    @if($showEditModal)
-      <div class="modal show" id="editCategoryModal">
-        <div class="modal-dialog">
-            <div class="modal-header">
-                <h3 class="modal-title">Edit Category</h3>
-                <button class="modal-close" data-modal-close>
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- BACKEND: PATCH /admin/categories/{id} -->
-                <form id="editCategoryForm">
-                  
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Category Name</label>
-                        <input type="text" class="form-control" name="name" required wire:model="editCategoryName">
-                        @error('editCategoryName') <span class="text-danger" style="font-size: 0.875rem; color: red;">{{ $message }}</span> @enderror
+                <div class="modal-body p-4">
+                    <div class="mb-4">
+                        <label class="form-label text-secondary fw-semibold mb-2">Category Name</label>
+                        <input type="text" class="form-control p-3 bg-primary-navy border-secondary text-white" placeholder="e.g. Environmental Law" wire:model="addCategoryName">
+                        @error('addCategoryName') <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i> {{ $message }}</div> @enderror
                     </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Status</label>
-                        <select class="form-select" name="status" required wire:model="editCategoryStatus">
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
+                    <div>
+                        <label class="form-label text-secondary fw-semibold mb-2">Initial Status</label>
+                        <select class="form-select p-3 bg-primary-navy border-secondary text-white" wire:model="addCategoryStatus">
+                            <option value="active">Active (Visible to users)</option>
+                            <option value="inactive">Inactive (Hidden)</option>
                         </select>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline-primary" wire:click="closeEditModal()">Cancel</button>
-                <button class="btn btn-primary" wire:click="updateCategory()">Save Changes</button>
+                </div>
+                <div class="modal-footer border-top border-white/10 px-4 py-3">
+                    <button type="button" class="btn btn-link text-white/50 text-decoration-none px-4" wire:click="closeAddModal">Cancel</button>
+                    <button type="button" class="btn btn-primary px-4 fw-bold" wire:click="addCategory">
+                        Create Category
+                    </button>
+                </div>
             </div>
         </div>
     </div>
     @endif
 
-
-@if($showAddModal)
-       <div class="modal show" id="addCategoryModal"  >
-        <div class="modal-dialog">
-            <div class="modal-header">
-                <h3 class="modal-title">Add New Category</h3>
-                <button class="modal-close" wire:click="closeAddModal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- BACKEND: POST /admin/categories -->
-                <form id="addCategoryForm">
-                    <div class="mb-3">
-                        <label class="form-label">Category Name</label>
-                        <input type="text" class="form-control" name="name" placeholder="e.g., Maritime Law" required wire:model="addCategoryName">
-                        @error('addCategoryName') <span class="text-danger" style="font-size: 0.875rem; color: red;">{{ $message }}</span> @enderror
+    <!-- Edit Modal -->
+    @if($showEditModal)
+    <div class="modal show" style="display: flex !important; background: rgba(0,0,0,0.8); z-index: 1060;">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 500px;">
+            <div class="modal-content border-secondary shadow-lg" style="background: #1e293b; border-radius: 12px;">
+                <div class="modal-header border-bottom border-white/10 px-4 py-3">
+                    <h5 class="modal-title fw-bold text-white"><i class="fas fa-edit text-warning me-2"></i> Edit Category</h5>
+                    <button type="button" class="btn-close btn-close-white" wire:click="closeEditModal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-4">
+                        <label class="form-label text-secondary fw-semibold mb-2">Category Name</label>
+                        <input type="text" class="form-control p-3 bg-primary-navy border-secondary text-white" wire:model="editCategoryName">
+                        @error('editCategoryName') <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i> {{ $message }}</div> @enderror
                     </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Status</label>
-                        <select class="form-select" name="status" required wire:model="addCategoryStatus">
+                    <div>
+                        <label class="form-label text-secondary fw-semibold mb-2">Status</label>
+                        <select class="form-select p-3 bg-primary-navy border-secondary text-white" wire:model="editCategoryStatus">
                             <option value="active">Active</option>
                             <option value="inactive">Inactive</option>
                         </select>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline-primary" wire:click="closeAddModal">Cancel</button>
-                <button class="btn btn-primary" wire:click="addCategory">Add Category</button>
+                </div>
+                <div class="modal-footer border-top border-white/10 px-4 py-3">
+                    <button type="button" class="btn btn-link text-white/50 text-decoration-none px-4" wire:click="closeEditModal">Cancel</button>
+                    <button type="button" class="btn btn-primary px-4 fw-bold" wire:click="updateCategory">
+                        Save Changes
+                    </button>
+                </div>
             </div>
         </div>
     </div>
     @endif
-    <!-- JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Enhanced Script -->
     <script>
-        // Handle Category Action Confirmation
         function confirmCategoryAction(message, action) {
             Swal.fire({
                 title: 'Are you sure?',
@@ -189,12 +193,13 @@
                 showCancelButton: true,
                 confirmButtonColor: '#3b82f6',
                 cancelButtonColor: '#ef4444',
-                confirmButtonText: 'Yes, proceed!'
+                confirmButtonText: 'Yes, proceed!',
+                cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
                     action();
                 }
             });
         }
-
+    </script>
 </div>

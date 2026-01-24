@@ -54,8 +54,6 @@
                                 <li><a class="dropdown-item py-2" href="{{ route('admin.dashboard') }}"><i class="fas fa-chart-line me-2 opacity-75"></i>Admin Dashboard</a></li>
                              @elseif(Auth::user()->role === 'lawyer')
                                 <li><a class="dropdown-item py-2" href="{{ route('lawyer.dashboard') }}"><i class="fas fa-columns me-2 opacity-75"></i>Lawyer Dashboard</a></li>
-                             @else
-                                <li><a class="dropdown-item py-2" href="{{ route('profile.edit') }}"><i class="fas fa-user-circle me-2 opacity-75"></i>My Profile</a></li>
                              @endif
 
                              <li><hr class="dropdown-divider opacity-10"></li>

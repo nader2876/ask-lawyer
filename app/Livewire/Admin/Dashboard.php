@@ -24,18 +24,19 @@ class Dashboard extends Component
         $totalQuestions = Question::count();
         $totalAnswers = QuestionReply::count();
         $totalArticles = Article::count();
+        $totalCategories = Category::count();
 
-        $recentQuestions = Question::with('owner')
+        $recentQuestions = Question::with('owner', 'category')
             ->orderBy('created_at', 'desc')
             ->take(5)
             ->get();
 
         $recentLawyerRequests = LawyerProfile::where('status', 'pending')
+            ->with('user.specializations')
             ->orderBy('created_at', 'desc')
             ->take(5)
             ->get();
 
-        // --- NEW: Chart Data Logic ---
         // 1. User Growth (Last 6 Months)
         $userGrowthData = User::select(
             DB::raw('COUNT(id) as count'),
@@ -48,8 +49,15 @@ class Dashboard extends Component
 
         // 2. Questions Distribution by Category
         $questionStats = Category::withCount('questions')
+            ->where('status', 'active')
             ->orderBy('questions_count', 'desc')
-            ->take(5)
+            ->take(6)
+            ->get();
+            
+        // 3. Category Logic (Insights)
+        $categoriesInsights = Category::withCount(['questions', 'articles', 'lawyers'])
+            ->orderBy('questions_count', 'desc')
+            ->take(6)
             ->get();
 
         return view('livewire.admin.dashboard', [
@@ -59,12 +67,14 @@ class Dashboard extends Component
             'totalQuestions' => $totalQuestions,
             'totalAnswers' => $totalAnswers,
             'totalArticles' => $totalArticles,
+            'totalCategories' => $totalCategories,
             'recentQuestions' => $recentQuestions,
             'recentLawyerRequests' => $recentLawyerRequests,
             'userGrowthLabels' => $userGrowthData->pluck('month'),
             'userGrowthValues' => $userGrowthData->pluck('count'),
             'categoryLabels' => $questionStats->pluck('name'),
             'categoryValues' => $questionStats->pluck('questions_count'),
+            'categoriesInsights' => $categoriesInsights,
         ]);
 
     }
