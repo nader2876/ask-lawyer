@@ -12,9 +12,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -43,6 +41,7 @@ Route::get('/', [publicIndexController::class, 'landing'])->name('home');
 Route::get('/questions', [publicIndexController::class, 'index'])->name('index'); // Questions Feed (was index)
 
 Route::get('/question-details/{id}', [questionDetailsController::class, 'index'])->name('question-details'); // Using generic for demo, usually /{id}
+Route::post('/question-details/{id}/answer', [questionDetailsController::class, 'store'])->name('answer.store')->middleware(['auth', 'role:lawyer']);
 Route::middleware('auth','role:user')->group(function () {
 Route::get('/ask-question',[publicIndexController::class,'addQuestion'])->name('ask-question');
 Route::post('/store-question',[publicIndexController::class,'storeQuestion'])->name('store-question');
@@ -59,7 +58,12 @@ Route::view('/article/edit', 'public.edit-article')->name('edit-article');
 
 // Route::view('/login', 'public.login')->name('login'); // Handled by Breeze in auth.php
 // Route::view('/register', 'public.register')->name('register'); // Handled by Breeze in auth.php
-Route::view('/lawyer/request', 'public.lawyer-request')->name('lawyer-request');
+Route::get('/lawyer/request', function () {
+    $categories = \App\Models\Category::all();
+    return view('public.lawyer-request', compact('categories'));
+})->name('lawyer-request');
+
+Route::post('/lawyer/register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'storeLawyer'])->name('lawyer.register');
 
 // ============================================================================
 // 2) ADMIN ROUTES
@@ -93,7 +97,9 @@ Route::prefix('lawyer')->name('lawyer.')->middleware(['auth', 'role:lawyer'])->g
 
     Route::view('/articles', 'lawyer.articles.index')->name('articles.index');
     Route::view('/articles/create', 'lawyer.articles.create')->name('articles.create');
-    Route::view('/articles/edit', 'lawyer.articles.edit')->name('articles.edit');
+    Route::get('/articles/{id}/edit', function ($id) {
+        return view('lawyer.articles.edit', compact('id'));
+    })->name('articles.edit');
 
     Route::view('/profile/edit', 'lawyer.profile.edit')->name('profile.edit');
 });

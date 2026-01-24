@@ -66,7 +66,12 @@ public $sort = 'created-desc';
         $lawyer->status = 'accepted';
         $lawyer->save();
 
-        $this->dispatch('success', 'Request approved successfully!');
+        // Also update the user's status to active
+        $lawyer->user->status = 'active';
+        $lawyer->user->save();
+
+        session()->flash('success', 'Request approved successfully!');
+        $this->dispatch('action-completed');
     }
 
     public function rejectRequest($lawyerId)
@@ -75,7 +80,8 @@ public $sort = 'created-desc';
         $lawyer->status = 'rejected';
         $lawyer->save();
 
-        $this->dispatch('success', 'Request rejected successfully!');
+        session()->flash('success', 'Request rejected and deleted.');
+        $this->dispatch('action-completed');
     }
     
 }

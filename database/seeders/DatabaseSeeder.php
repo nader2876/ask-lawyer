@@ -43,6 +43,7 @@ class DatabaseSeeder extends Seeder
             'status' => 'accepted', // Approved
             'bio' => 'An expert test lawyer for demonstration purposes.',
             'license_number' => 'TEST-BAR-001',
+            'location' => 'Amman',
         ]);
 
         // 1) Specialized Categories (Real Legal Areas)
@@ -87,6 +88,10 @@ class DatabaseSeeder extends Seeder
                 'status' => 'accepted',
                 'bio' => $data['bio'],
                 'license_number' => 'BAR-' . rand(10000, 99999),
+                'phone' => '+1 555 ' . rand(100, 999) . ' ' . rand(1000, 9999),
+                'whatsapp_number' => '+1 555 ' . rand(100, 999) . ' ' . rand(1000, 9999),
+                'linkedin_profile' => 'https://linkedin.com/in/' . strtolower(str_replace(' ', '', $data['name'])),
+                'location' => collect(['Amman', 'Zarqa', 'Irbid', 'Aqaba', 'Salt'])->random(),
             ]);
 
             // Attach specific category to User
@@ -107,6 +112,7 @@ class DatabaseSeeder extends Seeder
             LawyerProfile::factory()->create([
                 'user_id' => $rndLawyer->id,
                 'status' => 'accepted',
+                'location' => collect(['Amman', 'Zarqa', 'Irbid', 'Aqaba', 'Salt'])->random(),
             ]);
 
             // Attach 1-3 random categories to User

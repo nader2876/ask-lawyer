@@ -11,32 +11,17 @@
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('index') ? 'active' : '' }}" href="{{ route('index') }}">Questions</a></li>
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('lawyers') ? 'active' : '' }}" href="{{ route('lawyers') }}">Lawyers</a></li>
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('blog') ? 'active' : '' }}" href="{{ route('blog') }}">Blog</a></li>
+                @auth
+                    @if(Auth::user()->role === 'lawyer')
+                        <li class="nav-item"><a class="nav-link {{ request()->routeIs('lawyer.dashboard') ? 'active' : '' }}" href="{{ route('lawyer.dashboard') }}">Lawyer Panel</a></li>
+                    @endif
+                @endauth
                 @if(request()->routeIs('ask-question'))
                  <li class="nav-item"><a class="nav-link active" href="{{ route('ask-question') }}">Ask Question</a></li>
                 @endif
             </ul>
             <div class="d-flex align-items-center gap-3">
-                <!-- Role Selector for Demo -->
-                <div class="input-group input-group-sm d-none d-lg-flex" style="width: auto;">
-                    <span class="input-group-text bg-dark border-secondary text-secondary">View Mode</span>
-                    <select id="roleSelector" class="form-select form-select-sm bg-dark border-secondary text-white">
-                        <option value="guest">Guest</option>
-                        <option value="user">User</option>
-                        <option value="lawyer-pending">Lawyer (Pending)</option>
-                        <option value="lawyer-approved">Lawyer (Approved)</option>
-                    </select>
-                </div>
-                
-                <!-- Mobile Role Selector -->
-                <div class="d-lg-none w-100 mb-2">
-                     <small class="text-muted d-block mb-1">View Mode</small>
-                     <select class="form-select form-select-sm bg-dark border-secondary text-white" onchange="document.getElementById('roleSelector').value = this.value; document.getElementById('roleSelector').dispatchEvent(new Event('change'));">
-                        <option value="guest">Guest</option>
-                        <option value="user">User</option>
-                        <option value="lawyer-pending">Lawyer (Pending)</option>
-                        <option value="lawyer-approved">Lawyer (Approved)</option>
-                    </select>
-                </div>
+            
                 
                 @guest
                 <div class="auth-buttons d-flex gap-2">
@@ -48,8 +33,12 @@
                 @auth
                 <div class="user-menu">
                      <div class="dropdown">
-                        <button class="btn btn-link text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-circle fa-lg"></i>
+                        <button class="btn btn-link text-white text-decoration-none dropdown-toggle d-flex align-items-center p-1" data-bs-toggle="dropdown" style="border-radius: 50rem; transition: background 0.2s;">
+                        @if(Auth::user()->lawyerProfile?->profile_photo_path)   
+                        <img src="{{ asset('storage/' . Auth::user()->lawyerProfile?->profile_photo_path) }}" class="rounded-circle" style="width: 32px; height: 32px; object-fit: cover; border: 2px solid rgba(255,255,255,0.1); margin-right: 2px;">
+                        @else
+                        <i class="fas fa-user-circle fa-lg"></i>
+                        @endif
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark shadow">
                              <li><h6 class="dropdown-header">{{ Auth::user()->name }}</h6></li>

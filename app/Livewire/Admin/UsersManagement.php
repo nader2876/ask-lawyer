@@ -105,11 +105,8 @@ class UsersManagement extends Component
         $user = User::find($id);
         if ($user) {
             $user->delete();
-            $this->dispatch('swal:modal', 
-                type: 'success',
-                title: 'User Deleted',
-                text: 'User has been deleted successfully.'
-            );
+            session()->flash('success', 'User has been deleted successfully.');
+            $this->dispatch('action-completed');
         }
     }
 
@@ -120,7 +117,7 @@ class UsersManagement extends Component
             'email' => 'required|email|max:255',
             'role' => 'required|string',
             'status' => 'required|string',
-            'password' => 'nullable|string|min:8',
+            'password' => 'nullable|min:8|confirmed',
         ]);
 
         if ($this->password) {
@@ -144,11 +141,8 @@ class UsersManagement extends Component
 
             $this->selectedUser->update($data);
             
-            $this->dispatch('swal:modal', 
-                type: 'success',
-                title: 'User Updated',
-                text: 'User details have been updated successfully.'
-            );
+            session()->flash('success', 'User details have been updated successfully.');
+            $this->dispatch('action-completed');
         }
         
         $this->closeModal();
@@ -161,10 +155,10 @@ class UsersManagement extends Component
     {
         $this->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => 'required|email|unique:users,email',
             'role' => 'required|string',
-            'status' => 'string',
-            'password' => 'required|string|min:8',
+            'status' => 'required|string',
+            'password' => 'required|min:8',
         ]);
 
         User::create([
@@ -175,16 +169,11 @@ class UsersManagement extends Component
             'status' => $this->status,
         ]);
         
-        $this->dispatch('swal:modal', 
-            type: 'success',
-            title: 'User Created',
-            text: 'New user has been created successfully.'
-        );
+        session()->flash('success', 'New user has been created successfully.');
+        $this->dispatch('action-completed');
         
         $this->closeModal();
         $this->reset(['name', 'email', 'role', 'status', 'password', 'password_confirmation']);
         $this->isaddopen = false;
     }
-
-
 }

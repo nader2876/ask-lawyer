@@ -35,6 +35,20 @@
     <script src="{{ asset('assets/js/admin-ui.js') }}"></script>
     @yield('scripts')
     @livewireScripts
+    <script>
+        document.addEventListener('livewire:auto-scroll-top', () => {
+             window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        // Handle common livewire events
+        document.addEventListener('livewire:initialized', () => {
+            Livewire.on('action-completed', () => {
+                setTimeout(() => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 100);
+            });
+        });
+    </script>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>

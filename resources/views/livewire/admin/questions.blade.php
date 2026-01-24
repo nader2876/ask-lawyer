@@ -1,58 +1,30 @@
 <div>
-  <main class="admin-content">
-    <style>
-        .badge-gradient {
-            background: rgba(255, 255, 255, 0.05);
-            color: #e2e8f0;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            letter-spacing: 0.025em;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: inline-flex;
-            align-items: center;
-        }
-
-        /* Pagination Dark Mode Styling */
-        .page-link {
-            background-color: rgba(255, 255, 255, 0.05) !important;
-            border-color: rgba(255, 255, 255, 0.1) !important;
-            color: #94a3b8 !important;
-            border-radius: 8px;
-            margin: 0 4px;
-            transition: all 0.2s ease;
-        }
-
-        .page-link:hover {
-            background-color: rgba(255, 255, 255, 0.1) !important;
-            color: #f1f5f9 !important;
-            transform: translateY(-1px);
-        }
-
-        .page-item.active .page-link {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
-            border-color: transparent !important;
-            color: white !important;
-            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.5);
-        }
-
-        .page-item.disabled .page-link {
-            background-color: rgba(255, 255, 255, 0.02) !important;
-            color: #475569 !important;
-            border-color: transparent !important;
-        }
-        
-        /* Hide awkward rounded corners on groups since we use margins */
-        .page-item:first-child .page-link, 
-        .page-item:last-child .page-link {
-            border-radius: 8px !important;
-        }
-    </style>
-            
-            @include('partials.admin-topbar', ['title' => 'Questions Management'])
-
-            <div class="content-wrapper">
+    <!-- Flash Messages (Simple Design) -->
+    @if (session()->has('success'))
+        <div class="alert simple-alert simple-alert-success mb-4" role="alert">
+            <i class="fas fa-check-circle"></i>
+            <div class="alert-content">
+                <span class="alert-title">Success:</span>
+                <span>{{ session('success') }}</span>
+            </div>
+            <button type="button" class="alert-close" onclick="this.parentElement.remove()" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    @endif
+    
+    @if (session()->has('error'))
+        <div class="alert simple-alert simple-alert-danger mb-4" role="alert">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div class="alert-content">
+                <span class="alert-title">Error:</span>
+                <span>{{ session('error') }}</span>
+            </div>
+            <button type="button" class="alert-close" onclick="this.parentElement.remove()" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    @endif
                 <!-- Filters Bar -->
                 <div class="filters-bar">
                     <div class="filters-grid">
@@ -86,8 +58,9 @@
                                 wire:model.live="statusFilter"
                             >
                                 <option value="">All Status</option>
-                                <option value="Open">Open</option>
-                                <option value="Answered">Answered</option>
+                                <option value="open">Open</option>
+                                <option value="closed">Closed</option>
+                                <option value="answered">Answered</option>
                             </select>
                         </div>
                         
@@ -128,18 +101,25 @@
                             </thead>
                             <tbody>
                                 @foreach ($questions as $question)
-                                <tr >
+                                <tr wire:key="question-{{ $question->id }}">
                                     <td>Q-{{ $question->id }}</td>
                                     <td class="fw-semibold">{{ $question->title }}</td>
                                     <td><span class="badge-gradient">{{ $question->category->name }}</span></td>
                                     <td>{{ $question->owner->name }}</td>
                                     <td>{{ $question->created_at }}</td>
                                     <td>{{ $question->replies->count() }}</td>
-                                    <td><span class="badge badge-warning">{{ $question->status }}</span></td>
+                                    <td>
+                                        <span class="badge {{ $question->status === 'open' ? 'badge-success' : ($question->status === 'closed' ? 'badge-danger' : 'badge-warning') }}">
+                                            {{ ucfirst($question->status) }}
+                                        </span>
+                                    </td>
                                     <td>
                                         <div class="action-buttons">
                                             <button class="btn btn-primary btn-icon btn-sm" wire:click="viewQuestion({{ $question->id }})" title="View">
                                                 <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn {{ $question->status === 'closed' ? 'btn-success' : 'btn-warning' }} btn-icon btn-sm" wire:click="toggleStatus({{ $question->id }})" title="{{ $question->status === 'closed' ? 'Open' : 'Close' }} Question">
+                                                <i class="fas {{ $question->status === 'closed' ? 'fa-unlock' : 'fa-lock' }}"></i>
                                             </button>
                                             <button class="btn btn-danger btn-icon btn-sm" onclick="confirmQuestionAction('Are you sure you want to delete this question?', () => @this.deleteQuestion({{ $question->id }}))" title="Delete">
                                                 <i class="fas fa-trash"></i>
@@ -183,10 +163,7 @@
                             @endif
                         </div>
                     </div>
-                    </div>
                 </div>
-            </div>
-        </main>
 
 
 @if ($isViewQuestion)
@@ -267,32 +244,5 @@
             });
         }
 
-        // Livewire Event Listeners
-        document.addEventListener('livewire:initialized', () => {
-            // Listen for Success Messages
-            @this.on('success', (message) => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: message,
-                    background: '#1e293b',
-                    color: '#e5e7eb',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-            });
-
-            // Listen for Error Messages
-            @this.on('error', (message) => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: message,
-                    background: '#1e293b',
-                    color: '#e5e7eb',
-                    confirmButtonColor: '#3b82f6'
-                });
-            });
-        });
     </script>
-    </div>
+</div>

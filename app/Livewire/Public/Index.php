@@ -44,6 +44,7 @@ class Index extends Component
             $query->where('title', 'like', '%'.$this->search.'%')
           ->orWhere('description', 'like', '%'.$this->search.'%');
           })
+          ->where('status', 'open')
           ->when($this->category,function($query){
             $query->where('category_id', $this->category);
           })

@@ -38,13 +38,15 @@ class Categories extends Component
         $category->status = $this->editCategoryStatus;
         $category->save();
         $this->showEditModal = false;
-        $this->dispatch('success', 'Category updated successfully.');
+        session()->flash('success', 'Category updated successfully.');
+        $this->dispatch('action-completed');
     }
     public function deleteCategory($id)
     {
         $category = Category::find($id);
         $category->delete();
-        $this->dispatch('success', 'Category deleted successfully.');
+        session()->flash('success', 'Category deleted successfully.');
+        $this->dispatch('action-completed');
     }
     public function toggleCategory($id, $action)
     {
@@ -52,7 +54,8 @@ class Categories extends Component
         $category->status = $action;
         $category->save();
         $actionText = $action === 'active' ? 'activated' : 'deactivated';
-        $this->dispatch('success', "Category {$actionText} successfully.");
+        session()->flash('success', "Category {$actionText} successfully.");
+        $this->dispatch('action-completed');
     }
     public function addCategory()
     {
@@ -67,7 +70,8 @@ class Categories extends Component
         $this->addCategoryName = '';
         $this->addCategoryStatus = 'active';
         $this->showAddModal = false;
-        $this->dispatch('success', 'Category added successfully.');
+        session()->flash('success', 'Category added successfully.');
+        $this->dispatch('action-completed');
     }
     public function closeEditModal()
     {

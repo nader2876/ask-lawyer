@@ -19,18 +19,18 @@
                 <div class="row">
                     <!-- Profile Image -->
                     <div class="col-md-3 text-center mb-4 mb-md-0">
-                        <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mx-auto" style="width: 150px; height: 150px; border: 4px solid var(--primary);">
-                            @if($lawyer->profile_photo_path)
-                                <img src="{{ $lawyer->profile_photo_path }}" class="rounded-circle w-100 h-100" style="object-fit: cover;">
+                        <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mx-auto position-relative overflow-hidden" style="width: 150px; height: 150px; border: 4px solid var(--primary);">
+                             @if($lawyer->profile_photo_path)
+                                <img src="{{ asset('storage/' . $lawyer->profile_photo_path) }}" class="w-100 h-100" style="object-fit: cover;">
                             @else
-                                <img src="https://ui-avatars.com/api/?name={{ $lawyer->user->name }}&background=random&color=000" class="rounded-circle w-100 h-100">
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($lawyer->user->name) }}&background=0d6efd&color=fff&size=150" class="w-100 h-100" style="object-fit: cover;">
                             @endif
                         </div>
                          <!-- Edit Button (Lawyer Only) -- Auth check needed -->
                          @auth
                             @if(auth()->id() == $lawyer->user_id)
                             <div class="mt-3">
-                                <a href="{{ route('edit-lawyer-profile') }}" class="btn btn-sm btn-outline-light rounded-pill px-3">
+                                <a href="{{ route('lawyer.profile.edit') }}" class="btn btn-sm btn-outline-light rounded-pill px-3">
                                     <i class="fas fa-edit me-1"></i> Edit Profile
                                 </a>
                             </div>
@@ -50,18 +50,31 @@
                                 </p>
                                 <div class="d-flex gap-2 ms-0 mb-4">
                                      <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i>Verified</span>
-                                     <span class="badge border border-secondary text-muted">{{ $lawyer->license_number ?? 'Licensed' }}</span>
+                                     <span class="badge border border-secondary text-muted">{{ $lawyer->license_number ?? 'Licensed Lawyer' }}</span>
                                 </div>
-                            </div>
-                            <!-- Contact Actions (User Only) -->
-                            <div class="ms-auto user-only d-none">
-                                <button class="btn btn-gold rounded-pill px-4 mb-2 d-block w-100"><i class="fas fa-envelope me-2"></i>Message</button>
-                                <button class="btn btn-outline-light rounded-pill px-4 d-block w-100"><i class="fas fa-phone me-2"></i>Call</button>
                             </div>
                         </div>
 
-                        <div class="d-flex gap-4 text-muted small mt-2" id="contactDisplay">
-                             <span><i class="fas fa-envelope me-1"></i> {{ $lawyer->user->email }}</span>
+                        <div class="d-flex flex-wrap gap-4 text-muted small mt-2" id="contactDisplay">
+                             <div class="d-flex align-items-center"><i class="fas fa-envelope me-2 text-primary"></i> {{ $lawyer->user->email }}</div>
+                             
+                             @if($lawyer->phone)
+                                <div class="d-flex align-items-center"><i class="fas fa-phone me-2 text-primary"></i> {{ $lawyer->phone }}</div>
+                             @endif
+
+                             @if($lawyer->whatsapp_number)
+                                <div class="d-flex align-items-center">
+                                    <i class="fab fa-whatsapp me-2 text-success"></i> 
+                                    <a href="https://wa.me/{{ $lawyer->whatsapp_number }}" target="_blank" class="text-decoration-none text-muted hover-text-white">WhatsApp</a>
+                                </div>
+                             @endif
+
+                             @if($lawyer->linkedin_profile)
+                                <div class="d-flex align-items-center">
+                                    <i class="fab fa-linkedin me-2 text-info"></i> 
+                                    <a href="{{ $lawyer->linkedin_profile }}" target="_blank" class="text-decoration-none text-muted hover-text-white">LinkedIn Profile</a>
+                                </div>
+                             @endif
                         </div>
                     </div>
                 </div>
@@ -101,7 +114,7 @@
                                 <div class="card bg-dark border-secondary h-100">
                                     <div class="card-body">
                                         <h6 class="fw-bold text-white mb-2"><i class="fas fa-map-marker-alt me-2 text-danger"></i>Location</h6>
-                                        <p class="text-muted mb-0">Riyadh, Saudi Arabia</p>
+                                        <p class="text-muted mb-0">{{ $lawyer->location ?? 'Jordan' }}</p>
                                     </div>
                                 </div>
                             </div>

@@ -36,6 +36,30 @@
     background-color: rgba(255, 255, 255, 0.05); /* Subtle hover bg */
 }
 
+/* Navbar Profile Pic & Dropdown */
+.user-menu .dropdown-toggle {
+    transition: all 0.2s ease;
+    border-radius: 50rem !important;
+}
+
+.user-menu .dropdown-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.user-menu .dropdown-toggle img {
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    transition: border-color 0.2s ease;
+}
+
+.user-menu .dropdown-toggle:hover img {
+    border-color: var(--warning) !important;
+}
+
+.user-menu .dropdown-toggle::after {
+    margin-left: 0.4rem !important; /* Closer to the photo */
+    vertical-align: middle;
+}
+
 /* Button UI Polish */
 .btn {
     border-radius: 50rem; /* Pill shape */

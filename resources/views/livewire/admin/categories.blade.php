@@ -1,11 +1,33 @@
 <div>
-  <main class="admin-content">
-            
-            @include('partials.admin-topbar', ['title' => 'Categories Management'])
+    <!-- Flash Messages -->
+    @if (session()->has('success'))
+        <div class="alert simple-alert simple-alert-success mb-4" role="alert">
+            <i class="fas fa-check-circle"></i>
+            <div class="alert-content">
+                <span class="alert-title">Success:</span>
+                <span>{{ session('success') }}</span>
+            </div>
+            <button type="button" class="alert-close" onclick="this.parentElement.remove()" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    @endif
 
-            <div class="content-wrapper">
-                <!-- Info Alert -->
-                <div class="card mb-3" style="border-left: 4px solid var(--info);">
+    @if (session()->has('error'))
+        <div class="alert simple-alert simple-alert-danger mb-4" role="alert">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div class="alert-content">
+                <span class="alert-title">Error:</span>
+                <span>{{ session('error') }}</span>
+            </div>
+            <button type="button" class="alert-close" onclick="this.parentElement.remove()" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    @endif
+
+    <!-- Unified Categories Info Card -->
+    <div class="card mb-3" style="border-left: 4px solid var(--info); background: rgba(37, 130, 246, 0.05);">
                     <div class="card-body">
                         <div class="d-flex align-items-center gap-2">
                             <i class="fas fa-info-circle" style="color: var(--info); font-size: 1.25rem;"></i>
@@ -175,31 +197,4 @@
             });
         }
 
-        // Livewire Event Listeners
-        document.addEventListener('livewire:initialized', () => {
-            // Listen for Success Messages
-            @this.on('success', (message) => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: message,
-                    background: '#1e293b',
-                    color: '#e5e7eb',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-            });
-
-             // Listen for Error Messages
-            @this.on('error', (message) => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: message,
-                    background: '#1e293b',
-                    color: '#e5e7eb'
-                });
-            });
-        });
-    </script>
 </div>

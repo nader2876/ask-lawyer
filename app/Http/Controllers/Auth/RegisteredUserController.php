@@ -33,26 +33,57 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role' => ['sometimes', 'string', 'in:user,lawyer'],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => $request->role ?? 'user',
+            'role' => 'user', // Force user role
+            'status' => 'active',
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        if ($user->role === 'admin') {
-            return redirect(route('admin.dashboard', absolute: false));
-        } elseif ($user->role === 'lawyer') {
-            return redirect(route('lawyer.dashboard', absolute: false));
+        return redirect(route('index', absolute: false));
+    }
+    public function storeLawyer(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'license_number' => ['required', 'string', 'max:50'],
+            'location' => ['required', 'string', 'max:100'],
+            'specialization_id' => ['required', 'exists:categories,id'],
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'lawyer',
+            'status' => 'pending',
+        ]);
+
+        \App\Models\LawyerProfile::create([
+            'user_id' => $user->id,
+            'license_number' => $request->license_number,
+            'location' => $request->location,
+            'status' => 'pending',
+            'bio' => 'Draft bio pending update...',
+        ]);
+
+        if ($request->specialization_id) {
+            $user->specializations()->attach($request->specialization_id);
         }
 
-        return redirect(route('home', absolute: false));
+        event(new Registered($user));
+
+        Auth::login($user);
+
+        return redirect(route('index'))->with('success', 'Registration successful! Your account is pending approval. You can browse the site while you wait.');
     }
 }

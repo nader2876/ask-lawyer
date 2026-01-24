@@ -4,11 +4,24 @@ namespace App\Livewire\Public;
 
 use Livewire\Component;
 use App\Models\LawyerProfile;
+use Livewire\WithPagination;
 
 class Lawyers extends Component
 {
+    use WithPagination;
+
     public $search;
     public $categoryFilter;
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingCategoryFilter()
+    {
+        $this->resetPage();
+    }
     
     public function render()
     {
@@ -23,7 +36,7 @@ class Lawyers extends Component
                     $q->where('categories.id', $this->categoryFilter);
                 });
             })
-            ->get();
+            ->paginate(12);
             
         $categories = \App\Models\Category::all();
         

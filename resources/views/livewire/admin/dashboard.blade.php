@@ -1,4 +1,30 @@
 <div>
+    <!-- Flash Messages (Simple Design) -->
+    @if (session()->has('success'))
+        <div class="alert simple-alert simple-alert-success mb-4" role="alert">
+            <i class="fas fa-check-circle"></i>
+            <div class="alert-content">
+                <span class="alert-title">Success:</span>
+                <span>{{ session('success') }}</span>
+            </div>
+            <button type="button" class="alert-close" onclick="this.parentElement.remove()" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    @endif
+    
+    @if (session()->has('error'))
+        <div class="alert simple-alert simple-alert-danger mb-4" role="alert">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div class="alert-content">
+                <span class="alert-title">Error:</span>
+                <span>{{ session('error') }}</span>
+            </div>
+            <button type="button" class="alert-close" onclick="this.parentElement.remove()" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    @endif
  <div class="stats-grid">
         <div class="stat-card">
             <div class="stat-info">
@@ -107,12 +133,16 @@
                     </thead>
                     <tbody>
                         @foreach ($recentQuestions as $question)
-                        <tr>
+                        <tr wire:key="question-{{ $question->id }}">
                             <td>{{ $question->title }}</td>
                             <td>{{ $question->owner->name }}</td>
                             <td>{{ $question->category->name }}</td>
                             <td>{{ $question->created_at->format('Y-m-d') }}</td>
-                            <td><span class="badge badge-success">{{ $question->status }}</span></td>
+                            <td>
+                                <span class="badge {{ $question->status === 'open' ? 'badge-success' : ($question->status === 'closed' ? 'badge-danger' : 'badge-warning') }}">
+                                    {{ ucfirst($question->status) }}
+                                </span>
+                            </td>
                             <td>
                                 <button class="btn btn-sm btn-icon" wire:click="viewQuestion({{ $question->id }})"><i class="fas fa-eye"></i></button>
                             </td>
@@ -144,7 +174,7 @@
                     </thead>
                     <tbody>
                         @foreach ($recentLawyerRequests as $request)
-                        <tr>
+                        <tr wire:key="request-{{ $request->id }}">
                             <td>{{ $request->user->name }}</td>
                             <td>{{ $request->user->email }}</td>
                             <td>{{ $request->license_number }}</td>
@@ -273,31 +303,6 @@
 
         // Livewire Event Listeners
         document.addEventListener('livewire:initialized', () => {
-            
-            // Listen for Success Messages
-            @this.on('success', (message) => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: message,
-                    background: '#1e293b',
-                    color: '#e5e7eb',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-            });
-
-            // Listen for Error Messages
-            @this.on('error', (message) => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: message,
-                    background: '#1e293b',
-                    color: '#e5e7eb',
-                    confirmButtonColor: '#3b82f6'
-                });
-            });
 
             // Initialize Charts
             const ctx1 = document.getElementById('userGrowthChart');

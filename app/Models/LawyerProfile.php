@@ -19,6 +19,10 @@ class LawyerProfile extends Model
         'profile_photo_path',
         'status',
         'rejection_reason',
+        'phone',
+        'whatsapp_number',
+        'linkedin_profile',
+        'location',
     ];
 
     public function user()

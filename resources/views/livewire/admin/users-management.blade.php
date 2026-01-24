@@ -1,6 +1,32 @@
 <div>
-     <div class="content-wrapper">
-                <!-- Filters Bar -->
+    <!-- Flash Messages (Simple Design) -->
+    @if (session()->has('success'))
+        <div class="alert simple-alert simple-alert-success m-3" role="alert">
+            <i class="fas fa-check-circle"></i>
+            <div class="alert-content">
+                <span class="alert-title">Success:</span>
+                <span>{{ session('success') }}</span>
+            </div>
+            <button type="button" class="alert-close" onclick="this.parentElement.remove()" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    @endif
+    
+    @if (session()->has('error'))
+        <div class="alert simple-alert simple-alert-danger m-3" role="alert">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div class="alert-content">
+                <span class="alert-title">Error:</span>
+                <span>{{ session('error') }}</span>
+            </div>
+            <button type="button" class="alert-close" onclick="this.parentElement.remove()" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    @endif
+
+    <!-- Filters Bar -->
                 <div class="filters-bar">
                     <div class="filters-grid">
                         <div class="filter-group">
@@ -219,9 +245,9 @@ h            <div class="modal-dialog modal-dialog-centered" style="margin: 0; m
                         <div class="mb-3">
                             <label class="form-label">Role</label>
                             <select class="form-select" wire:model="role" placeholder="Select role" required>
-                                <option value="User">User</option>
-                                <option value="Lawyer">Lawyer</option>
-                                <option value="Admin">Admin</option>
+                                <option value="user">User</option>
+                                <option value="lawyer">Lawyer</option>
+                                <option value="admin">Admin</option>
                             </select>
                             @error('role') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
@@ -229,9 +255,9 @@ h            <div class="modal-dialog modal-dialog-centered" style="margin: 0; m
                         <div class="mb-3">
                             <label class="form-label">Status</label>
                             <select class="form-select" wire:model="status" placeholder="Select status" required>
-                                <option value="Active">Active</option>
-                                <option value="Inactive">Inactive</option>
-                                <option value="Suspended">Suspended</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="suspended">Suspended</option>
                             </select>
                             @error('status') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
@@ -281,9 +307,9 @@ h            <div class="modal-dialog modal-dialog-centered" style="margin: 0; m
                         <label class="form-label">Role</label>
                         <select class="form-select" wire:model="role" required>
                             <option value="">Select Role</option>
-                            <option value="User">User</option>
-                            <option value="Lawyer">Lawyer</option>
-                            <option value="Admin">Admin</option>
+                            <option value="user">User</option>
+                            <option value="lawyer">Lawyer</option>
+                            <option value="admin">Admin</option>
                         </select>
                         @error('role') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
@@ -292,9 +318,9 @@ h            <div class="modal-dialog modal-dialog-centered" style="margin: 0; m
                         <label class="form-label">Status</label>
                         <select class="form-select" wire:model="status" >
                             <option value="">Select Status</option>
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
-                            <option value="Suspended">Suspended</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                            <option value="suspended">Suspended</option>
                         </select>
                         @error('status') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
@@ -306,6 +332,7 @@ h            <div class="modal-dialog modal-dialog-centered" style="margin: 0; m
             </div>
         </div>
     </div>
+
 
 
     @endif

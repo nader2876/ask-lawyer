@@ -28,15 +28,18 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        $role = $request->user()->role;
+        $user = $request->user();
 
-        if ($role === 'admin') {
+        if ($user->role === 'admin') {
             return redirect()->intended(route('admin.dashboard', absolute: false));
-        } elseif ($role === 'lawyer') {
+        } elseif ($user->role === 'lawyer') {
+            if ($user->status === 'pending') {
+                 return redirect()->route('home')->with('status', 'Your account is pending approval. You can browse as a user but cannot access lawyer features yet.');
+            }
             return redirect()->intended(route('lawyer.dashboard', absolute: false));
         }
 
-        return redirect()->intended(route('home', absolute: false));
+        return redirect()->intended(route('index', absolute: false));
     }
 
     /**

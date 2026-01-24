@@ -92,7 +92,8 @@ class Articles extends Component
         $article = Article::findOrFail($ArticleId);
         $article->delete();
         $this->isViewArticle = false;
-        $this->dispatch('success', 'Article deleted successfully.');
+        session()->flash('success', 'Article deleted successfully.');
+        $this->dispatch('action-completed');
     }
 
     

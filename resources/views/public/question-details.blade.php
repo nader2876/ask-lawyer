@@ -32,7 +32,7 @@
                 </div>
 
                 <!-- Answers Header -->
-                <h4 class="mb-3"><i class="fas fa-comments me-2" style="color: var(--primary);"></i>Answers (2)</h4>
+                <h4 class="mb-3"><i class="fas fa-comments me-2" style="color: var(--primary);"></i>Answers ({{ $question->replies->count() }})</h4>
 
                 <!-- Answer 1 -->
                 <!-- BACKEND: GET /api/questions/{id}/answers -->
@@ -63,36 +63,63 @@
             
            
 
-                <!-- Answer Form (Approved Lawyers Only) -->
-                <!-- BACKEND: POST /api/questions/{id}/answers -->
-                <div id="answerFormSection" style="display: none;">
-                    <h5 class="mb-3">Your Answer</h5>
-                    <div class="card mb-4">
-                        <div class="card-body p-4">
-                            <form id="answerForm">
-                                <div class="mb-3">
-                                    <label class="form-label">Provide your professional answer</label>
-                                    <textarea class="form-control" rows="6" name="answer" placeholder="Share your legal expertise..." required></textarea>
+                <!-- Success/Error Flash Messages -->
+                @if (session('success'))
+                    <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                        <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
+                @auth
+                    @if(Auth::user()->role === 'lawyer' && Auth::user()->lawyerProfile?->status === 'accepted' && $question->replies->where('lawyer_id', Auth::id())->count() === 0)
+                        <div id="answerFormSection">
+                            <h5 class="mb-3">Your Answer</h5>
+                            <div class="card mb-4 shadow-sm border-0">
+                                <div class="card-body p-4">
+                                    <form id="answerForm" action="{{ route('answer.store', $question->id) }}" method="POST">
+                                        @csrf
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Provide your professional answer</label>
+                                            <textarea class="form-control bg-light" rows="6" name="answer" placeholder="Share your legal expertise..." required></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary d-flex align-items-center gap-2">
+                                            <i class="fas fa-paper-plane"></i> Post Answer
+                                        </button>
+                                    </form>
                                 </div>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-paper-plane me-2"></i>Post Answer
-                                </button>
-                            </form>
+                            </div>
+                        </div>
+                    @elseif(Auth::user()->role === 'lawyer' && Auth::user()->lawyerProfile?->status === 'pending')
+                        <div class="alert alert-info border-0 shadow-sm mb-4">
+                            <i class="fas fa-clock me-2"></i> Your lawyer registration is still pending approval. You will be able to answer once verified.
+                        </div>
+                    @endif
+                @endauth
+
+                @guest
+                    <!-- CTA for Non-Lawyers -->
+                    <div id="answerCTA" class="card text-center mb-4" style="border: 2px dashed var(--border-color); background: rgba(255,255,255,0.5);">
+                        <div class="card-body p-5">
+                            <i class="fas fa-gavel mb-3" style="font-size: 2.5rem; color: var(--primary);"></i>
+                            <h5 class="mb-2">Are you a legal professional?</h5>
+                            <p class="text-muted mb-4">Share your expertise and help answer this question by joining our community of legal experts.</p>
+                            <a href="{{ route('lawyer-request') }}" class="btn btn-primary btn-lg px-4">
+                                <i class="fas fa-user-check me-2"></i>Become a Verified Lawyer
+                            </a>
                         </div>
                     </div>
-                </div>
-
-                <!-- CTA for Non-Lawyers -->
-                <div id="answerCTA" class="card text-center" style="border: 2px dashed var(--border-color);">
-                    <div class="card-body p-4">
-                        <i class="fas fa-gavel mb-3" style="font-size: 2rem; color: var(--primary);"></i>
-                        <h5 class="mb-2">Are you a legal professional?</h5>
-                        <p class="text-muted mb-3">Share your expertise and help answer this question.</p>
-                        <a href="{{ route('lawyer-request') }}" class="btn btn-primary">
-                            <i class="fas fa-user-check me-2"></i>Become a Verified Lawyer
-                        </a>
+                @endguest
+                
+                @auth
+                    @if(Auth::user()->role === 'user')
+                    <div class="card text-center mb-4" style="border: 2px dashed var(--border-color);">
+                        <div class="card-body p-4">
+                            <p class="text-muted mb-0">Only verified lawyers can provide legal answers to questions.</p>
+                        </div>
                     </div>
-                </div>
+                    @endif
+                @endauth
             </div>
 
             <!-- Sidebar -->
@@ -186,11 +213,12 @@
              }
         });
 
-        // Handle answer submission
-        document.getElementById('answerForm')?.addEventListener('submit', (e) => {
-            e.preventDefault();
-            showToast('Demo Mode: Your answer will be posted via PHP backend later.');
-            document.getElementById('answerForm').reset();
+        // Handle answer submission - removed e.preventDefault() to allow PHP submission
+        // But we can add a simple loading state
+        document.getElementById('answerForm')?.addEventListener('submit', function() {
+            const btn = this.querySelector('button[type="submit"]');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Posting...';
+            btn.disabled = true;
         });
 
         // Like answer

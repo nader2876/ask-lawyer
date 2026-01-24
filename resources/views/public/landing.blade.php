@@ -20,14 +20,21 @@
         </p>
         
         <div class="d-flex justify-content-center gap-3 animate-fade-up" style="animation-delay: 0.4s;">
-            <a href="{{ route('ask-question') }}" class="btn btn-gold btn-lg rounded-pill px-5 fw-bold shadow-lg">Ask a Question</a>
-            <a href="{{ route('index') }}" class="btn btn-outline-light btn-lg rounded-pill px-5 fw-bold hover-white">Browse Questions</a>
+            @if (auth()->check() && auth()->user()->role === 'user')
+                <a href="{{ route('ask-question') }}" class="btn btn-gold btn-lg rounded-pill px-5 fw-bold shadow-lg">Ask a Question</a>
+            @endif
+            <a href="{{ route('index') }}" class="btn btn-outline-warning btn-lg rounded-pill px-5 fw-bold hover-scale" style="border-width: 2px;">
+                <i class="fas fa-list-ul me-2"></i> Browse Questions
+            </a>
+            <a href="{{ route('lawyers') }}" class="btn btn-outline-light btn-lg rounded-pill px-5 fw-bold hover-scale" style="border-width: 2px;">
+                <i class="fas fa-user-tie me-2"></i> Find Lawyers
+            </a>
         </div>
 
         <!-- Search Bar -->
         <div class="mt-5 mx-auto animate-fade-up" style="max-width: 700px; animation-delay: 0.6s;">
             <form action="{{ route('index') }}" method="GET" class="position-relative">
-                <input type="text" name="search" class="form-control form-control-lg rounded-pill py-3 px-5 bg-dark border-secondary text-white shadow" placeholder="Search for legal topics, questions, or lawyers..." style="backdrop-filter: blur(10px); background: rgba(30, 41, 59, 0.8) !important; " >
+                <input type="text" name="search" class="form-control form-control-lg rounded-pill py-3 px-5 bg-dark border-secondary text-white shadow" placeholder="Search for questions..." style="backdrop-filter: blur(10px); background: rgba(30, 41, 59, 0.8) !important; " >
                 <button type="submit" class="btn btn-gold rounded-circle position-absolute top-50 end-0 translate-middle-y me-2" style="width: 45px; height: 45px;">
                     <i class="fas fa-search"></i>
                 </button>

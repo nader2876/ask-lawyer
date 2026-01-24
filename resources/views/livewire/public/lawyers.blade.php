@@ -32,13 +32,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="small text-muted mb-2">Availability</label>
-                        <div class="form-check">
-                            <input class="form-check-input bg-primary-navy border-secondary" type="checkbox" id="availCheck">
-                            <label class="form-check-label text-white small" for="availCheck">
-                                Online Now
-                            </label>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -47,16 +41,27 @@
             <div class="col-lg-9">
                 <div id="lawyers-grid" class="row">
                     @forelse ($lawyers as $lawyer)
-                    <div class="col-md-4 mb-4" >
+                    <div class="col-md-4 mb-4" wire:key="lawyer-{{ $lawyer->id }}">
                         <div class="card h-100 border-secondary p-4 text-center card-hover overflow-hidden d-flex flex-column">
-                            <img src="https://ui-avatars.com/api/?name={{ $lawyer->user->name }}&background=fbbf24&color=000" class="rounded-circle mx-auto mb-3 border border-secondary p-1" width="100">
+                            @if($lawyer->profile_photo_path)
+                                <img src="{{ asset('storage/' . $lawyer->profile_photo_path) }}" class="rounded-circle mx-auto mb-3 border border-secondary p-1 object-fit-cover" width="100" height="100">
+                            @else
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($lawyer->user->name) }}&background=0d6efd&color=fff&size=100" class="rounded-circle mx-auto mb-3 border border-secondary p-1" width="100">
+                            @endif
+
                             <h5 class="fw-bold mb-1">Atty. {{ $lawyer->user->name }}</h5>
-                            <div class="mb-3"><span class="badge bg-soft-primary text-primary-soft badge-outline rounded-pill">@foreach ($lawyer->categories as $category) {{ $category->name }} @endforeach</span></div>
-                            <p class="text-muted small mb-4">{{ $lawyer->bio }}</p>
-                            <div class="d-flex justify-content-center gap-2 mb-4">
-                                <span class="small text-muted text-decoration-none">| {{ $lawyer->user->replies->count() }} Answers</span>
+                            <div class="mb-3">
+                                @foreach ($lawyer->categories->take(2) as $category) 
+                                    <span class="badge bg-secondary badge-outline rounded-pill mb-1">{{ $category->name }}</span>
+                                @endforeach
                             </div>
-                            <a href="{{ url('/lawyer-profile/'.$lawyer->user->id) }}" class="btn btn-gold w-100 rounded-pill fw-bold mt-auto">View Profile</a>
+                            
+                            <p class="text-muted small mb-4 text-truncate-3">{{ Str::limit($lawyer->bio, 80) }}</p>
+                            
+                            <div class="d-flex justify-content-center gap-2 mb-4">
+                                <span class="small text-muted text-decoration-none"><i class="fas fa-comment-dots text-primary me-1"></i>{{ $lawyer->user->replies->count() }} Answers</span>
+                            </div>
+                            <a href="{{ url('/lawyer-profile/'.$lawyer->user->id) }}" class="btn btn-primary w-100 rounded-pill fw-bold mt-auto">View Profile</a>
                         </div>
                     </div>
                     @empty
@@ -68,6 +73,39 @@
                         </div>
                     </div>
                     @endforelse
+                </div>
+
+                <!-- Pagination Footer -->
+                <div class="px-4 py-3 border-top border-secondary d-flex align-items-center justify-content-between mt-4">
+                    <div class="text-muted small">
+                        Showing {{ $lawyers->firstItem() ?? 0 }} to {{ $lawyers->lastItem() ?? 0 }} of {{ $lawyers->total() }} results
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        @if ($lawyers->onFirstPage())
+                            <button class="btn btn-sm btn-secondary disabled" style="opacity: 0.5; cursor: not-allowed; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8;">
+                                <i class="fas fa-chevron-left"></i> Previous
+                            </button>
+                        @else
+                            <button wire:click="previousPage" class="btn btn-sm btn-outline-light" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #e2e8f0;">
+                                <i class="fas fa-chevron-left"></i> Previous
+                            </button>
+                        @endif
+
+                        <span class="text-muted small mx-2">
+                            Page {{ $lawyers->currentPage() }} of {{ $lawyers->lastPage() }}
+                        </span>
+
+                        @if ($lawyers->hasMorePages())
+                            <button wire:click="nextPage" class="btn btn-sm btn-outline-light" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #e2e8f0;">
+                                Next <i class="fas fa-chevron-right"></i>
+                            </button>
+                        @else
+                            <button class="btn btn-sm btn-secondary disabled" style="opacity: 0.5; cursor: not-allowed; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8;">
+                                Next <i class="fas fa-chevron-right"></i>
+                            </button>
+                        @endif
+                    </div>
+                </div>
                 </div>
             </div>
         </div>

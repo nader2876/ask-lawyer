@@ -53,7 +53,12 @@ class Dashboard extends Component
         $lawyer->status = 'accepted';
         $lawyer->save();
 
-        $this->dispatch('success', 'Request approved successfully!');
+        // Also update the user's status to active
+        $lawyer->user->status = 'active';
+        $lawyer->user->save();
+
+        session()->flash('success', 'Request approved successfully!');
+        $this->dispatch('action-completed');
     }
 
     public function rejectRequest($lawyerId)
@@ -62,7 +67,7 @@ class Dashboard extends Component
         $lawyer->status = 'rejected';
         $lawyer->save();
 
-        $this->dispatch('success', 'Request rejected successfully!');
+        session()->flash('success', 'Request rejected successfully!');
     }
     public function viewQuestion($QuestionId)
     { 
@@ -83,6 +88,6 @@ class Dashboard extends Component
         $this->selectedQuestion->refresh();
         $this->replies = $this->selectedQuestion->replies;
 
-        $this->dispatch('success', 'Reply deleted successfully.');
+        session()->flash('success', 'Reply deleted successfully.');
     }
 }

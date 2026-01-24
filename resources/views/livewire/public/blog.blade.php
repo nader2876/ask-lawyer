@@ -66,12 +66,35 @@
             @endforelse
         </div>
 
-        @if($articles->hasPages())
-        <div class="row mt-5 mb-5 pb-5">
-            <div class="col-12 d-flex justify-content-center">
-                {{ $articles->links() }}
+        <div class="px-4 py-3 border-top border-secondary d-flex align-items-center justify-content-between mt-5">
+            <div class="text-muted small">
+                Showing {{ $articles->firstItem() ?? 0 }} to {{ $articles->lastItem() ?? 0 }} of {{ $articles->total() }} results
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                @if ($articles->onFirstPage())
+                    <button class="btn btn-sm btn-secondary disabled" style="opacity: 0.5; cursor: not-allowed; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8;">
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                @else
+                    <button wire:click="previousPage" class="btn btn-sm btn-outline-light" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #e2e8f0;">
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                @endif
+
+                <span class="text-muted small mx-2">
+                    Page {{ $articles->currentPage() }} of {{ $articles->lastPage() }}
+                </span>
+
+                @if ($articles->hasMorePages())
+                    <button wire:click="nextPage" class="btn btn-sm btn-outline-light" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #e2e8f0;">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                @else
+                    <button class="btn btn-sm btn-secondary disabled" style="opacity: 0.5; cursor: not-allowed; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8;">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                @endif
             </div>
         </div>
-        @endif
     </div>
 </div>

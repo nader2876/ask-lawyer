@@ -1,4 +1,30 @@
-<main class="admin-content">
+<div>
+    <!-- Flash Messages (Simple Design) -->
+    @if (session()->has('success'))
+        <div class="alert simple-alert simple-alert-success mb-4" role="alert">
+            <i class="fas fa-check-circle"></i>
+            <div class="alert-content">
+                <span class="alert-title">Success:</span>
+                <span>{{ session('success') }}</span>
+            </div>
+            <button type="button" class="alert-close" onclick="this.parentElement.remove()" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    @endif
+    
+    @if (session()->has('error'))
+        <div class="alert simple-alert simple-alert-danger mb-4" role="alert">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div class="alert-content">
+                <span class="alert-title">Error:</span>
+                <span>{{ session('error') }}</span>
+            </div>
+            <button type="button" class="alert-close" onclick="this.parentElement.remove()" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    @endif
 <style>
     .badge-gradient {
         background: rgba(255, 255, 255, 0.05);
@@ -34,31 +60,7 @@
         color: #22c55e;
     }
 
-    /* Layout Fixes for Overflow */
-    .admin-layout {
-        display: flex;
-        height: 100vh;
-        overflow: hidden;
-        width: 100%;
-    }
-
-    .admin-content {
-        margin-left: 260px;
-        width: calc(100% - 260px);
-        flex: none; /* Prevents flex-grow from overriding width */
-        min-width: 0;
-        height: 100vh;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .content-wrapper {
-        flex: 1;
-        min-width: 0;
-        width: 100%;
-        padding: 2rem; /* Add padding here if needed, or rely on child padding */
-    }
+    /* Layout Fixes removed as they are now in admin.css or layout */
 
     .table-container {
         width: 100%;
@@ -115,10 +117,6 @@
         font-size: 13px !important;
     }
 </style>
-            
-            @include('partials.admin-topbar', ['title' => 'Lawyer Verification Requests'])
-
-            <div class="content-wrapper">
                 <!-- Filters Bar -->
                 <div class="filters-bar">
                     <div class="filters-grid">
@@ -197,8 +195,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($lawyers as $lawyer)
-                                
-                                <tr>
+                                <tr wire:key="lawyer-{{ $lawyer->id }}">
                                     <td>REQ-{{$lawyer->id}}</td>
                                     <td class="fw-semibold">{{$lawyer->user->name}}</td>
                                     <td>{{$lawyer->user->email}}</td>
@@ -236,10 +233,8 @@
                                 @endforeach                              
                             </tbody>
                         </table>
-                    </div>
                 </div>
             </div>
-        
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
@@ -262,35 +257,7 @@
             });
         }
 
-        // Livewire Event Listeners
-        document.addEventListener('livewire:initialized', () => {
-            
-            // Listen for Success Messages
-            @this.on('success', (message) => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: message,
-                    background: '#1e293b',
-                    color: '#e5e7eb',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-            });
-
-            // Listen for Error Messages
-            @this.on('error', (message) => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: message,
-                    background: '#1e293b',
-                    color: '#e5e7eb',
-                    confirmButtonColor: '#3b82f6'
-                });
-            });
-        });
     </script>
-</main>
+</div>
 
 

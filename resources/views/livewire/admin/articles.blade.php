@@ -1,5 +1,4 @@
 <div>
-   <main class="admin-content">
     <style>
         .badge-gradient {
             background: rgba(255, 255, 255, 0.05);
@@ -52,7 +51,32 @@
             
             @include('partials.admin-topbar', ['title' => 'Articles Management'])
 
-            <div class="content-wrapper">
+    <!-- Flash Messages (Simple Design) -->
+    @if (session()->has('success'))
+        <div class="alert simple-alert simple-alert-success mb-4" role="alert">
+            <i class="fas fa-check-circle"></i>
+            <div class="alert-content">
+                <span class="alert-title">Success:</span>
+                <span>{{ session('success') }}</span>
+            </div>
+            <button type="button" class="alert-close" onclick="this.parentElement.remove()" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    @endif
+    
+    @if (session()->has('error'))
+        <div class="alert simple-alert simple-alert-danger mb-4" role="alert">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div class="alert-content">
+                <span class="alert-title">Error:</span>
+                <span>{{ session('error') }}</span>
+            </div>
+            <button type="button" class="alert-close" onclick="this.parentElement.remove()" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    @endif
                 <!-- Filters Bar -->
                 <div class="filters-bar">
                     <div class="filters-grid">
@@ -123,7 +147,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($articles as $article)
-                                <tr>
+                                <tr wire:key="article-{{ $article->id }}">
                                     <td>{{ $article->id }}</td>
                                     <td class="fw-semibold">{{ $article->title }}</td>
                                     <td><span class="badge badge-secondary">{{ $article->category->name }}</span></td>
@@ -173,18 +197,16 @@
                             @endif
                         </div>
                     </div>
-                    </div>
                 </div>
-            </div>
-        </main>
     
     
     
     
     @if($isViewArticle)
     
-     <div class="modal  show " id="viewArticleModal">
-        <div class="modal-dialog" style="max-width: 800px;">
+     <div class="modal show" id="viewArticleModal" style="display: flex !important; align-items: center; justify-content: center; background-color: rgba(0,0,0,0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1050;">
+        <div class="modal-dialog" style="max-width: 800px; width: 100%; margin: 0;">
+            <div class="modal-content" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 0.5rem;">
             <div class="modal-header">
                 <h3 class="modal-title">Article Details</h3>
                 <button class="modal-close" wire:click="closeViewArticle">
@@ -246,31 +268,5 @@
             });
         }
 
-        // Livewire Event Listeners
-        document.addEventListener('livewire:initialized', () => {
-            // Listen for Success Messages
-            @this.on('success', (message) => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: message,
-                    background: '#1e293b',
-                    color: '#e5e7eb',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-            });
-
-             // Listen for Error Messages
-            @this.on('error', (message) => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: message,
-                    background: '#1e293b',
-                    color: '#e5e7eb'
-                });
-            });
-        });
     </script>
 </div>

@@ -92,7 +92,8 @@ class Questions extends Component
         $question = Question::findOrFail($QuestionId);
         $question->delete();
         $this->isViewQuestion = false;
-        $this->dispatch('success', 'Question deleted successfully.');
+        session()->flash('success', 'Question deleted successfully.');
+        $this->dispatch('action-completed');
     }
 
     public function deleteReply($replyId)
@@ -103,6 +104,19 @@ class Questions extends Component
         $this->selectedQuestion->refresh();
         $this->replies = $this->selectedQuestion->replies;
 
-        $this->dispatch('success', 'Reply deleted successfully.');
+        session()->flash('success', 'Reply deleted successfully.');
+        $this->dispatch('action-completed');
+    }
+
+    public function toggleStatus($questionId)
+    {
+        $question = Question::findOrFail($questionId);
+        if ($question->status === 'closed') {
+            $question->status = 'open';
+        } else {
+            $question->status = 'closed';
+        }
+        $question->save();
+        session()->flash('success', 'Question status updated successfully.');
     }
 }

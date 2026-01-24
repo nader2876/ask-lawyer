@@ -1,38 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lawyer Requests - Legal Q&A Admin</title>
-    
-    <!-- CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/css/shared.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/admin.css') }}">
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
-    <div class="admin-layout">
-        
-        @include('partials.admin-sidebar')
+@extends('layouts.admin')
 
-        <!-- Main Content -->
-        <livewire:admin.lawyers-requests />
-    </div>
+@section('title', 'Lawyer Requests')
 
-    <!-- JavaScript -->
-    <script src="{{ asset('assets/js/shared.js') }}"></script>
-    <script src="{{ asset('assets/js/admin-ui.js') }}"></script>
-    <script>
-        // Initialize table filter
-        const requestFilter = new TableFilter('requestsTable');
-        
-        // Approve request
-       
-        
-     
-    </script>
-</body>
-</html>
+@section('topbar')
+    @include('partials.admin-topbar', ['title' => 'Lawyer Requests'])
+@endsection
 
+@section('content')
+    <livewire:admin.lawyers-requests />
+@endsection
+
+@section('scripts')
+<script>
+    document.addEventListener('livewire:initialized', () => {
+        Livewire.on('swal:confirm', (data) => {
+            const event = Array.isArray(data) ? data[0] : data;
+            Swal.fire({
+                title: event.title,
+                text: event.text,
+                icon: event.type,
+                background: '#1e293b',
+                color: '#e5e7eb',
+                showCancelButton: true,
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#ef4444',
+                confirmButtonText: 'Yes, proceed!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Livewire.dispatch(event.callback, { id: event.id });
+                }
+            });
+        });
+    });
+</script>
+@endsection
