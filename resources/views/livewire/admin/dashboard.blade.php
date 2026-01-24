@@ -96,7 +96,7 @@
                     <h3 class="card-title mb-0">User Growth</h3>
                 </div>
                 <!-- Backend Note: Pass data for labels (months) and data (counts) -->
-                <div class="card-body">
+                <div class="card-body" wire:ignore>
                     <canvas id="userGrowthChart" style="max-height: 300px; width: 100%;"></canvas>
                 </div>
             </div>
@@ -107,7 +107,7 @@
                     <h3 class="card-title mb-0">Questions Distribution</h3>
                 </div>
                 <!-- Backend Note: Pass categories and their respective counts -->
-                <div class="card-body">
+                <div class="card-body" wire:ignore>
                     <canvas id="questionsChart" style="max-height: 300px; width: 100%;"></canvas>
                 </div>
             </div>
@@ -168,6 +168,7 @@
                             <th>Email</th>
                             <th>License No.</th>
                             <th>Date</th>
+                            <th>CV</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -179,6 +180,15 @@
                             <td>{{ $request->user->email }}</td>
                             <td>{{ $request->license_number }}</td>
                             <td>{{ $request->created_at->format('Y-m-d') }}</td>
+                            <td>
+                                @if($request->cv)
+                                    <a href="{{ asset('storage/' . $request->cv) }}" target="_blank" class="btn btn-sm btn-outline-info">
+                                        <i class="fas fa-file-pdf"></i> View CV
+                                    </a>
+                                @else
+                                    <span class="text-muted small">No CV</span>
+                                @endif
+                            </td>
                             <td><span class="badge badge-warning">{{ $request->status }}</span></td>
                            <td>
                                @if ($request->status == 'pending')
@@ -310,10 +320,10 @@
                 new Chart(ctx1, {
                     type: 'line',
                     data: {
-                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        labels: @json($userGrowthLabels),
                         datasets: [{
                             label: 'New Users',
-                            data: [65, 59, 80, 81, 56, 55],
+                            data: @json($userGrowthValues),
                             borderColor: '#3b82f6',
                             backgroundColor: 'rgba(59, 130, 246, 0.1)',
                             fill: true,
@@ -345,10 +355,10 @@
                 new Chart(ctx2, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Legal', 'Business', 'Real Estate', 'Family'],
+                        labels: @json($categoryLabels),
                         datasets: [{
-                            data: [40, 25, 20, 15],
-                            backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'],
+                            data: @json($categoryValues),
+                            backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'],
                             borderWidth: 0
                         }]
                     },

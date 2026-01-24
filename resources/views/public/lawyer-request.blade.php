@@ -45,7 +45,7 @@
                                 </div>
                             @endif
 
-                            <form method="POST" action="{{ route('lawyer.register') }}">
+                            <form method="POST" action="{{ route('lawyer.register') }}" enctype="multipart/form-data">
                                 @csrf
 
                                 <div class="mb-3">
@@ -90,10 +90,22 @@
                                         @error('license_number') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label small fw-bold">Location (City)</label>
-                                        <input type="text" name="location" class="form-control @error('location') is-invalid @enderror" placeholder="e.g. Amman" value="{{ old('location') }}" required>
+                                        <label class="form-label small fw-bold text-light">Location (City)</label>
+                                        <input type="text" name="location" class="form-control bg-dark border-secondary text-white @error('location') is-invalid @enderror" placeholder="e.g. Amman" value="{{ old('location') }}" required>
                                         @error('location') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                     </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label small fw-bold text-light">Professional CV or Resume</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-dark border-secondary text-warning"><i class="fas fa-file-pdf"></i></span>
+                                        <input type="file" name="cv" class="form-control bg-dark border-secondary text-white @error('cv') is-invalid @enderror" accept=".pdf,.doc,.docx" required>
+                                    </div>
+                                    <div class="form-text text-muted small mt-2">
+                                        <i class="fas fa-info-circle me-1"></i> Please upload your professional resume in PDF or Word format (max 5MB).
+                                    </div>
+                                    @error('cv') <div class="text-danger small mt-1 fw-bold">{{ $message }}</div> @enderror
                                 </div>
 
                                 <div class="d-grid">

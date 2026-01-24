@@ -209,7 +209,15 @@
                                         </div>
                                     </td>
                                     <td>{{$lawyer->license_number}}</td>
-                                    <td><a href="#" class="btn-view-cv" onclick="demoAction('View CV')"><i class="fas fa-file-pdf"></i> View</a></td>
+                                    <td>
+                                        @if($lawyer->cv)
+                                            <a href="{{ asset('storage/' . $lawyer->cv) }}" target="_blank" class="btn-view-cv">
+                                                <i class="fas fa-file-pdf"></i> View CV
+                                            </a>
+                                        @else
+                                            <span class="text-muted small">No CV Uploaded</span>
+                                        @endif
+                                    </td>
                                     <td><span class="badge badge-warning">{{$lawyer->status}}</span></td>
                                     <td>{{$lawyer->created_at->format('Y-m-d')}}</td>
                                     <td>

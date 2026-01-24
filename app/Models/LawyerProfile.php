@@ -23,6 +23,7 @@ class LawyerProfile extends Model
         'whatsapp_number',
         'linkedin_profile',
         'location',
+        'cv',
     ];
 
     public function user()

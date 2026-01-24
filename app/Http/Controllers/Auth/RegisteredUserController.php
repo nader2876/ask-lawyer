@@ -58,7 +58,13 @@ class RegisteredUserController extends Controller
             'license_number' => ['required', 'string', 'max:50'],
             'location' => ['required', 'string', 'max:100'],
             'specialization_id' => ['required', 'exists:categories,id'],
+            'cv' => ['required', 'file', 'mimes:pdf,doc,docx', 'max:5120'], // Max 5MB
         ]);
+
+        $cvPath = null;
+        if ($request->hasFile('cv')) {
+            $cvPath = $request->file('cv')->store('cvs', 'public');
+        }
 
         $user = User::create([
             'name' => $request->name,
@@ -74,6 +80,7 @@ class RegisteredUserController extends Controller
             'location' => $request->location,
             'status' => 'pending',
             'bio' => 'Draft bio pending update...',
+            'cv' => $cvPath,
         ]);
 
         if ($request->specialization_id) {

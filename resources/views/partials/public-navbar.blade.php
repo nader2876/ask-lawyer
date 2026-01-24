@@ -31,32 +31,41 @@
                 @endguest
 
                 @auth
-                <div class="user-menu">
+                <div class="user-menu ms-lg-2">
                      <div class="dropdown">
-                        <button class="btn btn-link text-white text-decoration-none dropdown-toggle d-flex align-items-center p-1" data-bs-toggle="dropdown" style="border-radius: 50rem; transition: background 0.2s;">
-                        @if(Auth::user()->lawyerProfile?->profile_photo_path)   
-                        <img src="{{ asset('storage/' . Auth::user()->lawyerProfile?->profile_photo_path) }}" class="rounded-circle" style="width: 32px; height: 32px; object-fit: cover; border: 2px solid rgba(255,255,255,0.1); margin-right: 2px;">
-                        @else
-                        <i class="fas fa-user-circle fa-lg"></i>
-                        @endif
+                        <button class="btn btn-link text-white text-decoration-none dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            @if(Auth::user()->lawyerProfile?->profile_photo_path)   
+                                <img src="{{ asset('storage/' . Auth::user()->lawyerProfile?->profile_photo_path) }}" class="rounded-circle shadow-sm" alt="Profile">
+                            @else
+                                <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px; font-size: 0.8rem; font-weight: 700;">
+                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                </div>
+                            @endif
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark shadow">
-                             <li><h6 class="dropdown-header">{{ Auth::user()->name }}</h6></li>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark shadow border-secondary animate-fade-up" style="border-radius: 12px; min-width: 200px;">
+                             <li>
+                                <div class="px-3 py-2 border-bottom border-white/10 mb-2">
+                                    <p class="text-white fw-bold mb-0 small">{{ Auth::user()->name }}</p>
+                                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">{{ Auth::user()->email }}</p>
+                                </div>
+                             </li>
                              
                              @if(Auth::user()->role === 'admin')
-                                <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">Admin Dashboard</a></li>
+                                <li><a class="dropdown-item py-2" href="{{ route('admin.dashboard') }}"><i class="fas fa-chart-line me-2 opacity-75"></i>Admin Dashboard</a></li>
                              @elseif(Auth::user()->role === 'lawyer')
-                                <li><a class="dropdown-item" href="{{ route('lawyer.dashboard') }}">Lawyer Dashboard</a></li>
+                                <li><a class="dropdown-item py-2" href="{{ route('lawyer.dashboard') }}"><i class="fas fa-columns me-2 opacity-75"></i>Lawyer Dashboard</a></li>
                              @else
-                                <li><a class="dropdown-item" href="{{ route('profile.edit') }}">My Profile</a></li>
+                                <li><a class="dropdown-item py-2" href="{{ route('profile.edit') }}"><i class="fas fa-user-circle me-2 opacity-75"></i>My Profile</a></li>
                              @endif
 
-                             <li><hr class="dropdown-divider"></li>
+                             <li><hr class="dropdown-divider opacity-10"></li>
                              <li>
                                 <form method="POST" action="{{ route('logout') }}" id="logout-form">
                                     @csrf
                                 </form>
-                                <a class="dropdown-item" href="#" onclick="confirmUserLogout(event)">Logout</a>
+                                <a class="dropdown-item py-2 text-warning" href="#" onclick="confirmUserLogout(event)">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
                              </li>
                         </ul>
                      </div>

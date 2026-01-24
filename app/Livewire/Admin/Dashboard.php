@@ -7,6 +7,8 @@ use App\Models\LawyerProfile;
 use App\Models\Question;
 use App\Models\QuestionReply;
 use App\Models\Article;
+use App\Models\Category;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class Dashboard extends Component
@@ -33,7 +35,23 @@ class Dashboard extends Component
             ->take(5)
             ->get();
 
-        
+        // --- NEW: Chart Data Logic ---
+        // 1. User Growth (Last 6 Months)
+        $userGrowthData = User::select(
+            DB::raw('COUNT(id) as count'),
+            DB::raw("DATE_FORMAT(created_at, '%b') as month")
+        )
+            ->where('created_at', '>=', now()->subMonths(6))
+            ->groupBy('month')
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        // 2. Questions Distribution by Category
+        $questionStats = Category::withCount('questions')
+            ->orderBy('questions_count', 'desc')
+            ->take(5)
+            ->get();
+
         return view('livewire.admin.dashboard', [
             'totalUsers' => $totalUsers,
             'approvedLawyers' => $approvedLawyers,
@@ -43,7 +61,10 @@ class Dashboard extends Component
             'totalArticles' => $totalArticles,
             'recentQuestions' => $recentQuestions,
             'recentLawyerRequests' => $recentLawyerRequests,
-            
+            'userGrowthLabels' => $userGrowthData->pluck('month'),
+            'userGrowthValues' => $userGrowthData->pluck('count'),
+            'categoryLabels' => $questionStats->pluck('name'),
+            'categoryValues' => $questionStats->pluck('questions_count'),
         ]);
 
     }
