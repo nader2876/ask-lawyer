@@ -125,11 +125,12 @@
             <!-- Sidebar -->
             <div class="col-lg-4">
                 <!-- Top Answerer -->
-               
+               @if($topAnswerer)
                 <div class="card mb-3">
                     <div class="card-body p-4">
                         <h6 class="fw-semibold mb-3">Top Answerer</h6>
                         <div class="text-center mb-3">
+
                             <img src="https://ui-avatars.com/api/?name={{$topAnswerer->name}}&background=10b981&color=fff" class="rounded-circle mb-2" width="60">
                             <h6 class="mb-1">{{$topAnswerer->name}}</h6>
                             <p class="small text-muted mb-0">
@@ -147,7 +148,7 @@
                     </div>
                 </div>
           
-
+            @endif
                 <!-- Related Questions -->
                 <div class="card">
                     <div class="card-body p-4">

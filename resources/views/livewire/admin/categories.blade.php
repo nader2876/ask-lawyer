@@ -120,7 +120,9 @@
             <div class="modal-content border-secondary shadow-lg" style="background: #1e293b; border-radius: 12px;">
                 <div class="modal-header border-bottom border-white/10 px-4 py-3">
                     <h5 class="modal-title fw-bold text-white"><i class="fas fa-plus-circle text-primary me-2"></i> Add New Category</h5>
-                    <button type="button" class="btn-close btn-close-white" wire:click="closeAddModal"></button>
+                    <button class="modal-close" wire:click="closeAddModal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
                 </div>
                 <div class="modal-body p-4">
                     <div class="mb-4">

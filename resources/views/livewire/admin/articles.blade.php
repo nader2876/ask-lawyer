@@ -49,7 +49,7 @@
         }
     </style>
             
-            @include('partials.admin-topbar', ['title' => 'Articles Management'])
+          
 
     <!-- Flash Messages (Simple Design) -->
     @if (session()->has('success'))
