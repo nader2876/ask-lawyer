@@ -32,7 +32,9 @@ class LawyerProfile extends Model
     }
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'category_lawyer', 'lawyer_id', 'category_id', 'user_id');
+        return $this->belongsToMany(Category::class, 'category_lawyer', 'lawyer_id', 'category_id', 'user_id')
+            ->withTimestamps();
     }
+   
 
 }

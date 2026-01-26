@@ -21,7 +21,7 @@
                     <div class="col-md-3 text-center mb-4 mb-md-0">
                         <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mx-auto position-relative overflow-hidden" style="width: 150px; height: 150px; border: 4px solid var(--primary);">
                              @if($lawyer->profile_photo_path)
-                                <img src="{{ asset('storage/' . $lawyer->profile_photo_path) }}" class="w-100 h-100" style="object-fit: cover;">
+                                <img src="{{ Str::startsWith($lawyer->profile_photo_path, 'http') ? $lawyer->profile_photo_path : asset('storage/' . $lawyer->profile_photo_path) }}" class="w-100 h-100" style="object-fit: cover;">
                             @else
                                 <img src="https://ui-avatars.com/api/?name={{ urlencode($lawyer->user->name) }}&background=0d6efd&color=fff&size=150" class="w-100 h-100" style="object-fit: cover;">
                             @endif

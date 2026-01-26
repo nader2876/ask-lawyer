@@ -2,219 +2,264 @@
 
 namespace Database\Seeders;
 
-use App\Models\Article;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Faker\Factory as Faker;
+use App\Models\User;
 use App\Models\Category;
 use App\Models\LawyerProfile;
 use App\Models\Question;
 use App\Models\QuestionReply;
-use App\Models\User;
-use Illuminate\Database\Seeder;
+use App\Models\Article;
+use App\Models\Like;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 0) Admin User
-        User::factory()->create([
+        $this->command->info('Cleaning DB...');
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Like::truncate();
+        QuestionReply::truncate();
+        Article::truncate();
+        Question::truncate();
+        DB::table('category_lawyer')->truncate();
+        LawyerProfile::truncate();
+        Category::truncate();
+        User::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        $faker = Faker::create();
+
+        // 2. Categories (10 Real)
+        $this->command->info('Seeding Categories...');
+        $categoriesData = [
+            ['name' => 'Family Law', 'slug' => 'family-law'],
+            ['name' => 'Criminal Defense', 'slug' => 'criminal-defense'],
+            ['name' => 'Corporate Law', 'slug' => 'corporate-law'],
+            ['name' => 'Intellectual Property', 'slug' => 'intellectual-property'],
+            ['name' => 'Labor & Employment', 'slug' => 'labor-employment'],
+            ['name' => 'Real Estate', 'slug' => 'real-estate'],
+            ['name' => 'Personal Injury', 'slug' => 'personal-injury'],
+            ['name' => 'Immigration', 'slug' => 'immigration'],
+            ['name' => 'Tax Law', 'slug' => 'tax-law'],
+            ['name' => 'Bankruptcy', 'slug' => 'bankruptcy'],
+        ];
+
+        foreach ($categoriesData as $cat) {
+            Category::create($cat);
+        }
+        $categoryIds = Category::pluck('id')->toArray();
+
+        // 3. Fixed Users
+        $this->command->info('Seeding Fixed Users...');
+        // Admin
+        User::create([
             'name' => 'System Admin',
             'email' => 'admin@example.com',
+            'password' => Hash::make('password'),
             'role' => 'admin',
-            'password' => bcrypt('password'), // password
         ]);
 
-        // 0.1) Test User (Regular Client)
-        $testUser = User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'user@example.com',
-            'role' => 'user',
-            'password' => bcrypt('password'), // password
-        ]);
-
-        // 0.2) Test Lawyer (Approved)
-        $testLawyer = User::factory()->create([
-            'name' => 'Test Lawyer',
+        // Test Lawyer
+        $testLawyer = User::create([
+            'name' => 'Sarah The Lawyer',
             'email' => 'lawyer@example.com',
+            'password' => Hash::make('password'),
             'role' => 'lawyer',
-            'password' => bcrypt('password'), // password
         ]);
-        
         LawyerProfile::create([
             'user_id' => $testLawyer->id,
-            'status' => 'accepted', // Approved
-            'bio' => 'An expert test lawyer for demonstration purposes.',
-            'license_number' => 'TEST-BAR-001',
-            'location' => 'Amman',
+            'bio' => 'Senior attorney with 15 years of experience in Corporate Law and M&A.',
+            'license_number' => 'SARAH-LAW-001',
+            'status' => 'accepted',
+            'location' => 'New York, USA',
+            'profile_photo_path' => 'https://ui-avatars.com/api/?name=Sarah+The+Lawyer&background=random&size=200',
+        ]);
+        // Pivot
+        DB::table('category_lawyer')->insert([
+            ['lawyer_id' => $testLawyer->id, 'category_id' => $categoryIds[2], 'created_at' => now(), 'updated_at' => now()], // Corporate
+            ['lawyer_id' => $testLawyer->id, 'category_id' => $categoryIds[8], 'created_at' => now(), 'updated_at' => now()], // Tax
         ]);
 
-        // 1) Specialized Categories (Real Legal Areas)
-        $categoriesNames = [
-            'Corporate Law', 'Family Law', 'Criminal Defense', 'Real Estate', 
-            'Intellectual Property', 'Immigration', 'Labor & Employment', 'Personal Injury',
-            'Tax Law', 'Environmental Law', 'Bankruptcy', 'Civil Rights'
+        // Test User
+        $testUser = User::create([
+            'name' => 'John Doe',
+            'email' => 'user@example.com',
+            'password' => Hash::make('password'),
+            'role' => 'user',
+        ]);
+
+        // 4. Create 10 Real Lawyers
+        $this->command->info('Seeding 10 Real Lawyers (Arabic)...');
+        $lawyerIds = [$testLawyer->id];
+        
+        $lawyerNames = [
+            'Ahmed Al-Mansour', 
+            'Fatima Al-Zahra', 
+            'Mohammed Al-Saud', 
+            'Layla Al-Khalid', 
+            'Omar Al-Fayed', 
+            'Noura Al-Jaber', 
+            'Khalid Al-Rashid', 
+            'Amira Al-Hassan', 
+            'Youssef Al-Nasser', 
+            'Sara Al-Otaibi'
         ];
         
-        $categories = collect();
-        foreach ($categoriesNames as $name) {
-            $categories->push(Category::create(['name' => $name, 'slug' => \Illuminate\Support\Str::slug($name)]));
-        }
-
-        // Attach categories to test lawyer
-        $testLawyer->specializations()->attach($categories->random(2)->pluck('id'));
-
-        // 2) Realistic Lawyers Data
-        $lawyerData = [
-            ['name' => 'Sarah Jenkins', 'bio' => 'Senior Corporate Attorney with 15 years of experience in mergers and acquisitions. Harvard Law graduate committed to helping startups navigate complex regulations.', 'specialization' => 'Corporate Law'],
-            ['name' => 'Michael Chen', 'bio' => 'Dedicated Family Law practitioner focusing on divorce mediation and child custody. I believe in amicable resolutions whenever possible.', 'specialization' => 'Family Law'],
-            ['name' => 'David Rodriguez', 'bio' => 'Aggressive Criminal Defense lawyer who fights for your rights. Former prosecutor with deep insight into the justice system.', 'specialization' => 'Criminal Defense'],
-            ['name' => 'Emily White', 'bio' => 'Intellectual Property expert helping creatives and tech companies protect their innovations. Patent and trademark specialist.', 'specialization' => 'Intellectual Property'],
-            ['name' => 'James Wilson', 'bio' => 'Real Estate attorney handling commercial and residential transactions. ensuring your property deals are secure and compliant.', 'specialization' => 'Real Estate'],
-        ];
-
-        $lawyerUsers = collect();
-        $lawyerUsers->push($testLawyer); // Add test lawyer to the pool
-
-        foreach ($lawyerData as $data) {
-            $user = User::create([
-                'name' => $data['name'],
-                'email' => strtolower(str_replace(' ', '.', $data['name'])) . '@law.com',
-                'role' => 'lawyer',
-                'password' => bcrypt('password'),
-            ]);
+        foreach($lawyerNames as $idx => $name) {
+            // Create email from name (e.g. ahmed.al-mansour@example.com)
+            $emailName = strtolower(str_replace([' ', '-'], '.', $name));
             
-            $lawyerUsers->push($user);
+            $lUser = User::create([
+                'name' => $name,
+                'email' => $emailName . '@example.com',
+                'password' => Hash::make('password'),
+                'role' => 'lawyer',
+            ]);
 
             LawyerProfile::create([
-                'user_id' => $user->id,
+                'user_id' => $lUser->id,
+                'bio' => "Professional attorney specializing in complex legal matters. Committed to providing excellent representation and sound advice. " . $faker->paragraph,
+                'license_number' => 'LAW-' . strtoupper($faker->bothify('??###')),
                 'status' => 'accepted',
-                'bio' => $data['bio'],
-                'license_number' => 'BAR-' . rand(10000, 99999),
-                'phone' => '+1 555 ' . rand(100, 999) . ' ' . rand(1000, 9999),
-                'whatsapp_number' => '+1 555 ' . rand(100, 999) . ' ' . rand(1000, 9999),
-                'linkedin_profile' => 'https://linkedin.com/in/' . strtolower(str_replace(' ', '', $data['name'])),
-                'location' => collect(['Amman', 'Zarqa', 'Irbid', 'Aqaba', 'Salt'])->random(),
+                'location' => 'Riyadh, Saudi Arabia',
+                'phone' => '+966 ' . $faker->numerify('5########'),
+                'profile_photo_path' => 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&background=random&size=200',
             ]);
 
-            // Attach specific category to User
-            $cat = $categories->where('name', $data['specialization'])->first();
-            $user->specializations()->attach($cat->id);
-            // Add a random second category
-            $user->specializations()->attach($categories->where('name', '!=', $data['specialization'])->random()->id);
+            // Assign 2 categories
+            $cats = $faker->randomElements($categoryIds, 2);
+            foreach($cats as $cid) {
+                DB::table('category_lawyer')->insert([
+                    'lawyer_id' => $lUser->id,
+                    'category_id' => $cid,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+            $lawyerIds[] = $lUser->id;
         }
 
-        // 2.1) Generate 20 Additional Random Lawyers
-        $randomLawyers = User::factory()->count(20)->create([
-            'role' => 'lawyer',
-        ]);
-
-        foreach ($randomLawyers as $rndLawyer) {
-            $lawyerUsers->push($rndLawyer);
-
-            LawyerProfile::factory()->create([
-                'user_id' => $rndLawyer->id,
-                'status' => 'accepted',
-                'location' => collect(['Amman', 'Zarqa', 'Irbid', 'Aqaba', 'Salt'])->random(),
+        // 5. Create 20 Users
+        $this->command->info('Seeding 20 Users...');
+        $userIds = [$testUser->id];
+        for ($i = 0; $i < 20; $i++) {
+            $u = User::create([
+                'name' => $faker->name,
+                'email' => $faker->unique()->safeEmail,
+                'password' => Hash::make('password'),
+                'role' => 'user',
             ]);
-
-            // Attach 1-3 random categories to User
-            $rndLawyer->specializations()->attach(
-                $categories->random(rand(1, 3))->pluck('id')->toArray()
-            );
+            $userIds[] = $u->id;
         }
 
-        // 3) Create Users (Clients)
-        $clientUsers = collect();
-        $clientUsers->push($testUser);
-        
-        $randomClients = User::factory()->count(30)->create(['role' => 'user']);
-        $clientUsers = $clientUsers->merge($randomClients);
-
-        // 4) Realistic Questions & Answers
-        $questionsData = [
-            ['title' => 'Can I get my deposit back if I break my lease early?', 'cat' => 'Real Estate', 'desc' => 'I signed a 12-month lease but need to move for work after 6 months. My landlord says he keeps the deposit. Is this legal in most states?'],
-            ['title' => 'How do I trademark my new software logo?', 'cat' => 'Intellectual Property', 'desc' => 'I just launched a SaaS startup and want to protect my branding. What is the process for registering a trademark globally?'],
-            ['title' => 'Custody rights for unmarried fathers?', 'cat' => 'Family Law', 'desc' => 'My partner and I are separating. We were never married. What are my automatic rights regarding visitation and custody of our 5-year-old?'],
-            ['title' => 'Slip and fall at a grocery store, who is liable?', 'cat' => 'Personal Injury', 'desc' => 'I slipped on a wet floor that had no warning sign. I broke my wrist. Can I sue for medical bills and lost wages?'],
-            ['title' => 'Starting a LLC vs S-Corp for freelance work?', 'cat' => 'Corporate Law', 'desc' => 'I am a freelance graphic designer making about $80k/year. Should I form an LLC or is an S-Corp better for tax purposes?'],
+        // 6. Create 20 Real Questions
+        $this->command->info('Seeding 20 Questions...');
+        $questionTitles = [
+            "What are the legal requirements for starting a small business?",
+            "How does custody work in a divorce case?",
+            "Can I sue my landlord for unsafe living conditions?",
+            "Understanding intellectual property rights for software.",
+            "What should I do if I'm involved in a car accident?",
+            "How to file for bankruptcy and what are the consequences?",
+            "Is a verbal contract legally binding?",
+            "What are my rights as an employee regarding overtime pay?",
+            "How to handle a breach of contract dispute?",
+            "Immigration process for spousal visa explanation needed.",
+            "Tax implications of selling detailed property.",
+            "Can I trademark my logo without a lawyer?",
+            "What constitutes wrongful termination?",
+            "Tenant rights during eviction process.",
+            "How to create a valid will?",
+            "Legal age for signing contracts.",
+            "Difference between copyright and trademark.",
+            "What is a non-compete agreement?",
+            "How to fight a traffic ticket effectively?",
+            "consumer protection laws regarding refunds."
         ];
 
-        foreach ($questionsData as $qData) {
-            $cat = $categories->where('name', $qData['cat'])->first() ?? $categories->first();
+        $questionIds = [];
+        foreach($questionTitles as $idx => $title) {
+            $desc = "I am looking for legal advice regarding the following situation... " . $faker->paragraph(3) . " Any help is appreciated.";
             
-            $question = Question::create([
-                'user_id' => $clientUsers->random()->id,
-                'category_id' => $cat->id,
-                'title' => $qData['title'],
-                'description' => $qData['desc'],
+            $q = Question::create([
+                'user_id' => $faker->randomElement($userIds),
+                'category_id' => $faker->randomElement($categoryIds),
+                'title' => $title,
+                'description' => $desc,
                 'status' => 'open',
-                'created_at' => now()->subDays(rand(1, 10)),
             ]);
-
-            // Add a reply from a relevant lawyer (or random if none found in loop)
-            $lawyerPool = $testLawyer->specializations->contains($cat->id) ? collect([$testLawyer]) : $lawyerUsers;
-            $relevantLawyer = $lawyerPool->random();
-
-            QuestionReply::create([
-                'question_id' => $question->id,
-                'lawyer_id' => $relevantLawyer->id,
-                'body' => "This is a complex issue depending on your jurisdiction. Generally, {$qData['cat']} dictates that... [Detailed legal advice would follow]. You should consult with a local attorney.",
-                'created_at' => now()->subDays(rand(1, 5)),
-            ]);
+            $questionIds[] = $q->id;
         }
 
-        // 4.1) Generate 50 Additional Random Questions
-        for ($i = 0; $i < 50; $i++) {
-            $qCat = $categories->random();
-            $qUser = $clientUsers->random();
-            
-            $question = Question::factory()->create([
-                'user_id' => $qUser->id,
-                'category_id' => $qCat->id,
-                'created_at' => now()->subDays(rand(1, 60)),
-            ]);
-
-            // 70% chance of having replies
-            if (rand(1, 100) <= 70) {
-                $numReplies = rand(1, 3);
-                for ($j = 0; $j < $numReplies; $j++) {
-                    QuestionReply::factory()->create([
-                        'question_id' => $question->id,
-                        'lawyer_id' => $lawyerUsers->random()->id,
-                        'created_at' => $question->created_at->addHours(rand(1, 48)),
-                    ]);
-                }
+        // 7. Create 40 Replies (2 per question approx)
+        $this->command->info('Seeding 40 Replies...');
+        $replyIds = [];
+        foreach($questionIds as $qid) {
+            // Add 2 replies to each question
+            for($re = 0; $re < 2; $re++) {
+                $r = QuestionReply::create([
+                    'question_id' => $qid,
+                    'lawyer_id' => $faker->randomElement($lawyerIds),
+                    'body' => "Based on the details provided, here is a general perspective: " . $faker->paragraph(2) . " However, I recommend consulting with a lawyer formally.",
+                ]);
+                $replyIds[] = $r->id;
             }
         }
 
-        // 5) Realistic Articles (Blog)
-        $articlesData = [
-            ['title' => '5 Common Mistakes in Startup Incorporations', 'cat' => 'Corporate Law'],
-            ['title' => 'Understanding Alimony: What You Need to Know', 'cat' => 'Family Law'],
-            ['title' => 'Your Rights When Stopped by Police', 'cat' => 'Criminal Defense'],
-            ['title' => 'A Guide to Commercial Lease Agreements', 'cat' => 'Real Estate'],
-            ['title' => 'Copyright vs Trademark: What is the Difference?', 'cat' => 'Intellectual Property'],
+        // 8. Create 50 Likes
+        $this->command->info('Seeding 50 Likes...');
+        $likesCount = 0;
+        $attempts = 0;
+        while($likesCount < 50 && $attempts < 200) {
+            $uid = $faker->randomElement($userIds);
+            $rid = $faker->randomElement($replyIds);
+            
+            $exists = DB::table('likes')->where('user_id', $uid)->where('reply_id', $rid)->exists();
+            if(! $exists) {
+                DB::table('likes')->insert([
+                    'user_id' => $uid,
+                    'reply_id' => $rid,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+                $likesCount++;
+            }
+            $attempts++;
+        }
+
+        // 9. Create 10 Articles with Real Pictures
+        $this->command->info('Seeding 10 Articles...');
+        $articleTitles = [
+            "Understanding Family Law Basics in 2026",
+            "5 Steps to Protect Your Intellectual Property",
+            "Tenants Rights: What You Need to Know",
+            "The Guide to Corporate Taxation",
+            "Criminal Defense Strategies Explained",
+            "How to Negotiate Your Employment Contract",
+            "Real Estate Closing Process De-mystified",
+            "Immigration Law Updates for the New Year",
+            "Personal Injury: When to Hire a Lawyer",
+            "Bankruptcy: A Fresh Start?"
         ];
 
-        foreach ($articlesData as $aData) {
-             $cat = $categories->where('name', $aData['cat'])->first();
-             Article::create([
-                 'author_id' => $lawyerUsers->random()->id,
-                 'category_id' => $cat->id,
-                 'title' => $aData['title'],
-                 'content' => "<p>Detailed guide about <strong>{$aData['title']}</strong>. Legal nuances are important to understand...</p><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>",
-                 'image_path' => 'https://images.unsplash.com/photo-1505664194779-8beaceb93744?w=800&q=80',
-                 'status' => 'published',
-                 'created_at' => now()->subDays(rand(2, 20)),
-             ]);
-        }
-
-        // 5.1) Generate 25 Additional Random Articles
-        for ($i = 0; $i < 25; $i++) {
-            Article::factory()->create([
-                'author_id' => $lawyerUsers->random()->id,
-                'category_id' => $categories->random()->id,
-                'created_at' => now()->subDays(rand(1, 90)),
+        foreach($articleTitles as $idx => $title) {
+            Article::create([
+                'author_id' => $faker->randomElement($lawyerIds),
+                'category_id' => $faker->randomElement($categoryIds),
+                'title' => $title,
+                'slug' => Str::slug($title . '-' . uniqid()),
+                'content' => $faker->realText(3000), 
                 'status' => 'published',
+                'published_at' => now()->subDays(rand(1, 100)),
+                // Using unsplash random image
+                'image_path' => 'https://picsum.photos/seed/' . ($idx+1) . '/800/600', 
             ]);
         }
+        
+        $this->command->info('Realistic Seeding Complete!');
     }
 }

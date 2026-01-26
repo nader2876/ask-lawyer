@@ -73,5 +73,10 @@ public function specializations()
     return $this->belongsToMany(Category::class, 'category_lawyer', 'lawyer_id', 'category_id')
         ->withTimestamps();
 }
+public function likedReplies()
+{
+    return $this->belongsToMany(QuestionReply::class, 'likes', 'user_id', 'reply_id')
+        ->withTimestamps();
+}
 
 }

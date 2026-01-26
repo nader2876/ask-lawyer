@@ -1,31 +1,39 @@
 <div>
-    <section class="hero-section text-center pt-5 mt-5 bg-dark">
-        <div class="container mt-5">
-            <h1 class="display-4 fw-bold mb-4">Legal <span class="text-warning">Insights</span> & News</h1>
-            <p class="lead text-muted mb-5">Expert analysis and guides on the latest legal developments.</p>
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <div class="input-group input-group-lg shadow-lg border border-secondary rounded-pill overflow-hidden bg-primary-navy">
-                        <span class="input-group-text bg-transparent border-0 text-muted ps-4"><i class="fas fa-search"></i></span>
-                        <input type="text" class="form-control bg-primary-navy border-0 py-3 text-white" placeholder="Search articles..." wire:model.live="search">
+    <div class="container py-5 mt-5 pt-5">
+        <!-- Search & Filter Section -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8">
+                <!-- Minimal Search Bar -->
+                <div class="position-relative mb-5" style="z-index: 10;">
+                    <div class="search-matte p-1 rounded-pill d-flex align-items-center position-relative transition-all">
+                        <span class="ps-3 pe-2 text-warning opacity-75">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" 
+                               class="form-control bg-transparent border-0 text-white shadow-none placeholder-white-50" 
+                               placeholder="Search articles..." 
+                               wire:model.live="search"
+                               style="font-size: 1rem; height: 3rem;">
+                               
+                        @if($search)
+                            <button class="btn btn-link text-white-50 text-decoration-none pe-3" wire:click="$set('search', '')">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        @endif
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <div class="container py-5">
-        <div class="row mb-5">
-            <div class="col-md-12">
-                <div class="d-flex justify-content-center gap-2 flex-wrap">
-                    <button class="btn {{ $categoryFilter === '' ? 'btn-gold' : 'btn-outline-secondary' }} rounded-pill px-4" wire:click="$set('categoryFilter', '')">All</button>
+                <!-- Category Filters -->
+                <div class="d-flex justify-content-center gap-2 flex-wrap pb-4 border-bottom border-dark-subtle">
+                    <button class="btn {{ $categoryFilter === '' ? 'btn-gold' : 'btn-matte-outline' }} btn-sm rounded-pill px-3" wire:click="$set('categoryFilter', '')">All</button>
                     @foreach($categories as $category)
-                        <button class="btn {{ $categoryFilter == $category->id ? 'btn-gold' : 'btn-outline-secondary' }} rounded-pill px-4" wire:click="$set('categoryFilter', '{{ $category->id }}')">{{ $category->name }}</button>
+                        <button class="btn {{ $categoryFilter == $category->id ? 'btn-gold' : 'btn-matte-outline' }} btn-sm rounded-pill px-3" wire:click="$set('categoryFilter', '{{ $category->id }}')">{{ $category->name }}</button>
                     @endforeach
                 </div>
             </div>
         </div>
 
+        <!-- Articles Grid -->
         <div class="row g-4">
             @forelse($articles as $article)
             <div class="col-md-4">
@@ -47,8 +55,8 @@
                         
                         <div class="d-flex align-items-center justify-content-between mt-auto pt-3 border-top border-secondary">
                             <div class="d-flex align-items-center">
-                                <img src="https://ui-avatars.com/api/?name={{ $article->author->name }}&background=random" class="rounded-circle me-2" width="30" height="30">
-                                <small class="text-white-50">{{ $article->author->name }}</small>
+                                <img src="https://ui-avatars.com/api/?name={{ $article->author->name ?? 'User' }}&background=random" class="rounded-circle me-2" width="30" height="30">
+                                <small class="text-white-50">{{ $article->author->name ?? 'User' }}</small>
                             </div>
                             <a href="{{ route('article.details', $article->id) }}" class="btn btn-link text-warning p-0 text-decoration-none fw-bold">Read More <i class="fas fa-arrow-right ms-1"></i></a>
                         </div>
@@ -66,35 +74,63 @@
             @endforelse
         </div>
 
+        <!-- Pagination -->
         <div class="px-4 py-3 border-top border-secondary d-flex align-items-center justify-content-between mt-5">
             <div class="text-muted small">
                 Showing {{ $articles->firstItem() ?? 0 }} to {{ $articles->lastItem() ?? 0 }} of {{ $articles->total() }} results
             </div>
             <div class="d-flex align-items-center gap-2">
                 @if ($articles->onFirstPage())
-                    <button class="btn btn-sm btn-secondary disabled" style="opacity: 0.5; cursor: not-allowed; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8;">
-                        <i class="fas fa-chevron-left"></i> Previous
-                    </button>
+                    <button class="btn btn-sm btn-secondary disabled" style="opacity: 0.5;">Previous</button>
                 @else
-                    <button wire:click="previousPage" class="btn btn-sm btn-outline-light" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #e2e8f0;">
-                        <i class="fas fa-chevron-left"></i> Previous
-                    </button>
+                    <button wire:click="previousPage" class="btn btn-sm btn-outline-light">Previous</button>
                 @endif
 
-                <span class="text-muted small mx-2">
-                    Page {{ $articles->currentPage() }} of {{ $articles->lastPage() }}
-                </span>
+                <span class="text-muted small mx-2">Page {{ $articles->currentPage() }}</span>
 
                 @if ($articles->hasMorePages())
-                    <button wire:click="nextPage" class="btn btn-sm btn-outline-light" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #e2e8f0;">
-                        Next <i class="fas fa-chevron-right"></i>
-                    </button>
+                    <button wire:click="nextPage" class="btn btn-sm btn-outline-light">Next</button>
                 @else
-                    <button class="btn btn-sm btn-secondary disabled" style="opacity: 0.5; cursor: not-allowed; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8;">
-                        Next <i class="fas fa-chevron-right"></i>
-                    </button>
+                    <button class="btn btn-sm btn-secondary disabled" style="opacity: 0.5;">Next</button>
                 @endif
             </div>
         </div>
-    </div>
+    <style>
+        .search-matte {
+            background: #1e293b; /* Slate-800 */
+            border: 1px solid #334155; /* Slate-700 */
+            transition: all 0.2s ease;
+        }
+        
+        .search-matte:focus-within {
+            border-color: #fbbf24; /* Warning/Gold */
+            background: #0f172a; /* Slate-900 */
+        }
+
+        .btn-matte-outline {
+            background: transparent;
+            border: 1px solid #334155;
+            color: #94a3b8;
+        }
+        .btn-matte-outline:hover {
+            border-color: #fbbf24;
+            color: #fbbf24;
+        }
+        
+        .btn-gold {
+            background: #fbbf24;
+            color: #0f172a;
+            border: 1px solid #fbbf24; /* Match border width of inactive state */
+            font-weight: 600;
+        }
+
+        .placeholder-white-50::placeholder {
+            color: #64748b;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease;
+        }
+    </style>
 </div>

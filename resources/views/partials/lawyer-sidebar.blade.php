@@ -6,27 +6,27 @@
     </div>
     
     <nav class="sidebar-nav">
-        <a href="{{ route('lawyer.dashboard') }}" class="nav-item {{ Request::is('lawyer') || Request::routeIs('lawyer.dashboard') ? 'active' : '' }}">
+        <a href="{{ route('lawyer.dashboard') }}" class="nav-item {{ request()->is('lawyer/dashboard') || request()->routeIs('lawyer.dashboard') ? 'active' : '' }}">
             <i class="fas fa-tachometer-alt"></i> Dashboard
         </a>
 
         <div class="nav-section-title">Work</div>
 
-        <a href="{{ route('lawyer.questions.index') }}" class="nav-item {{ Request::routeIs('lawyer.questions.*') ? 'active' : '' }}">
+        <a href="{{ route('lawyer.questions.index') }}" class="nav-item {{ request()->is('lawyer/questions*') || request()->routeIs('lawyer.questions.*') ? 'active' : '' }}">
             <i class="fas fa-question-circle"></i> Browse Questions
         </a>
 
-        <a href="{{ route('lawyer.answers.index') }}" class="nav-item {{ Request::routeIs('lawyer.answers.*') ? 'active' : '' }}">
+        <a href="{{ route('lawyer.answers.index') }}" class="nav-item {{ request()->is('lawyer/answers*') || request()->routeIs('lawyer.answers.*') ? 'active' : '' }}">
             <i class="fas fa-gavel"></i> My Answers
         </a>
 
-        <a href="{{ route('lawyer.articles.index') }}" class="nav-item {{ Request::routeIs('lawyer.articles.*') ? 'active' : '' }}">
+        <a href="{{ route('lawyer.articles.index') }}" class="nav-item {{ request()->is('lawyer/articles*') || request()->routeIs('lawyer.articles.*') ? 'active' : '' }}">
             <i class="fas fa-newspaper"></i> My Articles
         </a>
 
         <div class="nav-section-title">Profile</div>
 
-        <a href="{{ route('lawyer.profile.edit') }}" class="nav-item {{ Request::routeIs('lawyer.profile.*') ? 'active' : '' }}">
+        <a href="{{ route('lawyer.profile.edit') }}" class="nav-item {{ request()->is('lawyer/profile*') || request()->routeIs('lawyer.profile.*') ? 'active' : '' }}">
             <i class="fas fa-user-edit"></i> Edit Profile
         </a>
 

@@ -6,7 +6,8 @@ use App\Models\Question;
 use App\Models\QuestionReply;
 use App\Models\User;
 use Illuminate\Http\Request;
-
+use App\Models\LawyerProfile;
+use App\Models\Like;
 class questionDetailsController extends Controller
 {
    
@@ -42,6 +43,19 @@ class questionDetailsController extends Controller
       
         return redirect()->back()->with('success', 'Answer posted successfully!');
     }
+    public function likereply($id)
+    {
+        $user = auth()->user();
+      
+        $reply = QuestionReply::where('id', $id)->firstOrFail();
+        
+      
+        $user->likedReplies()->toggle($reply->id);
+        
+        return redirect()->back();
+    }
+
+
 
     //
    

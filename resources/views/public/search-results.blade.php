@@ -84,7 +84,7 @@
                             <div class="card bg-dark border-secondary h-100 hover-transform-up transition-all">
                                 <div class="card-body text-center p-4">
                                     <div class="position-relative d-inline-block mb-3">
-                                        <img src="{{ $lawyer->profile_photo_path ? asset('storage/'.$lawyer->profile_photo_path) : 'https://ui-avatars.com/api/?name='.urlencode($lawyer->name) }}" class="rounded-circle border border-2 border-primary p-1 object-fit-cover" width="96" height="96" alt="Lawyer">
+                                        <img src="{{ $lawyer->profile_photo_path ? (Str::startsWith($lawyer->profile_photo_path, 'http') ? $lawyer->profile_photo_path : asset('storage/'.$lawyer->profile_photo_path)) : 'https://ui-avatars.com/api/?name='.urlencode($lawyer->user->name) }}" class="rounded-circle border border-2 border-primary p-1 object-fit-cover" width="96" height="96" alt="Lawyer">
                                       
                                     </div>
                                     <h5 class="card-title text-white mb-1">{{ $lawyer->user->name }}</h5>
@@ -116,7 +116,7 @@
                             <div class="row g-0">
                                 <div class="col-md-3 position-relative">
                                     @if($article->image)
-                                        <img src="{{ asset('storage/'.$article->image) }}" class="img-fluid h-100 object-fit-cover position-absolute" alt="Article">
+                                        <img src="{{ Str::startsWith($article->image, 'http') ? $article->image : asset('storage/'.$article->image) }}" class="img-fluid h-100 object-fit-cover position-absolute" alt="Article">
                                     @else
                                         <div class="bg-secondary bg-opacity-10 h-100 d-flex align-items-center justify-content-center text-muted">
                                             <i class="fas fa-image fa-3x opacity-50"></i>
@@ -132,7 +132,7 @@
                                         <h5 class="card-title"><a href="{{ route('article.details', $article->id) }}" class="text-white text-decoration-none hover-text-primary">{{ $article->title }}</a></h5>
                                         <p class="card-text text-white-50">{{ Str::limit($article->excerpt, 120) }}</p>
                                         <div class="d-flex align-items-center gap-2 mt-3">
-                                            <img src="{{ $article->author->profile_photo_path ?? 'https://ui-avatars.com/api/?name='.urlencode($article->author->name) }}" class="rounded-circle" width="20" height="20" alt="Author">
+                                            <img src="{{ $article->author->lawyerProfile->profile_photo_path ? (Str::startsWith($article->author->lawyerProfile->profile_photo_path, 'http') ? $article->author->lawyerProfile->profile_photo_path : asset('storage/'.$article->author->lawyerProfile->profile_photo_path)) : 'https://ui-avatars.com/api/?name='.urlencode($article->author->name) }}" class="rounded-circle" width="20" height="20" alt="Author">
                                             <span class="text-muted small">By {{ $article->author->name }}</span>
                                         </div>
                                     </div>

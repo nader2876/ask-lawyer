@@ -44,7 +44,7 @@
                     <div class="col-md-4 mb-4" wire:key="lawyer-{{ $lawyer->id }}">
                         <div class="card h-100 border-secondary p-4 text-center card-hover overflow-hidden d-flex flex-column">
                             @if($lawyer->profile_photo_path)
-                                <img src="{{ asset('storage/' . $lawyer->profile_photo_path) }}" class="rounded-circle mx-auto mb-3 border border-secondary p-1 object-fit-cover" width="100" height="100">
+                                <img src="{{ Str::startsWith($lawyer->profile_photo_path, 'http') ? $lawyer->profile_photo_path : asset('storage/' . $lawyer->profile_photo_path) }}" class="rounded-circle mx-auto mb-3 border border-secondary p-1 object-fit-cover" width="100" height="100">
                             @else
                                 <img src="https://ui-avatars.com/api/?name={{ urlencode($lawyer->user->name) }}&background=0d6efd&color=fff&size=100" class="rounded-circle mx-auto mb-3 border border-secondary p-1" width="100">
                             @endif

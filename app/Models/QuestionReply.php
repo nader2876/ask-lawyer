@@ -25,5 +25,15 @@ class QuestionReply extends Model
     {
         return $this->belongsTo(User::class, 'lawyer_id');
     }
+    public function likes()
+{
+    return $this->hasMany(Like::class, 'reply_id');
+}
+
+public function likedByUsers()
+{
+    return $this->belongsToMany(User::class, 'likes', 'reply_id', 'user_id')
+        ->withTimestamps();
+}
     
 }

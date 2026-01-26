@@ -34,8 +34,7 @@
                 <!-- Answers Header -->
                 <h4 class="mb-3"><i class="fas fa-comments me-2" style="color: var(--primary);"></i>Answers ({{ $question->replies->count() }})</h4>
 
-                <!-- Answer 1 -->
-                <!-- BACKEND: GET /api/questions/{id}/answers -->
+             
                 @foreach ($question->replies as $reply)
                 <div class="card mb-3">
                     <div class="card-body p-4">
@@ -51,9 +50,12 @@
                             {{$reply->body}}
                         </p>
                         <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-outline-primary" onclick="likeAnswer('ANS-001')">
-                                <i class="far fa-thumbs-up me-1"></i>Helpful (15)
+                            <form action="{{ route('replies.like', $reply->id) }}" method="POST">
+    @csrf
+                            <button class="btn btn-sm btn-outline-primary"  >
+                                <i class="far fa-thumbs-up me-1"></i>Helpful ({{$reply->likedByUsers()->count()}})
                             </button>
+                            </form>
                             <small class="text-muted align-self-center">Answered on {{$reply->created_at->diffForHumans()}}</small>
                         </div>
                     </div>

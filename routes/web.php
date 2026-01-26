@@ -56,6 +56,7 @@ Route::view('/my-articles', 'public.my-articles')->name('my-articles');
 Route::view('/article/new', 'public.new-article')->name('new-article');
 Route::view('/article/edit', 'public.edit-article')->name('edit-article');
 Route::get('/search', [publicIndexController::class, 'search'])->name('search');
+Route::post('/replies/{id}/like', [questionDetailsController::class, 'likeReply'])->name('replies.like');
 
 // Route::view('/login', 'public.login')->name('login'); // Handled by Breeze in auth.php
 // Route::view('/register', 'public.register')->name('register'); // Handled by Breeze in auth.php
