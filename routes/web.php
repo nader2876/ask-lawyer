@@ -5,8 +5,8 @@ require __DIR__.'/auth.php';
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\publicIndexController;
-use App\Http\Controllers\questionDetailsController;
+use App\Http\Controllers\PublicIndexController;
+use App\Http\Controllers\QuestionDetailsController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -37,26 +37,26 @@ Route::middleware('auth')->group(function () {
 // 1) PUBLIC ROUTES
 // ============================================================================
 
-Route::get('/', [publicIndexController::class, 'landing'])->name('home');
-Route::get('/questions', [publicIndexController::class, 'index'])->name('index'); // Questions Feed (was index)
+Route::get('/', [PublicIndexController::class, 'landing'])->name('home');
+Route::get('/questions', [PublicIndexController::class, 'index'])->name('index'); // Questions Feed (was index)
 
-Route::get('/question-details/{id}', [questionDetailsController::class, 'index'])->name('question-details'); // Using generic for demo, usually /{id}
-Route::post('/question-details/{id}/answer', [questionDetailsController::class, 'store'])->name('answer.store')->middleware(['auth', 'role:lawyer']);
+Route::get('/question-details/{id}', [QuestionDetailsController::class, 'index'])->name('question-details'); // Using generic for demo, usually /{id}
+Route::post('/question-details/{id}/answer', [QuestionDetailsController::class, 'store'])->name('answer.store')->middleware(['auth', 'role:lawyer']);
 Route::middleware('auth','role:user')->group(function () {
-Route::get('/ask-question',[publicIndexController::class,'addQuestion'])->name('ask-question');
-Route::post('/store-question',[publicIndexController::class,'storeQuestion'])->name('store-question');
+Route::get('/ask-question',[PublicIndexController::class,'addQuestion'])->name('ask-question');
+Route::post('/store-question',[PublicIndexController::class,'storeQuestion'])->name('store-question');
 });
 Route::view('/lawyers', 'public.lawyers')->name('lawyers');
-Route::get('/lawyer-profile/{id}', [publicIndexController::class, 'lawyerProfile'])->name('lawyer-profile'); 
+Route::get('/lawyer-profile/{id}', [PublicIndexController::class, 'lawyerProfile'])->name('lawyer-profile'); 
 Route::view('/edit-lawyer-profile', 'public.edit-lawyer-profile')->name('edit-lawyer-profile'); 
 
-Route::get('/blog', [publicIndexController::class, 'blog'])->name('blog');
-Route::get('/article/details/{id}', [publicIndexController::class, 'articleDetails'])->name('article.details');
+Route::get('/blog', [PublicIndexController::class, 'blog'])->name('blog');
+Route::get('/article/details/{id}', [PublicIndexController::class, 'articleDetails'])->name('article.details');
 Route::view('/my-articles', 'public.my-articles')->name('my-articles');
 Route::view('/article/new', 'public.new-article')->name('new-article');
 Route::view('/article/edit', 'public.edit-article')->name('edit-article');
-Route::get('/search', [publicIndexController::class, 'search'])->name('search');
-Route::post('/replies/{id}/like', [questionDetailsController::class, 'likeReply'])->name('replies.like');
+Route::get('/search', [PublicIndexController::class, 'search'])->name('search');
+Route::post('/replies/{id}/like', [QuestionDetailsController::class, 'likeReply'])->name('replies.like');
 
 // Route::view('/login', 'public.login')->name('login'); // Handled by Breeze in auth.php
 // Route::view('/register', 'public.register')->name('register'); // Handled by Breeze in auth.php
