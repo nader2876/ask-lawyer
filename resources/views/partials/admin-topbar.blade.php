@@ -1,6 +1,15 @@
 <header class="admin-topbar">
     <h1 class="topbar-title">{{ $title ?? 'Admin Panel' }}</h1>
     
+    <div class="topbar-search ms-4 flex-grow-1" style="max-width: 400px;">
+        <form action="{{ url('/search') }}" method="GET">
+             <div class="input-group">
+                 <span class="input-group-text bg-dark border-secondary text-muted"><i class="fas fa-search"></i></span>
+                 <input type="text" name="query" class="form-control bg-dark border-secondary text-white" placeholder="Search..." aria-label="Search" style="color: white;">
+             </div>
+        </form>
+    </div>
+    
     <div class="topbar-actions">
         <div class="user-menu">
             <div class="user-avatar">A</div>

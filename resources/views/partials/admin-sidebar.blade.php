@@ -11,23 +11,23 @@
         </a>
         
         <div class="nav-section-title">Management</div>
-        <a href="{{ route('admin.users.index') }}" class="nav-item {{ Request::is('admin/users') ? 'active' : '' }}">
+        <a href="{{ route('admin.users.index') }}" class="nav-item {{ Request::is('admin/users*') ? 'active' : '' }}">
             <i class="fas fa-users"></i>
             <span>Users</span>
         </a>
-        <a href="{{ route('admin.lawyer-requests') }}" class="nav-item {{ Request::is('admin/lawyer-requests') ? 'active' : '' }}">
+        <a href="{{ route('admin.lawyer-requests') }}" class="nav-item {{ Request::is('admin/lawyer-requests*') ? 'active' : '' }}">
             <i class="fas fa-user-check"></i>
             <span>Lawyer Requests</span>
         </a>
-        <a href="{{ route('admin.questions') }}" class="nav-item {{ Request::is('admin/questions') ? 'active' : '' }}">
+        <a href="{{ route('admin.questions') }}" class="nav-item {{ Request::is('admin/questions*') ? 'active' : '' }}">
             <i class="fas fa-question-circle"></i>
             <span>Questions</span>
         </a>
-        <a href="{{ route('admin.articles') }}" class="nav-item {{ Request::is('admin/articles') ? 'active' : '' }}">
+        <a href="{{ route('admin.articles') }}" class="nav-item {{ Request::is('admin/articles*') ? 'active' : '' }}">
             <i class="fas fa-file-alt"></i>
             <span>Articles</span>
         </a>
-        <a href="{{ route('admin.categories') }}" class="nav-item {{ Request::is('admin/categories') ? 'active' : '' }}">
+        <a href="{{ route('admin.categories') }}" class="nav-item {{ Request::is('admin/categories*') ? 'active' : '' }}">
             <i class="fas fa-tags"></i>
             <span>Categories</span>
         </a>

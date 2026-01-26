@@ -64,4 +64,15 @@ class publicIndexController extends Controller
         $question->save();
         return redirect()->route('index')->with('success', 'Your question has been submitted successfully!');
     }
+    public function search(Request $request)
+    {
+        $search= $request->search;
+        $questions= Question::where('title', 'like', '%'.$search.'%')->get();
+        $lawyers= LawyerProfile::wherehas('user',function($query) use($search){
+            $query->where('name', 'like', '%'.$search.'%');
+            $query->where('role','lawyer');
+        })->get();
+        $articles= Article::where('title', 'like', '%'.$search.'%')->get();
+        return view('public.search-results', compact('questions', 'lawyers', 'articles','search'));
+    }
 }

@@ -8,9 +8,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link {{ request()->routeIs('index') ? 'active' : '' }}" href="{{ route('index') }}">Questions</a></li>
-                <li class="nav-item"><a class="nav-link {{ request()->routeIs('lawyers') ? 'active' : '' }}" href="{{ route('lawyers') }}">Lawyers</a></li>
-                <li class="nav-item"><a class="nav-link {{ request()->routeIs('blog') ? 'active' : '' }}" href="{{ route('blog') }}">Blog</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('index') || request()->routeIs('question-details') ? 'active' : '' }}" href="{{ route('index') }}">Questions</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('lawyers') || request()->routeIs('lawyer-profile') ? 'active' : '' }}" href="{{ route('lawyers') }}">Lawyers</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('blog') || request()->routeIs('article.*') ? 'active' : '' }}" href="{{ route('blog') }}">Blog</a></li>
                 @auth
                     @if(Auth::user()->role === 'lawyer')
                         <li class="nav-item"><a class="nav-link {{ request()->routeIs('lawyer.dashboard') ? 'active' : '' }}" href="{{ route('lawyer.dashboard') }}">Lawyer Panel</a></li>
@@ -20,6 +20,14 @@
                  <li class="nav-item"><a class="nav-link active" href="{{ route('ask-question') }}">Ask Question</a></li>
                 @endif
             </ul>
+            
+            <form class="d-flex mx-lg-4 my-2 my-lg-0 flex-grow-1" action="{{ url('/search') }}" method="GET" style="max-width: 400px;">
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-secondary text-light"><i class="fas fa-search"></i></span>
+                    <input type="search" name="search" class="form-control bg-transparent border-secondary text-light" placeholder="Search questions, lawyers..." aria-label="Search" value="{{ request()->get('search')??null }}">
+                </div>
+            </form>
+
             <div class="d-flex align-items-center gap-3">
             
                 
