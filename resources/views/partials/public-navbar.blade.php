@@ -15,6 +15,9 @@
                     @if(Auth::user()->role === 'lawyer')
                         <li class="nav-item"><a class="nav-link {{ request()->routeIs('lawyer.dashboard') ? 'active' : '' }}" href="{{ route('lawyer.dashboard') }}">Lawyer Panel</a></li>
                     @endif
+                    @if(Auth::user()->role === 'admin')
+                        <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">Admin Panel</a></li>
+                    @endif
                 @endauth
                 @if(request()->routeIs('ask-question'))
                  <li class="nav-item"><a class="nav-link active" href="{{ route('ask-question') }}">Ask Question</a></li>
@@ -23,7 +26,7 @@
             
             <form class="d-flex mx-lg-4 my-2 my-lg-0 flex-grow-1" action="{{ url('/search') }}" method="GET" style="max-width: 400px;">
                 <div class="input-group">
-                    <span class="input-group-text bg-transparent border-secondary text-light"><i class="fas fa-search"></i></span>
+                    <button class="input-group-text bg-transparent border-secondary text-light" type="submit"><i class="fas fa-search"></i></button>
                     <input type="search" name="search" class="form-control bg-transparent border-secondary text-light" placeholder="Search questions, lawyers..." aria-label="Search" value="{{ request()->get('search')??null }}">
                 </div>
             </form>
@@ -43,7 +46,7 @@
                      <div class="dropdown">
                         <button class="btn btn-link text-white text-decoration-none dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             @if(Auth::user()->lawyerProfile?->profile_photo_path)   
-                                <img src="{{ asset('storage/' . Auth::user()->lawyerProfile?->profile_photo_path) }}" class="rounded-circle shadow-sm" alt="Profile">
+                                <img src="{{ Str::startsWith(Auth::user()->lawyerProfile?->profile_photo_path, 'http') ? Auth::user()->lawyerProfile?->profile_photo_path : asset('storage/' . Auth::user()->lawyerProfile?->profile_photo_path) }}" class="rounded-circle shadow-sm" alt="Profile">
                             @else
                                 <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px; font-size: 0.8rem; font-weight: 700;">
                                     {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}

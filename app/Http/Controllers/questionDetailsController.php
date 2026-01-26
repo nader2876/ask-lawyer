@@ -18,6 +18,7 @@ class questionDetailsController extends Controller
     ->where('role', 'lawyer')
     ->whereHas('replies', function ($q) use ($id) {
         $q->where('question_id', $id);
+        
     })
     ->withCount('replies')
     ->orderByDesc('replies_count')
