@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top public-navbar">
     <div class="container">
         <a class="navbar-brand" href="{{ route('home') }}">
-            <i class="fas fa-balance-scale me-2"></i>Legal Q&A
+            <i class="fas fa-balance-scale me-2"></i>Ask a Lawyer
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
             <span class="navbar-toggler-icon"></span>

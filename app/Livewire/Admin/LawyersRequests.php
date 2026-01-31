@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\LawyerProfile;
 use App\Models\Category;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\LawyerApproved;
+use  Illuminate\Support\Facades\Log;
 class LawyersRequests extends Component
 {
 
@@ -66,9 +69,16 @@ public $sort = 'created-desc';
         $lawyer->status = 'accepted';
         $lawyer->save();
 
-        // Also update the user's status to active
+       
         $lawyer->user->status = 'active';
         $lawyer->user->save();
+
+        try {
+            Mail::to($lawyer->user->email)->send(new LawyerApproved($lawyer->user));
+        } catch (\Exception $e) {
+            // Log the error but don't fail the request
+           Log::error("Failed to send lawyer approval email to {$lawyer->user->email}: " . $e->getMessage());
+        }
 
         session()->flash('success', 'Request approved successfully!');
         $this->dispatch('action-completed');

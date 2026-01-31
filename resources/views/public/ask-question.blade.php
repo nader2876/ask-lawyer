@@ -38,12 +38,7 @@
                                 <textarea class="form-control" rows="6" placeholder="Describe your situation in detail. Do not include personal names or sensitive data." name="description" required></textarea>
                             </div>
 
-                            <div class="form-check mb-4">
-                                <input class="form-check-input" type="checkbox" id="anonCheck">
-                                <label class="form-check-label text-muted" for="anonCheck">
-                                    Post anonymously
-                                </label>
-                            </div>
+                          
 
                             <div class="d-grid gap-3">
                                 <button type="submit" class="btn btn-primary btn-lg">

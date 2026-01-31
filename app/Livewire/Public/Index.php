@@ -12,13 +12,13 @@ class Index extends Component
 {
     use WithPagination;
 
-    #[Url]
+ 
     public $search='';
     
-    #[Url]
+   
     public $category='';
     
-    #[Url]
+    
     public $sort='date-newest';
 
     public function updatingSearch()

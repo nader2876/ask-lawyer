@@ -50,6 +50,14 @@
 
             <div class="col-lg-9">
                 <div id="questions-container" class="row">
+                    @if (session('success'))
+                        <div class="col-12 mb-4">
+                            <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+                                <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    @endif
                     <!-- Sample Item 1 -->
                     @forelse($questions as $question)
                     <div class="col-12 mb-4" >

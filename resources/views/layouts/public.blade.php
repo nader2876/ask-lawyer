@@ -75,5 +75,8 @@
     <!-- Custom Scripts -->
     @yield('scripts')
     @livewireScripts
+    
+
+
 </body>
 </html>
